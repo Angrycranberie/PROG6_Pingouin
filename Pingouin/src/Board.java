@@ -1,25 +1,46 @@
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Classe de gestion du plateau. Contient les methodes v√©rifiant l'alignement
+ * entre cases du plateau, et celles jouant des coups.
+ * @author Charly
+ */
 public class Board {
 	Tile tab[][];
-	
+
+	/**
+	 * Constructeur. Cr√©e un tableau non initialis√© de tiles 8*8
+	 */
 	public Board() {
 		tab = new Tile[8][8];
 	}
 	
+	/**
+	 * Rend la case (x, y) occup√©e
+	 * @param x Coordonn√©e x de la case
+	 * @param y Coordonn√©e y de la case
+	 */
 	public void takePosition(int x, int y) {
 		tab[y][x].changeStatue();
 	}
-	
+
+	/**
+	 * Retire la case (x, y) du jeu
+	 * @param x Coordonn√©e x de la case
+	 * @param y Coordonn√©e y de la case
+	 * @return La case retir√©e du jeu
+	 */
 	public Tile removeTile(int x, int y) {
 		Tile res = tab[y][x];
 		tab[y][x] = null;
 		return res;
 	}
 	
-	// distribue alÈatoirement les tuiles sur le plateau
-	// change les valeurs du tableau sans prendre en compte si elle Ètaient dÈj‡ distribuÈes
+	/**
+	 * G√©n√®re un nouveau plateau de jeu de fa√ßon al√©atoire.
+	 * Les proportions des valeurs des cases sont fixes.
+	 */
 	public void shuffle() {
 		int trois = 10;
 		int deux = 20;
@@ -49,7 +70,10 @@ public class Board {
 			}
 		}
 	}
-	
+	/**
+	 * Fonction v√©rifiant les proportions de tiles dans le plateau.
+	 * @return Vrai si les proportions sont correctes, faux sinon.
+	 */
 	private boolean test_shuffle() {
 		shuffle();
 		int trois = 0;
@@ -77,8 +101,20 @@ public class Board {
 		return trois == 10 && deux == 20 && un == 30;
 	}
 	
-	// dÈtermine si deux positions sont alignÈes ou non
+	/**
+	 * Determine si les cases (x1, y1) et (x2, y2) sont align√©es.
+	 * @param x1 Coordonn√©e x de la case 1
+	 * @param y1 Coordonn√©e y de la case 1
+	 * @param x2 Coordonn√©e x de la case 2
+	 * @param y2 Coordonn√©e y de la case 2
+	 * @return Un entier indiquant l'alignement :
+	 *	0 si non-align√© ou l'une des cases ne contient pas de tuile
+	 * 	1 si align√©s √† l'horizontal	
+	 *	2 si align√©s selon la diagonale [Bas-gauche ; Haut-droite] (comme un slash / )
+	 *	3 si align√©s selon la diagonale [Haut-gauche ; Bas-droite] (comme un antislash \ )
+	 */
 	public int align(int x1 , int y1 , int x2 , int y2) {
+		// Exception non lev√©e si coorodonn√©es out of bound.
 		boolean trueTile = tab[y1][x1] != null && tab[y2][x2] != null;
 		boolean horizontal = y1 == y2;
 		boolean slash;
@@ -131,6 +167,11 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Methode de test. V√©rifie l'alignement de chaque case.
+	 * @param print Vrai si l'on veut afficher les tests sur la sortie standard, Faux sinon.
+	 * @return Vrai si tous les tests sont pass√©s, Faux sinon.
+	 */
 	private boolean test_align(boolean print) {
 		boolean res = true;
 		// test horizontaux
@@ -266,7 +307,7 @@ public class Board {
 			System.out.println("(2,7,4,3) faux");
 		}
 		
-		// test non alignÈ
+		// test non alignÔøΩ
 		res = res && align(0,0,2,1) == 0;
 		if(print) {
 			printTest(1,0,0,2,1);
@@ -310,7 +351,15 @@ public class Board {
 		return res;
 	}
 	
-	// dÈtermine si un dÈplacement entre les deux propositions donnÈes est valide
+	// dÔøΩtermine si un dÔøΩplacement entre les deux propositions donnÔøΩes est valide
+	/**
+	 * Determine si le d√©placement de (x1, y1) √† (x2, y2) est autoris√© ou non.
+	 * @param x1 Coordonn√©e x de la case 1
+	 * @param y1 Coordonn√©e y de la case 1
+	 * @param x2 Coordonn√©e x de la case 2
+	 * @param y2 Coordonn√©e y de la case 2
+	 * @return Vrai si le d√©placement est possible, Faux sinon.
+	 */
 	public boolean legitTravel(int x1, int y1 , int x2 , int y2) {
 		int resAlign = align(x1,y1,x2,y2);
 		if(resAlign == 1) { // y1 == y2
@@ -338,7 +387,7 @@ public class Board {
 			}
 			return true;
 		}
-		else if(resAlign == 2) { // alignÈs en /
+		else if(resAlign == 2) { // alignÔøΩs en /
 			int x;
 			if(y1 < y2) {
 				x = x1;
@@ -376,7 +425,7 @@ public class Board {
 			}
 			return true;
 		}
-		else if(resAlign == 3){ // alignÈs en \
+		else if(resAlign == 3){ // alignÔøΩs en \
 			int x;
 			if(y1 < y2) {
 				x = x1;
@@ -419,6 +468,11 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param print
+	 * @return
+	 */
 	private boolean test_legitTravel(boolean print) {
 		boolean res = true;	
 		shuffle();
@@ -580,9 +634,9 @@ public class Board {
 		return res;
 	}
 	
-	// effectue le dÈplacement de (x1,y1) vers (x2,y2) si les rËgles sont suivis, retourne la tuile de dÈpart
-	// en l'enlevant du plateau et rend la tuile d'arrivÈe occupÈe
-	// si le dÈplacement n'Ètait pas valide la tuil retournÈ est null et aucune modification du plateau n'est faites
+	// effectue le dÔøΩplacement de (x1,y1) vers (x2,y2) si les rÔøΩgles sont suivis, retourne la tuile de dÔøΩpart
+	// en l'enlevant du plateau et rend la tuile d'arrivÔøΩe occupÔøΩe
+	// si le dÔøΩplacement n'ÔøΩtait pas valide la tuil retournÔøΩ est null et aucune modification du plateau n'est faites
 	public Tile makeMove(int x1, int y1 , int x2 , int y2) {
 		
 		if(legitTravel(x1,y1,x2,y2) && tab[y1][x1].occupied()) {
@@ -762,7 +816,7 @@ public class Board {
 						System.out.print(". ");
 					}
 				}
-				else if(option == 2) { // deplacement lÈgal
+				else if(option == 2) { // deplacement lÔøΩgal
 					if(x == x1 && y == y1) {
 						if(tab[y][x] == null) {
 							System.out.print("V ");
@@ -797,7 +851,7 @@ public class Board {
 						}
 					}
 				}
-				else if(option == 3){ // dÈplacement
+				else if(option == 3){ // dÔøΩplacement
 					if(x == x1 && y == y1) {
 						if(tab[y][x] == null) {
 							System.out.print("V ");
@@ -838,7 +892,7 @@ public class Board {
 		System.out.println();
 	}
 	
-	// lance les diffÈrentes fonctions de test de la classe
+	// lance les diffÔøΩrentes fonctions de test de la classe
 	public void test() {
 		boolean result = true;
 		Scanner s = new Scanner(System.in);
@@ -851,14 +905,14 @@ public class Board {
 		
 		printBoard(1);
 		
-		// vÈrifie qu'il y a bien le nombre correct de piËces des diffÈrentes valeurs
-		System.out.println("tester le mÈlange ?(1 ou 0)");
+		// vÔøΩrifie qu'il y a bien le nombre correct de piÔøΩces des diffÔøΩrentes valeurs
+		System.out.println("tester le mÔøΩlange ?(1 ou 0)");
 		if(s.nextInt() == 1){
 			result = test_shuffle();
 			System.out.println(result);
 		}
 		
-		System.out.println("tester la dÈtection d'alignement ?(1 ou 0)"); // vÈrifie la fonction qui dÈtermine si deux piËces sont alignÈes ou pas
+		System.out.println("tester la dÔøΩtection d'alignement ?(1 ou 0)"); // vÔøΩrifie la fonction qui dÔøΩtermine si deux piÔøΩces sont alignÔøΩes ou pas
 		if(s.nextInt() == 1){
 			System.out.println("afficher les tests ?(1 ou 0)");
 			if(s.nextInt() == 1){
@@ -871,7 +925,7 @@ public class Board {
 			}
 		}
 		
-		System.out.println("tester la dÈtection de voyages possibles  ?(1 ou 0)"); // vÈrifie la fonction qui dÈtermine si un dÈplacement entre deux piËces est possible
+		System.out.println("tester la dÔøΩtection de voyages possibles  ?(1 ou 0)"); // vÔøΩrifie la fonction qui dÔøΩtermine si un dÔøΩplacement entre deux piÔøΩces est possible
 		if(s.nextInt() == 1){
 			System.out.println("afficher les tests ?(1 ou 0)");
 			if(s.nextInt() == 1){
@@ -884,7 +938,7 @@ public class Board {
 			}
 		}
 		
-		System.out.println("tester les dÈplacement ?(1 ou 0)"); // vÈrifie la fonction qui exÈcute un dÈplacement
+		System.out.println("tester les dÔøΩplacement ?(1 ou 0)"); // vÔøΩrifie la fonction qui exÔøΩcute un dÔøΩplacement
 		if(s.nextInt() == 1){
 			System.out.println("afficher les tests ?(1 ou 0)");
 			if(s.nextInt() == 1){
