@@ -18,8 +18,8 @@ public class Board {
 		return res;
 	}
 	
-	// distribue aléatoirement les tuiles sur le plateau
-	// change les valeurs du tableau sans prendre en compte si elle étaient déjà distribuées
+	// distribue alÃ©atoirement les tuiles sur le plateau
+	// change les valeurs du tableau sans prendre en compte si elle ï¿½taient dÃ©jÃ  distribuÃ©es
 	public void shuffle() {
 		int trois = 10;
 		int deux = 20;
@@ -77,7 +77,7 @@ public class Board {
 		return trois == 10 && deux == 20 && un == 30;
 	}
 	
-	// détermine si deux positions sont alignées ou non
+	// dÃ©termine si deux positions sont alignÃ©es ou non
 	public int align(int x1 , int y1 , int x2 , int y2) {
 		boolean trueTile = tab[y1][x1] != null && tab[y2][x2] != null;
 		boolean horizontal = y1 == y2;
@@ -266,7 +266,7 @@ public class Board {
 			System.out.println("(2,7,4,3) faux");
 		}
 		
-		// test non aligné
+		// test non alignï¿½
 		res = res && align(0,0,2,1) == 0;
 		if(print) {
 			printTest(1,0,0,2,1);
@@ -310,7 +310,7 @@ public class Board {
 		return res;
 	}
 	
-	// détermine si un déplacement entre les deux propositions données est valide
+	// dÃ©termine si un dÃ©placement entre les deux propositions donnÃ©es est valide
 	public boolean legitTravel(int x1, int y1 , int x2 , int y2) {
 		int resAlign = align(x1,y1,x2,y2);
 		if(resAlign == 1) { // y1 == y2
@@ -338,7 +338,7 @@ public class Board {
 			}
 			return true;
 		}
-		else if(resAlign == 2) { // alignés en /
+		else if(resAlign == 2) { // alignÃ©s en /
 			int x;
 			if(y1 < y2) {
 				x = x1;
@@ -376,7 +376,7 @@ public class Board {
 			}
 			return true;
 		}
-		else if(resAlign == 3){ // alignés en \
+		else if(resAlign == 3){ // alignÃ©s en \
 			int x;
 			if(y1 < y2) {
 				x = x1;
@@ -580,9 +580,9 @@ public class Board {
 		return res;
 	}
 	
-	// effectue le déplacement de (x1,y1) vers (x2,y2) si les règles sont suivis, retourne la tuile de départ
-	// en l'enlevant du plateau et rend la tuile d'arrivée occupée
-	// si le déplacement n'était pas valide la tuil retourné est null et aucune modification du plateau n'est faites
+	// effectue le dÃ©placement de (x1,y1) vers (x2,y2) si les rÃ¨gles sont suivis, retourne la tuile de dÃ©part
+	// en l'enlevant du plateau et rend la tuile d'arrivÃ©e occupÃ©e
+	// si le dÃ©placement n'Ã©tait pas valide la tuile retournÃ© est null et aucune modification du plateau n'est faites
 	public Tile makeMove(int x1, int y1 , int x2 , int y2) {
 		
 		if(legitTravel(x1,y1,x2,y2) && tab[y1][x1].occupied()) {
@@ -762,7 +762,7 @@ public class Board {
 						System.out.print(". ");
 					}
 				}
-				else if(option == 2) { // deplacement légal
+				else if(option == 2) { // deplacement lÃ©gal
 					if(x == x1 && y == y1) {
 						if(tab[y][x] == null) {
 							System.out.print("V ");
@@ -797,7 +797,7 @@ public class Board {
 						}
 					}
 				}
-				else if(option == 3){ // déplacement
+				else if(option == 3){ // dÃ©placement
 					if(x == x1 && y == y1) {
 						if(tab[y][x] == null) {
 							System.out.print("V ");
@@ -838,7 +838,7 @@ public class Board {
 		System.out.println();
 	}
 	
-	// lance les différentes fonctions de test de la classe
+	// lance les diffÃ©rentes fonctions de test de la classe
 	public void test() {
 		boolean result = true;
 		Scanner s = new Scanner(System.in);
@@ -849,16 +849,17 @@ public class Board {
 		takePosition(5,3);
 		takePosition(3,1);
 		
+		printBoard(0);
 		printBoard(1);
 		
-		// vérifie qu'il y a bien le nombre correct de pièces des différentes valeurs
-		System.out.println("tester le mélange ?(1 ou 0)");
+		// vï¿½rifie qu'il y a bien le nombre correct de piï¿½ces des diffï¿½rentes valeurs
+		System.out.println("tester le mÃ©lange ?(1 ou 0)");
 		if(s.nextInt() == 1){
 			result = test_shuffle();
 			System.out.println(result);
 		}
 		
-		System.out.println("tester la détection d'alignement ?(1 ou 0)"); // vérifie la fonction qui détermine si deux pièces sont alignées ou pas
+		System.out.println("tester la dÃ©tection d'alignement ?(1 ou 0)"); // vÃ©rifie la fonction qui dÃ©termine si deux piÃ¨ces sont alignÃ©es ou pas
 		if(s.nextInt() == 1){
 			System.out.println("afficher les tests ?(1 ou 0)");
 			if(s.nextInt() == 1){
@@ -871,7 +872,7 @@ public class Board {
 			}
 		}
 		
-		System.out.println("tester la détection de voyages possibles  ?(1 ou 0)"); // vérifie la fonction qui détermine si un déplacement entre deux pièces est possible
+		System.out.println("tester la dÃ©tection de voyages possibles  ?(1 ou 0)"); // vÃ©rifie la fonction qui dÃ©termine si un dÃ©placement entre deux piÃ¨ces est possible
 		if(s.nextInt() == 1){
 			System.out.println("afficher les tests ?(1 ou 0)");
 			if(s.nextInt() == 1){
@@ -884,7 +885,7 @@ public class Board {
 			}
 		}
 		
-		System.out.println("tester les déplacement ?(1 ou 0)"); // vérifie la fonction qui exécute un déplacement
+		System.out.println("tester les dÃ©placement ?(1 ou 0)"); // vÃ©rifie la fonction qui exÃ©cute un dÃ©placement
 		if(s.nextInt() == 1){
 			System.out.println("afficher les tests ?(1 ou 0)");
 			if(s.nextInt() == 1){
