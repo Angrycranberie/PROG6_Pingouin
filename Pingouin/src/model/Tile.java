@@ -1,45 +1,49 @@
 package model;
 
 public class Tile {
-	private int value;
-	private boolean occupied;
+	private int fishNumber;		// Nombre de poissons sur la tuile.
+	private boolean occupied;	// Si la case est occupée par un pingouin ou non.
+
+	/**
+	 * Constructeur de la classe pour une tuiles Tile.
+	 * On vérifie que le nombre de poisson entré est bien entre 1 et 3.
+	 */
+	Tile(int fishNumber) {
+		if (fishNumber < 1) this.setFishNumber(1);
+		else this.setFishNumber(Math.min(fishNumber, 3));
+		this.free();
+	}
 	
 	/**
-	 * affecte une valeur à une tuile
-	 * @param value
+	 * Affecte un nombre de poisson donné à la tuile.
+	 * @param fishNumber Nombre de poissons à attribuer à la tuile (1, 2 ou 3).
 	 */
-	public void setValue(int value) {
-		this.value = value;
+	public void setFishNumber(int fishNumber) {
+		this.fishNumber = fishNumber;
 		occupied = false;
 	}
-	
+
 	/**
-	 * rend une tuile occupée par un pingouin
+	 * Renvoie le nombre de poissons d'une tuile.
+	 * @return Nombre de poissons de la tuile (1, 2 ou 3).
 	 */
-	public void taken() {
-		occupied = true;
-	}
+	public int getFishNumber() { return this.fishNumber; }
 	
 	/**
-	 * rend une tuile libre
+	 * Définit la tuile comme étant occupée par un pingouin.
 	 */
-	public void quit() {
-		occupied = false;
-	}
+	public void occupy() { this.occupied = true; }
 	
 	/**
-	 * renvoi la valeur d'une tuile
-	 * @return valeur de la tuile
+	 * Définit la tuile comme étant libre (sans pingouin).
 	 */
-	public int value() {
-		return value;
-	}
+	public void free() { this.occupied = false; }
 	
 	/**
-	 * indique si une tuile est occupée
-	 * @return occupation de la tuile
+	 * Indique si une tuile est occupée par un pingouin.
+	 * @return Vrai (true) si la tuile est occupée ; faux (false) sinon.
 	 */
 	public boolean occupied() {
-		return occupied;
+		return this.occupied;
 	}	
 }
