@@ -1,5 +1,7 @@
 package model;
 
+import controller.Player;
+
 public class Game {
 	private Player p[];
 	private int nbPlayer;

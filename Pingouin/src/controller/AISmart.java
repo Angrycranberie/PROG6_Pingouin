@@ -5,6 +5,10 @@ package controller;
  * le plus de poissons.
  * @author Vincent
  */
-public class AISmart extends PlayerAI {
+public class AISmart extends Player {
+
+	public AISmart(int nbPenguins, int c, String name) {
+		super(nbPenguins, c, name);
+	}
 
 }

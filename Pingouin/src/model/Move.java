@@ -1,5 +1,7 @@
 package model;
 
+import controller.Player;
+
 public class Move {
 	int x1;
 	int y1;
