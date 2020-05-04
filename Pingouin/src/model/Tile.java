@@ -1,15 +1,21 @@
 package model;
 
 public class Tile {
+	// Constantes du nombre de poissons par tuile.
+	public static final int ONE_FISH = 1;
+	public static final int TWO_FISH = 2;
+	public static final int THREE_FISH = 3;
+
 	private int fishNumber;		// Nombre de poissons sur la tuile.
 	private boolean occupied;	// Si la case est occupée par un pingouin ou non.
 
 	/**
 	 * Constructeur de la classe pour une tuiles Tile.
 	 * On vérifie que le nombre de poisson entré est bien entre 1 et 3.
+	 * Si ce n'est pas le cas, on ramène ce nombre dans la plage correcte.
 	 */
 	Tile(int fishNumber) {
-		if (fishNumber < 1) this.setFishNumber(1);
+		if (fishNumber < 1) this.setFishNumber(Tile.ONE_FISH);
 		else this.setFishNumber(Math.min(fishNumber, 3));
 		this.free();
 	}
