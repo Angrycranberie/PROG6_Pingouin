@@ -3,10 +3,11 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Board {
-	Tile tab[][];
+	private Tile tab[][];
 	
 	public Board() {
 		tab = new Tile[8][8];
+		shuffle();
 	}
 	
 	/**
@@ -15,7 +16,16 @@ public class Board {
 	 * @param y coord y de la tuile
 	 */
 	public void takePosition(int x, int y) {
-		tab[y][x].changeStatue();
+		tab[y][x].taken();
+	}
+	
+	/**
+	 * libère une tuile d'un pingouin
+	 * @param x coord x de la tuile
+	 * @param y coord y de la tuile
+	 */
+	public void quitPosition(int x, int y) {
+		tab[y][x].quit();
 	}
 	
 	/**
@@ -630,7 +640,6 @@ public class Board {
 	 * @return tuile 1 si le déplacement s'est fait, null sinon
 	 */
 	public Tile makeMove(int x1, int y1 , int x2 , int y2) {
-		
 		if(legitTravel(x1,y1,x2,y2) && tab[y1][x1].occupied()) {
 			takePosition(x2,y2);
 			return removeTile(x1,y1);
@@ -765,6 +774,28 @@ public class Board {
 			System.out.println("(5,7,6,4) faux");
 		}
 		return res;
+	}
+	
+	/**
+	 * annule un mouvement d'une tuile 1 vers une tuile 2
+	 * @param x1 coord x de la tuile 1
+	 * @param y1 coord y de la tuile 1
+	 * @param x2 coord x de la tuile 2
+	 * @param y2 coord x de la tuile 2
+	 * @param nbFish nombre de poisson sur la tuile 1
+	 */
+	public void reverseMove(int x1, int y1 , int x2 , int y2, int nbFish) {
+		if(tab[y2][x2].occupied() && tab[y1][x1] == null) {
+			// on quitte la case d'arrivée
+			tab[y2][x2].quit();
+			
+			// on recréé la case de départ avec le bon nombre de poissons
+			tab[y1][x1] = new Tile();
+			tab[y1][x1].setValue(nbFish);
+			
+			// on met le pingouin dessus
+			tab[y1][x1].taken();
+		}
 	}
 	
 	/**

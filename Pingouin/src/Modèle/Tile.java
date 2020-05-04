@@ -16,8 +16,15 @@ public class Tile {
 	/**
 	 * rend une tuile occupée par un pingouin
 	 */
-	public void changeStatue() {
+	public void taken() {
 		occupied = true;
+	}
+	
+	/**
+	 * rend une tuile libre
+	 */
+	public void quit() {
+		occupied = false;
 	}
 	
 	/**
