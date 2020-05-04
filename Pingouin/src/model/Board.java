@@ -2,35 +2,37 @@ package model;
 import java.util.Random;
 import java.util.Scanner;
 
-/**
- * Classe de gestion du plateau. Contient les methodes vérifiant l'alignement
- * entre cases du plateau, et celles jouant des coups.
- * @author Charly
- */
 public class Board {
-	Tile tab[][];
-
-	/**
-	 * Constructeur. Crée un tableau non initialisé de tiles 8*8
-	 */
+	private Tile tab[][];
+	
 	public Board() {
 		tab = new Tile[8][8];
+		shuffle();
 	}
 	
 	/**
-	 * Rend une tuile occupée par un pingouin
+	 * rend une tuile occupée par un pingouin
 	 * @param x coord x de la tuile
 	 * @param y coord y de la tuile
 	 */
 	public void takePosition(int x, int y) {
-		tab[y][x].changeStatue();
+		tab[y][x].taken();
 	}
-
+	
 	/**
-	 * Retire la tuile (x, y) du jeu
-	 * @param x Coordonnée x de la case
-	 * @param y Coordonnée y de la case
-	 * @return La case retirée du jeu
+	 * libère une tuile d'un pingouin
+	 * @param x coord x de la tuile
+	 * @param y coord y de la tuile
+	 */
+	public void quitPosition(int x, int y) {
+		tab[y][x].quit();
+	}
+	
+	/**
+	 * retire une tuile du plateau
+	 * @param x coord x de la tuile
+	 * @param y coord y de la tuile
+	 * @return tuile enlevée
 	 */
 	public Tile removeTile(int x, int y) {
 		Tile res = tab[y][x];
@@ -39,8 +41,7 @@ public class Board {
 	}
 	
 	/**
-	 * Génère un nouveau plateau de jeu de façon aléatoire.
-	 * Les proportions des valeurs des cases sont fixes.
+	 * distribue aléatoirement les pièces sur le plateau de jeu
 	 */
 	public void shuffle() {
 		int trois = 10;
@@ -71,10 +72,10 @@ public class Board {
 			}
 		}
 	}
-
+	
 	/**
-	 * Fonction vérifiant les proportions de tiles dans le plateau.
-	 * @return Vrai si les proportions sont correctes, faux sinon.
+	 * test la fonction shuffle, si elle a bien remis toute les tuiles et qu'il y a le bon nombre de tuile de chaque valeur
+	 * @return indique si le test a réussi
 	 */
 	private boolean test_shuffle() {
 		shuffle();
@@ -104,19 +105,14 @@ public class Board {
 	}
 	
 	/**
-	 * Determine si les cases (x1, y1) et (x2, y2) sont alignées.
-	 * @param x1 Coordonnée x de la case 1
-	 * @param y1 Coordonnée y de la case 1
-	 * @param x2 Coordonnée x de la case 2
-	 * @param y2 Coordonnée y de la case 2
-	 * @return Un entier indiquant l'alignement :
-	 *	0 si non-aligné ou l'une des cases ne contient pas de tuile
-	 * 	1 si alignés à l'horizontal	
-	 *	2 si alignés selon la diagonale [Bas-gauche ; Haut-droite] (comme un slash / )
-	 *	3 si alignés selon la diagonale [Haut-gauche ; Bas-droite] (comme un antislash \ )
+	 * vérifie si deux tuiles sont alignées
+	 * @param x1 coord x de la tuile 1
+	 * @param y1 coord y de la tuile 1
+	 * @param x2 coord x de la tuile 2
+	 * @param y2 coord x de la tuile 2
+	 * @return 0 pas alignées ou au moins une tuile n'est pas présente, 1 alignées horizontalement , 2 en slash , 3 en antislash
 	 */
 	public int align(int x1 , int y1 , int x2 , int y2) {
-		// Exception non levée si coorodonnées out of bound.
 		boolean trueTile = tab[y1][x1] != null && tab[y2][x2] != null;
 		boolean horizontal = y1 == y2;
 		boolean slash;
@@ -170,9 +166,9 @@ public class Board {
 	}
 	
 	/**
-	 * Methode de test. Vérifie l'alignement de chaque case.
-	 * @param print Vrai si l'on veut afficher les tests sur la sortie standard, Faux sinon.
-	 * @return Vrai si tous les tests sont passés, Faux sinon.
+	 * teste la fonction align
+	 * @param print indique si la fonction doit afficher les tests ou non
+	 * @return indique si le test a réussi
 	 */
 	private boolean test_align(boolean print) {
 		boolean res = true;
@@ -354,12 +350,12 @@ public class Board {
 	}
 	
 	/**
-	 * Determine si le déplacement de (x1, y1) à (x2, y2) est valide ou non.
-	 * @param x1 Coordonnée x de la case 1
-	 * @param y1 Coordonnée y de la case 1
-	 * @param x2 Coordonnée x de la case 2
-	 * @param y2 Coordonnée y de la case 2
-	 * @return Vrai si le déplacement est possible, Faux sinon.
+	 * indique si un déplacement entre deux tuiles est valide ou non
+	 * @param x1 coord x de la tuile 1
+	 * @param y1 coord y de la tuile 1
+	 * @param x2 coord x de la tuile 2
+	 * @param y2 coord x de la tuile 2
+	 * @return résultat du test
 	 */
 	public boolean legitTravel(int x1, int y1 , int x2 , int y2) {
 		int resAlign = align(x1,y1,x2,y2);
@@ -644,7 +640,6 @@ public class Board {
 	 * @return tuile 1 si le déplacement s'est fait, null sinon
 	 */
 	public Tile makeMove(int x1, int y1 , int x2 , int y2) {
-		
 		if(legitTravel(x1,y1,x2,y2) && tab[y1][x1].occupied()) {
 			takePosition(x2,y2);
 			return removeTile(x1,y1);
@@ -779,6 +774,28 @@ public class Board {
 			System.out.println("(5,7,6,4) faux");
 		}
 		return res;
+	}
+	
+	/**
+	 * annule un mouvement d'une tuile 1 vers une tuile 2
+	 * @param x1 coord x de la tuile 1
+	 * @param y1 coord y de la tuile 1
+	 * @param x2 coord x de la tuile 2
+	 * @param y2 coord x de la tuile 2
+	 * @param nbFish nombre de poisson sur la tuile 1
+	 */
+	public void reverseMove(int x1, int y1 , int x2 , int y2, int nbFish) {
+		if(tab[y2][x2].occupied() && tab[y1][x1] == null) {
+			// on quitte la case d'arrivée
+			tab[y2][x2].quit();
+			
+			// on recréé la case de départ avec le bon nombre de poissons
+			tab[y1][x1] = new Tile();
+			tab[y1][x1].setValue(nbFish);
+			
+			// on met le pingouin dessus
+			tab[y1][x1].taken();
+		}
 	}
 	
 	/**

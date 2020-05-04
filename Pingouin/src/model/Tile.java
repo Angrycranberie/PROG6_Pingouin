@@ -1,28 +1,44 @@
 package model;
 
-/**
- * Objet Tile. Correspond à une case du plateau.
- * Contient le nombre de poissons de la case, et si elle est occupée par un pingouin.
- * Les cases retirées de la partie sont des objets null
- * @author Charly
- */
 public class Tile {
 	private int value;
 	private boolean occupied;
 	
+	/**
+	 * affecte une valeur à une tuile
+	 * @param value
+	 */
 	public void setValue(int value) {
 		this.value = value;
 		occupied = false;
 	}
 	
-	public void changeStatue() {
+	/**
+	 * rend une tuile occupée par un pingouin
+	 */
+	public void taken() {
 		occupied = true;
 	}
 	
+	/**
+	 * rend une tuile libre
+	 */
+	public void quit() {
+		occupied = false;
+	}
+	
+	/**
+	 * renvoi la valeur d'une tuile
+	 * @return valeur de la tuile
+	 */
 	public int value() {
 		return value;
 	}
 	
+	/**
+	 * indique si une tuile est occupée
+	 * @return occupation de la tuile
+	 */
 	public boolean occupied() {
 		return occupied;
 	}	
