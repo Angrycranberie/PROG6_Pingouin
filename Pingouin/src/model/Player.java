@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
+ * @author Charly
+ */
 public class Player {
 	private String name;
 	private int score;

@@ -2,6 +2,11 @@ package model;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Classe Board. Correspond à un tableau de jeu 8*8 qui contient les cases du jeu
+ * @author Charly
+ *
+ */
 public class Board {
 	private Tile tab[][];
 	

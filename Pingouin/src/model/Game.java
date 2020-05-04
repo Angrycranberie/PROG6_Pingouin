@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * Classe Game. Gère une partie du jeu : ordre des tours, coups sur le plateau.
+ * @author Charly
+ */
 public class Game {
 	private Player p[];
 	private int nbPlayer;
@@ -98,7 +102,7 @@ public class Game {
 	 * @return indique si il y a ou non un prochain joueur
 	 */
 	public boolean nextPlayer() {
-		for(int i = 1 ; i <= 4 ; i++) {
+		for(int i = 1 ; i <= nbPlayer ; i++) {
 			if(p[(currentPlayerNumber - 1 + i) % nbPlayer].playing()) {
 				currentPlayerNumber = (currentPlayerNumber - 1 + i) % nbPlayer + 1;
 				return true;

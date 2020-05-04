@@ -1,5 +1,11 @@
 package model;
 
+/**
+ * Classe Tile. Une case du jeu, avec sa valeur et une donnée indiquant si elle est
+ * occupée ou non.
+ * @author Charly
+ *
+ */
 public class Tile {
 	private int value;
 	private boolean occupied;
