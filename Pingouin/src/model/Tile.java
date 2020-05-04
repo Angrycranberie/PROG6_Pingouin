@@ -10,7 +10,7 @@ public class Tile {
 	private boolean occupied;	// Si la case est occupée par un pingouin ou non.
 
 	/**
-	 * Constructeur de la classe pour une tuiles Tile.
+	 * Constructeur d'une tuile.
 	 * On vérifie que le nombre de poisson entré est bien entre 1 et 3.
 	 * Si ce n'est pas le cas, on ramène ce nombre dans la plage correcte.
 	 */
