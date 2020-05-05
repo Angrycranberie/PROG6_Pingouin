@@ -7,7 +7,7 @@ package model;
 public class Game {
 	private Player[] players;
 	private int playerCount;
-	private Board board;
+	private Board gameBoard;
 	private int currentPlayerNumber;
 	
 	/**
@@ -26,7 +26,7 @@ public class Game {
 		if(playerCount >= 2) players[1] = p2;
 		if(playerCount >= 3) players[2] = p3;
 		if(playerCount >= 4) players[3] = p4;
-		board = new Board();
+		gameBoard = new Board();
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public class Game {
 	public boolean movePenguin(int x1, int y1, int x2, int y2) {
 		Player p = getCurrentPlayer();
 		if (hasPenguinGoodOwning(p,x1,y1)) {
-			Tile t = board.makeMove(x1, y1, x2, y2);
+			Tile t = gameBoard.makeMove(x1, y1, x2, y2);
 			if (t != null) {
 				p.changeScore(t.getFishNumber());
 				p.addTile();
@@ -64,10 +64,12 @@ public class Game {
 	 * @return Vrai (true) si le pingouin appartient au joueur courant ; faux (false) sinon.
 	 */
 	private boolean hasPenguinGoodOwning(Player p, int x1, int y1) {
-		int[][] penguins = p.getPenguins();
+		Penguin penguins[] = p.penguins();
 		int nbPenguins = p.getPenguinsNumber();
 		for(int i = 0; i < nbPenguins ; i++) {
-			if (penguins[i][0] == x1 && penguins[i][1] == y1) return true;
+			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -93,5 +95,7 @@ public class Game {
 		return false;
 	}
 	
-	
+	public int[][] legitMovePossibility(Penguin p){
+		return gameBoard.movePossibility(p.coord_x(),p.coord_y());
+	}
 }

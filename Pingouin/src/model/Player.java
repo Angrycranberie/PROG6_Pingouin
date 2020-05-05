@@ -10,7 +10,7 @@ public class Player {
 	private String name; // Nom du joueur.
 	private int fishScore; // Score associé au nombre de poissons obtenu.
 	private int tileScore; // Score associé au nombre de cases obtenues.
-	private int penguins[][]; // Liste des pingouins du joueur.
+	private Penguin penguins[]; // Liste des pingouins du joueur.
 	private int penguinsNumber; // Nombre de pingouins du joueur.
 	private Color color; // Couleur du joueur.
 	private boolean playing; // Si le joueur est toujours dans la partie ou non.
@@ -22,9 +22,9 @@ public class Player {
 	 */
 	public Player(int penguinsNumber, Color color, String name) {
 		this.fishScore = this.tileScore = 0;
-		penguins = new int[penguinsNumber][2];
 		this.penguinsNumber = penguinsNumber;
 		this.color = color;
+		penguins = new Penguin[penguinsNumber];
 		this.name = name;
 		playing = true;
 	}
@@ -65,7 +65,7 @@ public class Player {
 	 * Retourne les coordonnées des pingouins du joueur.
 	 * @return Tableau des coordonnées des pingouins du joueur.
 	 */
-	public int[][] getPenguins(){
+	public Penguin[] penguins(){
 		return penguins;
 	}
 	
@@ -116,9 +116,8 @@ public class Player {
 	 */
 	public void movePenguin(int x1, int y1, int x2, int y2) {
 		for (int i = 0; i < penguinsNumber; i++) {
-			if (penguins[i][0] == x1 && penguins[i][1] == y1) {
-				penguins[i][0] = x2;
-				penguins[i][1] = y2;
+			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
+				penguins[i].changePosition(x2,y2);
 			}
 		}
 	}
