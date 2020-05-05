@@ -1,5 +1,7 @@
 package model;
 
+import controller.Player;
+
 /**
  * Classe Move. Correspond à des coups joués par un joueur. Utilisé par History.
  * @author Charly
