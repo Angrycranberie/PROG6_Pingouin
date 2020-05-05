@@ -1,23 +1,23 @@
 package model;
 
-import controller.Player;
-
+/**
+ * Classe Move. Correspond à des coups joués par un joueur. Utilisé par History.
+ * @author Charly
+ *
+ */
 public class Move {
-	int x1;
-	int y1;
-	int x2;
-	int y2;
-	int player;
-	int nbFish;
+	int x1, y1, x2, y2; // Coordonnées de départ et d'arrivée du coup.
+	int player; // Numéro du joueur jouant le coup.
+	int fishNumber; // Nombre de poissons obtenu suite à ce coup.
 	
 	/**
-	 * création d'une action de la part du joueur n°player qui bouge de la tuile 1 vers la 2 en obtenant nbFish
-	 * @param x1 coordonnée x de la tuile 1
-	 * @param y1 coordonnée y de la tuile 1
-	 * @param x2 coordonnée x de la tuile 2
-	 * @param y2 coordonnée y de la tuile 2
-	 * @param player numéro du joueur
-	 * @param nbFish nombre de poisson obtenu suite à ce coup
+	 * Création d'une action de la part du joueur de numéro "player" qui bouge d'une tuile à une autre en obtenant "fishNumber" poissons.
+	 * @param x1 Coordonnée x de la tuile de départ.
+	 * @param y1 Coordonnée y de la tuile de départ.
+	 * @param x2 Coordonnée x de la tuile d'arrivée.
+	 * @param y2 Coordonnée y de la tuile d'arrivée.
+	 * @param player Numéro du joueur jouant le coup.
+	 * @param nbFish Nombre de poissons obtenu suite à ce coup.
 	 */
 	public Move(int x1,	int y1, int x2,	int y2,	int player, int nbFish) {
 		this.x1 = x1;
@@ -25,29 +25,31 @@ public class Move {
 		this.x2 = x2;
 		this.y2 = y2;
 		this.player = player;
-		this.nbFish = nbFish;
+		this.fishNumber = nbFish;
 	}
 	
 	/**
-	 * annulation du coup
-	 * @param gameBoard plateau de jeu
-	 * @param p ensemble des joueurs
+	 * Annulation du coup.
+	 * @param b Plateau de jeu.
+	 * @param p Ensemble des joueurs.
 	 */
-	public void reverseMove(Board gameBoard,Player p[]) {
+	public void undo(Board b, Player[] p) {
 		p[player-1].movePenguin(x2, y2, x1, y1);
-		gameBoard.reverseMove(x1,y1,x2,y2,nbFish);
-		p[player-1].changeScore(-nbFish);
+		b.reverseMove(x1,y1,x2,y2, fishNumber);
+		p[player-1].changeScore(-fishNumber);
 		p[player-1].removeTile();
 	}
-	
-	public void remakeMove(Board gameBoard,Player p[]) {
-		if(gameBoard.makeMove(x1,y1,x2,y2).value() == nbFish) {
+
+	/**
+	 * Réfection du coup.
+	 * @param b Plateau de jeu.
+	 * @param p Ensemble des joueurs.
+	 */
+	public void redo(Board b, Player[] p) {
+		if (b.makeMove(x1,y1,x2,y2).getFishNumber() == fishNumber) {
 			p[player-1].movePenguin(x1, y1, x2, y2);
-			p[player-1].changeScore(nbFish);
+			p[player-1].changeScore(fishNumber);
 			p[player-1].addTile();
 		}
-		
 	}
-	
-	
 }
