@@ -1,82 +1,73 @@
 package model;
 
+import controller.Player;
+
+/**
+ * Classe Game. Gère une partie du jeu : ordre des tours, coups sur le plateau.
+ * @author Charly
+ */
 public class Game {
-	private Player players[];
-	private int nbPlayer;
+	private Player[] players;
+	private int playerCount;
 	private Board gameBoard;
 	private int currentPlayerNumber;
 	
 	/**
-	 * initialise le jeu
-	 * @param nbPlayer nombre de joueur
-	 * @param p1 joueur 1
-	 * @param p2 joueur 2
-	 * @param p3 joueur 3
-	 * @param p4 joueur 4
+	 * Initialisation du jeu.
+	 * @param playerCount Nombre de joueurs effectif.
+	 * @param p1 Joueur n°1.
+	 * @param p2 Joueur n°2.
+	 * @param p3 Joueur n°3.
+	 * @param p4 Joueur n°4.
 	 */
-	public Game(int nbPlayer,Player p1,Player p2,Player p3,Player p4) {
+	public Game(int playerCount, Player p1, Player p2, Player p3, Player p4) {
 		currentPlayerNumber = 1;
-		this.nbPlayer = nbPlayer;
-		players = new Player[nbPlayer];
-		if(nbPlayer >= 1) {
-			players[0] = p1;
-		}
-		if(nbPlayer >= 2) {
-			players[1] = p2;
-		}
-		if(nbPlayer >= 3) {
-			players[2] = p3;
-		}
-		if(nbPlayer >= 4) {
-			players[3] = p4;
-		}
+		this.playerCount = playerCount;
+		players = new Player[playerCount];
+		if(playerCount >= 1) players[0] = p1;
+		if(playerCount >= 2) players[1] = p2;
+		if(playerCount >= 3) players[2] = p3;
+		if(playerCount >= 4) players[3] = p4;
 		gameBoard = new Board();
 	}
 	
 	/**
-	 * retourne le numéro du joueur courant
-	 * @return numéro joueur courant
+	 * Retourne le numéro du joueur courant.
+	 * @return Numéro du joueur courant.
 	 */
-	public int currentPlayerNumber() {
-		return currentPlayerNumber;
-	}
+	public int getCurrentPlayerNumber() { return currentPlayerNumber; }
 	
 	/**
-	 * effectue le mouvement du pingouin de la tuile 1 vers la 2
-	 * @param x1 coordonnée x de la tuile 1
-	 * @param y1 coordonnée y de la tuile 1
-	 * @param x2 coordonnée x de la tuile 2
-	 * @param y2 coordonnée y de la tuile 2
-	 * @return indique si le mouvement s'est fait ou non
+	 * Effectue le mouvement d'un pingouin d'une tuile à une autre.
+	 * @param x1 Coordonnée x de la tuile de départ.
+	 * @param y1 Coordonnée y de la tuile de départ.
+	 * @param x2 Coordonnée x de la tuile d'arrivée.
+	 * @param y2 Coordonnée y de la tuile d'arrivée.
+	 * @return Vrai (true) si le mouvement a été fait ; faux (false) sinon.
 	 */
-	public boolean makeMove(int x1, int y1, int x2, int y2) {
-		Player p = currentPlayer();
-		if(goodPenguin(p,x1,y1)) {
+	public boolean movePenguin(int x1, int y1, int x2, int y2) {
+		Player p = getCurrentPlayer();
+		if (hasPenguinGoodOwning(p,x1,y1)) {
 			Tile t = gameBoard.makeMove(x1, y1, x2, y2);
-			if(t != null) {
-				p.changeScore(t.value());
+			if (t != null) {
+				p.changeScore(t.getFishNumber());
 				p.addTile();
 				p.movePenguin(x1, y1, x2, y2);
 				return true;
 			}
-			else {
-				return false;
-			}
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
 	/**
-	 * indique si le pingouin situé sur la tuile donnée est bien le pingouin du joueur courant
-	 * @param x1 coordonnée x de la tuile
-	 * @param y1 coordonnée y de la tuile
-	 * @return true le pingouin appartient au joueur courant false sinon
+	 * Indique si le pingouin situé sur la tuile donnée est bien le pingouin du joueur courant.
+	 * @param x1 Coordonnée x de la tuile où se situe le pingouin.
+	 * @param y1 Coordonnée y de la tuile où se situe le pingouin.
+	 * @return Vrai (true) si le pingouin appartient au joueur courant ; faux (false) sinon.
 	 */
-	private boolean goodPenguin(Player p,int x1, int y1) {
+	private boolean hasPenguinGoodOwning(Player p, int x1, int y1) {
 		Penguin penguins[] = p.penguins();
-		int nbPenguins = p.nbPenguins();
+		int nbPenguins = p.getPenguinsNumber();
 		for(int i = 0; i < nbPenguins ; i++) {
 			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
 				return true;
@@ -86,21 +77,20 @@ public class Game {
 	}
 	
 	/**
-	 * retourne le joueur courant
-	 * @return joueur courant
+	 * Retourne directement le joueur courant (et non son numéro).
+	 * @return Joueur courant.
 	 */
-	private Player currentPlayer() {
-		return players[currentPlayerNumber - 1];
-	}
+	private Player getCurrentPlayer() { return players[currentPlayerNumber - 1]; }
 	
 	/**
-	 * détermine le prochain joueur
-	 * @return indique si il y a ou non un prochain joueur
+	 * Détermine quel est le prochain joueur.
+	 * Par effet de bord, on incrémente le numéro du joueur courant.
+	 * @return Vrai (true) s'il y a bien un prochain joueur ; faux (false) sinon.
 	 */
 	public boolean nextPlayer() {
-		for(int i = 1 ; i <= nbPlayer ; i++) {
-			if(players[(currentPlayerNumber - 1 + i) % nbPlayer].playing()) {
-				currentPlayerNumber = (currentPlayerNumber - 1 + i) % nbPlayer + 1;
+		for (int i = 1; i <= 4; i++) {
+			if (players[(currentPlayerNumber - 1 + i) % playerCount].isPlaying()) {
+				currentPlayerNumber = (currentPlayerNumber - 1 + i) % playerCount + 1;
 				return true;
 			}
 		}
