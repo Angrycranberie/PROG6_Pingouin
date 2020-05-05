@@ -50,25 +50,13 @@ public class AIRandom extends Player {
 	 * @param move le tableau de coup disponible
 	 * @return le nombre de coup
 	 */
-	static private int lengthMove(int move[][]) {
+	private int lengthMove(int move[][]) {
 		int len=0;
 		boolean end = false;
 		while(!end && len < 60) {
-			if(move[len][0] == null) end = true;
-			len++;
+			if(move[len][0] == -1) end = true;
+			else len++;
 		}
 		return len;
-	}
-	
-	public static void main(String[] args) {
-		
-		int testTab[][] = new int[60][2];
-		
-		for(int i = 0; i < 50; i++) {
-			testTab[i][0] = i+1;
-			testTab[i][0] = i+2;
-		}
-		
-		System.out.println("Nombre de coup dans le tableau : "+lengthMove(testTab));
 	}
 }

@@ -988,6 +988,11 @@ public class Board {
 			}
 		}
 		
+		for(int i = index ; i < 60 ; i++) {
+			result[i][0] = -1;
+			result[i][1] = -1;
+		}
+		
 		return result;
 	}
 	
