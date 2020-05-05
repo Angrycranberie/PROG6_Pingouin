@@ -988,6 +988,11 @@ public class Board {
 			}
 		}
 		
+		for(int i = index ; i < 60 ; i++) {
+			result[i][0] = -1;
+			result[i][1] = -1;
+		}
+		
 		return result;
 	}
 	
@@ -1010,11 +1015,11 @@ public class Board {
 		possibility = movePossibility(0,0);
 		int result_0_0[][] = {{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{1,1},{1,2},{2,3},{2,4},{3,5},{3,6},{4,7},{0,1}};
 		for(int i = 0; i < 60 && not_end; i++) {
-			if(possibility[i] != null && i < result_0_0.length) {
+			if(possibility[i][0] != -1) {
 				if(print) {
 					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
 				}
-				if(possibility[i][0] != result_0_0[i][0] || possibility[i][1] != result_0_0[i][1]) {
+				if(i < result_0_0.length && (possibility[i][0] != result_0_0[i][0] || possibility[i][1] != result_0_0[i][1])) {
 					if(print) {
 						System.out.println("attendu x : " + result_0_0[i][0] + " y : " + result_0_0[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
 					}
@@ -1045,11 +1050,11 @@ public class Board {
 		possibility = movePossibility(4,3);
 		int result_4_3[][] = {{5,3},{6,3},{7,3},{4,4},{5,5},{5,6},{6,7},{3,4},{3,5},{2,6},{2,7},{3,3},{2,3},{1,3},{0,3},{3,2},{3,1},{2,0},{4,2},{5,1},{5,0}};
 		for(int i = 0; i < 60 && not_end; i++) {
-			if(possibility[i] != null && i < result_4_3.length) {
+			if(possibility[i][0] != -1) {
 				if(print) {
 					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
 				}
-				if(possibility[i][0] != result_4_3[i][0] || possibility[i][1] != result_4_3[i][1]) {
+				if(i < result_4_3.length && possibility[i][0] != result_4_3[i][0] || possibility[i][1] != result_4_3[i][1]) {
 					if(print) {
 						System.out.println("attendu x : " + result_4_3[i][0] + " y : " + result_4_3[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
 					}
@@ -1080,11 +1085,11 @@ public class Board {
 		possibility = movePossibility(2,6);
 		int result_2_6[][] = {{3,6},{4,6},{5,6},{6,6},{3,7},{2,7},{1,6},{0,6},{2,5},{1,4},{1,3},{0,2},{0,1},{3,5},{3,4},{4,3},{4,2},{5,1},{5,0}};
 		for(int i = 0; i < 60 && not_end; i++) {
-			if(possibility[i] != null && i < result_2_6.length) {
+			if(possibility[i][0] != -1) {
 				if(print) {
 					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
 				}
-				if(possibility[i][0] != result_2_6[i][0] || possibility[i][1] != result_2_6[i][1]) {
+				if(i < result_2_6.length && possibility[i][0] != result_2_6[i][0] || possibility[i][1] != result_2_6[i][1]) {
 					if(print) {
 						System.out.println("attendu x : " + result_2_6[i][0] + " y : " + result_2_6[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
 					}
@@ -1118,11 +1123,11 @@ public class Board {
 		possibility = movePossibility(2,6);
 		int result_2_6_bis[][] = {{3,6},{4,6},{5,6},{6,6},{3,7},{1,6},{0,6},{2,5},{1,4},{3,5},{3,4},{4,3},{4,2},{5,1}};
 		for(int i = 0; i < 60 && not_end; i++) {
-			if(possibility[i] != null && i < result_2_6_bis.length) {
+			if(possibility[i][0] != -1) {
 				if(print) {
 					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
 				}
-				if(possibility[i][0] != result_2_6_bis[i][0] || possibility[i][1] != result_2_6_bis[i][1]) {
+				if(i < result_2_6_bis.length && possibility[i][0] != result_2_6_bis[i][0] || possibility[i][1] != result_2_6_bis[i][1]) {
 					if(print) {
 						System.out.println("attendu x : " + result_2_6_bis[i][0] + " y : " + result_2_6_bis[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
 					}
