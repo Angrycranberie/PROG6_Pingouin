@@ -4,17 +4,19 @@ import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.DefaultMenuLayout;
+import java.awt.*;
 
-public class MainMenu {
+public class MainMenuInterface {
     public JPanel panelMain;
-    private JButton chargerUnePartieButton;
-    private JButton nouvellePartieButton;
-    private JButton quitterButton;
+    private JButton b_loadGame;
+    private JButton b_quit;
+    private JLabel l_title;
     public JPanel p;
     public JButton b_newGame;
+    private JButton b_settings;
 
 
-    MainMenu(){
+    MainMenuInterface(){
         /*panelMain.setLayout(new GroupLayout(panelMain));
         b_newGame = new JButton();
         b_newGame.setText("Nouvelle Partie");
