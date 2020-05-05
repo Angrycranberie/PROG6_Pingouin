@@ -1,5 +1,9 @@
 package controller;
 
+import model.Game;
+import model.Penguin;
+
+import java.awt.Color;
 import java.util.Random;
 
 /**
@@ -10,26 +14,61 @@ public class AIRandom extends Player {
 
 	Random r;
 	
-	public AIRandom(int nbPenguins, int c, String name) {
-		super(nbPenguins, c, name);
+	public AIRandom(Game game, int penguinsNumber, Color color, String name) {
+		super(game, penguinsNumber, color, name);
 		r = new Random();
 	}
-	
+
 	@Override
 	public void play() {
-		int tmp, x, y;
+		int tmp, x, y, index=0;
+		int move[][];
+		Penguin tabPen[] = penguins();
+		Penguin pen;
 		
 		/* choix du pingouin à jouer */
-		tmp = r.nextInt(2);
+		do {
+			tmp = r.nextInt(getPenguinsNumber());
+			pen = tabPen[tmp];
+			move = getGame().legitMovePossibility(pen);
+			
+			index = lengthMove(move);
+			
+		} while(index == 0); 
 		
-		/* on teste si le pingouin peut bouger */
-		/* si non, on prend l'autre */
 		
-		/* récupération des cases accessibles pour le pingouin */
-		
-		/* on choisit une case au hasard parmi les accessibles */
-		
-		// makeMove(px, py, x, y);
+		do {
+			/* on choisit une case au hasard parmi les accessibles */
+			tmp = r.nextInt(index);
+			x = move[tmp][0];
+			y = move[tmp][1];
+		} while (!getGame().movePenguin(pen.coord_x(), pen.coord_y(), x, y));
 	}
 	
+	/**
+	 * Retourne le nombre de coup disponible
+	 * @param move le tableau de coup disponible
+	 * @return le nombre de coup
+	 */
+	static private int lengthMove(int move[][]) {
+		int len=0;
+		boolean end = false;
+		while(!end && len < 60) {
+			if(move[len][0] == null) end = true;
+			len++;
+		}
+		return len;
+	}
+	
+	public static void main(String[] args) {
+		
+		int testTab[][] = new int[60][2];
+		
+		for(int i = 0; i < 50; i++) {
+			testTab[i][0] = i+1;
+			testTab[i][0] = i+2;
+		}
+		
+		System.out.println("Nombre de coup dans le tableau : "+lengthMove(testTab));
+	}
 }

@@ -1,131 +1,145 @@
 package controller;
 
-/** 
- * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur 
- * @author Charly 
+import model.Game;
+import model.Penguin;
+
+import java.awt.*;
+
+/**
+ * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
+ * @author Charly
  */
-public abstract class Player {
-	private String name;
-	private int score;
-	private int nbTile;
-	private int penguins[][];
-	private int nbPenguins;
-	private int colour;
-	private boolean playing;
+public class Player {
+	private Game game;
+	private String name; // Nom du joueur.
+	private int fishScore; // Score associé au nombre de poissons obtenu.
+	private int tileScore; // Score associé au nombre de cases obtenues.
+	private Penguin penguins[]; // Liste des pingouins du joueur.
+	private int penguinsNumber; // Nombre de pingouins du joueur.
+	private Color color; // Couleur du joueur.
+	private boolean playing; // Si le joueur est toujours dans la partie ou non.
 	
 	/**
-	 * crée l'objet Player 
-	 * @param nbPenguins indique le nombre de pingouin du joueur
-	 * @param c couleur du joueur
+	 * Création du joueur.
+	 * @param penguinsNumber Indique le nombre de pingouin du joueur
+	 * @param color Couleur du joueur.
 	 */
-	public Player(int nbPenguins , int c , String name) {
-		score = 0; 
-		nbTile = 0; 
-		penguins = new int[nbPenguins][2]; 
-		this.nbPenguins = nbPenguins;
-		colour = c;
-		this.name = name; 
+	public Player(Game game, int penguinsNumber, Color color, String name) {
+		this.game = game;
+		this.fishScore = this.tileScore = 0;
+		this.penguinsNumber = penguinsNumber;
+		this.color = color;
+		penguins = new Penguin[penguinsNumber];
+		this.name = name;
 		playing = true;
 	}
 	
 	/**
-	 * retourne le score du joueur
-	 * @return score du joueur
+	 * Retourne le jeu.
+	 * @return Le Jeu.
 	 */
-	public int score() {
-		return score;
+	public Game getGame() {
+		return game;
 	}
 	
 	/**
-	 * indique si le joueur peut jouer
-	 * @return indique si le joueur peut jouer
+	 * Retourne le score principal du joueur, associé au nombre de poissons récoltés.
+	 * @return Nombre de poissons récoltés.
 	 */
-	public boolean playing() {
+	public int getFishScore() {
+		return fishScore;
+	}
+	
+	/**
+	 * Indique si le joueur peut jouer ou non.
+	 * @return Vrai (true) si le joueur peut joueur ; faux (false) sinon.
+	 */
+	public boolean isPlaying() {
 		return playing;
 	}
 	
 	/**
-	 * retourne le nombre de tuile récupérée par le joueur
-	 * @return nombre de tuile récupérée
+	 * Retourne le score secondaire du joueur, associé au nombre de tuiles récupérées.
+	 * @return Nombre de tuiles récupérées.
 	 */
-	public int nbTile() {
-		return nbTile;
+	public int getTileScore() {
+		return tileScore;
 	}
 	
 	/**
-	 * retourne la couleur du joueur
-	 * @return couleur du joueur
+	 * Retourne la couleur du joueur.
+	 * @return Couleur du joueur.
 	 */
-	public int colour() {
-		return colour;
+	public Color getColor() {
+		return color;
 	}
 	
 	/**
-	 * retourne les coordonnées des pingouins du joueur
-	 * @return coordonnées des pingouins du joueur
+	 * Retourne les coordonnées des pingouins du joueur.
+	 * @return Tableau des coordonnées des pingouins du joueur.
 	 */
-	public int[][] penguins(){
+	public Penguin[] penguins(){
 		return penguins;
 	}
 	
 	/**
-	 * retourne le nombre de pingouins du joueur
-	 * @return
+	 * Retourne le nombre de pingouins du joueur.
+	 * @return Nombre de pingouins du joueur.
 	 */
-	public int nbPenguins() {
-		return nbPenguins;
+	public int getPenguinsNumber() {
+		return penguinsNumber;
 	}
 	
 	/**
-	 * retourne le nom du joueur
-	 * @return nom du joueur
+	 * Retourne le nom du joueur.
+	 * @return Nom du joueur.
 	 */
-	public String name() {
+	public String getName() {
 		return name;
 	}
 	
 	/**
-	 * augmente le score du joueur d'un montant donné
-	 * @param add montant à ajouter
+	 * Augmente (ou diminue) le score du joueur d'un montant donné.
+	 * @param n Montant à additionner au score.
 	 */
-	public void changeScore(int add) {
-		score += add;
+	public void changeScore(int n) {
+		fishScore += n;
 	}
 	
 	/**
-	 * augmente le nombre de tuile du joueur
+	 * Augmente le nombre de tuiles du joueur.
 	 */
 	public void addTile() {
-		nbTile++;
+		tileScore++;
 	}
 	
 	/**
-	 * décrémente le nombre de tuile du joueur
+	 * Diminue le nombre de tuiles du joueur.
 	 */
 	public void removeTile() {
-		nbTile--;
+		tileScore--;
 	}
 	
 	/**
-	 * joue un coup
-	 */
-	public void play() {
-		return;
-	}
-	
-	/**
-	 * bouge un pingouin d'une tuile 1 vers une tuile 2
-	 * @param x1 coordonnée x de la tuile 1
-	 * @param y1 coordonnée y de la tuile 1
-	 * @param x2 coordonnée x de la tuile 2
-	 * @param y2 coordonnée y de la tuile 2
+	 * Bouge un pingouin d'une tuile vers une autre.
+	 * @param x1 Coordonnée x de la tuile de départ.
+	 * @param y1 Coordonnée y de la tuile de départ.
+	 * @param x2 Coordonnée x de la tuile d'arrivée.
+	 * @param y2 Coordonnée y de la tuile d'arrivée.
 	 */
 	public void movePenguin(int x1, int y1, int x2, int y2) {
-		for(int i = 0 ; i < nbPenguins ; i++) {
-			if(penguins[i][0] == x1 && penguins[i][1] == y1) {
-				penguins[i][0] = x2;
-				penguins[i][1] = y2;
+		for (int i = 0; i < penguinsNumber; i++) {
+			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
+				penguins[i].changePosition(x2,y2);
 			}
 		}
+	}
+	
+	// TODO
+	/**
+	 * Joue un coup
+	 */
+	void play() {
+		return ;
 	}
 }

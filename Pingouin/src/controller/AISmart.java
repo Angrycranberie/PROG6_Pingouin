@@ -1,5 +1,9 @@
 package controller;
 
+import java.awt.Color;
+
+import model.Game;
+
 /**
  * Classe d'IA intermédiaire. Joue des coups en privilégiant les cases donnant
  * le plus de poissons.
@@ -7,8 +11,9 @@ package controller;
  */
 public class AISmart extends Player {
 
-	public AISmart(int nbPenguins, int c, String name) {
-		super(nbPenguins, c, name);
+	public AISmart(Game game, int penguinsNumber, Color color, String name) {
+		super(game, penguinsNumber, color, name);
 	}
+
 
 }

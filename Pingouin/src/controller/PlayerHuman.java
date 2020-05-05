@@ -1,13 +1,19 @@
 package controller;
 
+import model.Game;
+
+import java.awt.Color;
+
 /**
  * Classe de joueur humain. Joue un coup à partir d'un clic.
  * @author Vincent
  */
 public class PlayerHuman extends Player {
 
-	public PlayerHuman(int nbPenguins, int c, String name) {
-		super(nbPenguins, c, name);
+	public PlayerHuman(Game game, int penguinsNumber, Color color, String name) {
+		super(game, penguinsNumber, color, name);
 	}
+
+
 
 }
