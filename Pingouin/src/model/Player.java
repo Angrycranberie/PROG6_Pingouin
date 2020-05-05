@@ -2,6 +2,10 @@ package model;
 
 import java.awt.*;
 
+/**
+ * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
+ * @author Charly
+ */
 public class Player {
 	private String name; // Nom du joueur.
 	private int fishScore; // Score associé au nombre de poissons obtenu.

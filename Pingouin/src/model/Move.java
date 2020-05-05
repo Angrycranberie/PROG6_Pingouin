@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * Classe Move. Correspond à des coups joués par un joueur. Utilisé par History.
+ * @author Charly
+ *
+ */
 public class Move {
 	int x1, y1, x2, y2; // Coordonnées de départ et d'arrivée du coup.
 	int player; // Numéro du joueur jouant le coup.
