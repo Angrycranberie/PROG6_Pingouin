@@ -114,7 +114,13 @@ public class Game {
 	}
 	
 	public boolean canPlay(Player p) {
-		
-		return false;
+		boolean possibility = false;
+		int movePossibility[][];
+		Penguin penguins[] = p.penguins();
+		for(int i = 0 ; i < p.getPenguinsNumber() ; i++) {
+			movePossibility = legitMovePossibility(penguins[i]);
+			possibility = possibility || movePossibility[0][0] == -1;
+		}
+		return possibility;
 	}
 }
