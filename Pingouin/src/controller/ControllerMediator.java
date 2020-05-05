@@ -7,7 +7,7 @@ import view.EventCollector;
  * Appelle les methodes qui executent les actions.
  * @author Vincent
  */
-public class ControlerMediator implements EventCollector {
+public class ControllerMediator implements EventCollector {
 
 	@Override
 	public void mouseClick(int l, int c) {
@@ -15,7 +15,7 @@ public class ControlerMediator implements EventCollector {
 	}
 
 	@Override
-	public void tictac() {
+	public void timedAction() {
 		
 	}
 	
