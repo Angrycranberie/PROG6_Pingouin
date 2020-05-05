@@ -8,36 +8,41 @@ import java.util.Scanner;
  *
  */
 public class Board {
-	private Tile tab[][];
-	
+	// Constantes d'alignement des tuiles.
+	public static final int NULL_ALIGN = 0;
+	public static final int HORIZONTAL_ALIGN = 1;
+	public static final int SLASH_ALIGN = 2;
+	public static final int ANTISLASH_ALIGN = 3;
+
+	private Tile[][] tab; // Représentation du plateau sous forme de tableau.
+
+	/** Constructeur du plateau.
+	 * On modélise ce dernier par un tableau de 8*8 cases puis on génère aléatoirement son contenu.
+	 */
 	public Board() {
 		tab = new Tile[8][8];
 		shuffle();
 	}
 	
 	/**
-	 * rend une tuile occupée par un pingouin
-	 * @param x coord x de la tuile
-	 * @param y coord y de la tuile
+	 * Permet à un pingouin d'occuper une tuile.
+	 * @param x Coordonnée x de la tuile à occuper.
+	 * @param y Coordonnée y de la tuile à occuper.
 	 */
-	public void takePosition(int x, int y) {
-		tab[y][x].taken();
-	}
+	public void occupyWithPenguin(int x, int y) { tab[y][x].occupy(); }
 	
 	/**
-	 * libère une tuile d'un pingouin
-	 * @param x coord x de la tuile
-	 * @param y coord y de la tuile
+	 * Libère une tuile d'un pingouin.
+	 * @param x Coordonnée x de la tuile à libérer.
+	 * @param y Coordonnée y de la tuile à libérer.
 	 */
-	public void quitPosition(int x, int y) {
-		tab[y][x].quit();
-	}
+	public void freeFromPenguin(int x, int y) { tab[y][x].free(); }
 	
 	/**
-	 * retire une tuile du plateau
-	 * @param x coord x de la tuile
-	 * @param y coord y de la tuile
-	 * @return tuile enlevée
+	 * Retire une tuile du plateau.
+	 * @param x Coordonnée x de la tuile à enlever.
+	 * @param y Coordonnée y de la tuile à enlever.
+	 * @return Tuile enlevée du plateau.
 	 */
 	public Tile removeTile(int x, int y) {
 		Tile res = tab[y][x];
@@ -46,263 +51,239 @@ public class Board {
 	}
 	
 	/**
-	 * distribue aléatoirement les pièces sur le plateau de jeu
+	 * Distribue aléatoirement les poissons sur le plateau de jeu.
 	 */
 	public void shuffle() {
-		int trois = 10;
-		int deux = 20;
-		int un = 30;
-		int tirage;
-		int value;
+		// Nombre de cases comportant respectivement un, deux et trois poissons.
+		int threeFish = 10, twoFish = 20, oneFish = 30;
+
+		// Variable de tirage et du nombre de poissons effectif à ajouter à la tuile.
+		int draw, fishNumber;
+
 		Random r = new Random();
-		for(int y = 0 ; y < 8 ; y++) {
-			for(int x = 0 ; x < 8 ; x++) {
-				if(y % 2 != 0 || x != 7) {
-					tirage = r.nextInt(trois + deux + un) + 1;  // 1 <= tirage <= un + deux + trois 
-					if(tirage <= un) { // 1 <= tirage <= un  ,  un valeurs possibles
-						value = 1;
-						un--;
+		for (int y = 0 ; y < 8 ; y++) {
+			for (int x = 0 ; x < 8 ; x++) {
+				if (y % 2 != 0 || x != 7) {
+					draw = r.nextInt(threeFish + twoFish + oneFish) + 1;  // 1 <= draw <= oneFish + twoFish + threeFish.
+					if (draw <= oneFish) { // 1 <= draw <= oneFish ; une valeur possible.
+						fishNumber = Tile.ONE_FISH;
+						oneFish--;
+					} else if(draw <= oneFish + twoFish) { // oneFish < draw <= oneFish + twoFish ; deux valeurs possibles.
+						fishNumber = Tile.TWO_FISH;
+						twoFish--;
+					} else { // oneFish + twoFish < draw <= oneFish + twoFish + threeFish ; trois valeurs possibles.
+						fishNumber = Tile.THREE_FISH;
+						threeFish--;
 					}
-					else if(tirage <= un + deux) { // un < tirage <= un + deux  ,  deux valeurs possibles
-						value = 2;
-						deux--;
-					}
-					else { // un + deux < tirage <= un + deux + trois   ,   trois valeurs possibles
-						value = 3;
-						trois--;
-					}
-					tab[y][x] = new Tile();
-					tab[y][x].setValue(value);
+					tab[y][x] = new Tile(fishNumber);
 				}
 			}
 		}
 	}
 	
 	/**
-	 * test la fonction shuffle, si elle a bien remis toute les tuiles et qu'il y a le bon nombre de tuile de chaque valeur
-	 * @return indique si le test a réussi
+	 * Test de la fonction "shuffle".
+	 * Vérifie si elle a bien remis toutes les tuiles et qu'il y a le bon nombre de tuiles pour chaque valeur.
+	 * @return Indique si le test a réussi.
 	 */
 	private boolean test_shuffle() {
 		shuffle();
-		int trois = 0;
-		int deux = 0;
-		int un = 0;
-		for(int y = 0 ; y < 8 ; y++) {
-			for(int x = 0 ; x < 8 ; x++) {
-				if(tab[y][x] != null) {
-					if(tab[y][x].value() == 1) {
-						un++;
-					}
-					else if(tab[y][x].value() == 2) {
-						deux++;
-					}
-					else if(tab[y][x].value() == 3) {
-						trois++;
-					}
-					else {
-						System.out.println(tab[y][x].value() + " n'est pas une valeur valide, coord : x " + x +" y " + y);
-						return false;
+		int threeFish, twoFish, oneFish;
+		threeFish = twoFish = oneFish = 0;
+		for (int y = 0 ; y < 8 ; y++) {
+			for (int x = 0 ; x < 8 ; x++) {
+				if (tab[y][x] != null) {
+					switch (tab[y][x].getFishNumber()) {
+						case 1: oneFish++; break;
+						case 2: twoFish++; break;
+						case 3: threeFish++; break;
+						default:
+							System.out.println(
+									tab[y][x].getFishNumber()+" n'est pas une valeur valide, coord : x "+x+" y "+y
+							);
+							return false;
 					}
 				}
 			}
 		}
-		return trois == 10 && deux == 20 && un == 30;
+		return threeFish == 10 && twoFish == 20 && oneFish == 30;
 	}
 	
 	/**
-	 * vérifie si deux tuiles sont alignées
-	 * @param x1 coord x de la tuile 1
-	 * @param y1 coord y de la tuile 1
-	 * @param x2 coord x de la tuile 2
-	 * @param y2 coord x de la tuile 2
-	 * @return 0 pas alignées ou au moins une tuile n'est pas présente, 1 alignées horizontalement , 2 en slash , 3 en antislash
+	 * Vérifie si deux tuiles sont alignées.
+	 * @param x1 Coordonnée x de la tuile 1.
+	 * @param y1 Coordonnée y de la tuile 1.
+	 * @param x2 Coordonnée x de la tuile 2.
+	 * @param y2 Coordonnée x de la tuile 2.
+	 * @return 0 : pas d'alignement ou erreur de tuile ; 1 : horizontal ; 2 : en slash ; 3 en antislash.
 	 */
-	public int align(int x1 , int y1 , int x2 , int y2) {
+	public int areAligned(int x1, int y1, int x2, int y2) {
+		// Vérification de la validité des tuiles.
 		boolean trueTile = tab[y1][x1] != null && tab[y2][x2] != null;
+
+		// Recherche d'un alignement horizontal.
 		boolean horizontal = y1 == y2;
+
+		// Recherche d'un alignement diagonal droit (slash).
 		boolean slash;
-		if(y1 < y2) {
-			if(y1 % 2 == 0) {
-				slash = x1 + ((y1 - y2) / 2) == x2;
-			}
-			else {
-				slash = x1 + ((y1 + 1 - y2) / 2) - 1 == x2;
-			}
+		if (y1 < y2) {
+			if(y1 % 2 == 0) slash = x1 + ((y1 - y2) / 2) == x2;
+			else slash = x1 + ((y1 + 1 - y2) / 2) - 1 == x2;
+		} else {
+			if(y2 % 2 == 0) slash = x2 + ((y2 - y1) / 2) == x1;
+			else slash = x2 + ((y2 + 1 - y1) / 2) - 1 == x1;
 		}
-		else {
-			if(y2 % 2 == 0) {
-				slash = x2 + ((y2 - y1) / 2) == x1;
-			}
-			else {
-				slash = x2 + ((y2 + 1 - y1) / 2) - 1 == x1;
-			}
+
+		// Recherche d'un alignement diagonal gauche (antislash).
+		boolean antislash;
+		if (y1 < y2) {
+			if(y1 % 2 == 0) antislash = x1 + ((y2 - y1 - 1) / 2) + 1 == x2;
+			else antislash = x1 + ((y2  - y1) / 2)  == x2;
+		} else {
+			if(y2 % 2 == 0) antislash = x2 + ((y1 - y2 - 1) / 2) + 1== x1;
+			else antislash = x2 + ((y1 - y2) / 2)  == x1;
 		}
-		boolean antiSlash;
-		if(y1 < y2) {
-			if(y1 % 2 == 0) {
-				antiSlash = x1 + ((y2 - y1 - 1) / 2) + 1 == x2;
-			}
-			else {
-				antiSlash = x1 + ((y2  - y1) / 2)  == x2;
-			}
-		}
-		else {
-			if(y2 % 2 == 0) {
-				antiSlash = x2 + ((y1 - y2 - 1) / 2) + 1== x1;
-			}
-			else {
-				antiSlash = x2 + ((y1 - y2) / 2)  == x1;
-			}
-		}
-		if(trueTile && (horizontal || slash || antiSlash)) {
-			if(horizontal) {
-				return 1;
-			}
-			else if(slash) {
-				return 2;
-			}
-			else{
-				return 3;
-			}
-		}
-		else{
-			return 0;
-		}
+
+		if (trueTile && (horizontal || slash || antislash)) {
+			if (horizontal) return Board.HORIZONTAL_ALIGN;
+			else if (slash) return Board.SLASH_ALIGN;
+			else return Board.ANTISLASH_ALIGN;
+		} else return Board.NULL_ALIGN;
 	}
 	
 	/**
-	 * teste la fonction align
-	 * @param print indique si la fonction doit afficher les tests ou non
-	 * @return indique si le test a réussi
+	 * Test de la fonction "areAligned".
+	 * @param print Indique si la fonction doit afficher les tests ou non.
+	 * @return Indique si le test a réussi.
 	 */
-	private boolean test_align(boolean print) {
+	private boolean test_areAligned(boolean print) {
 		boolean res = true;
 		// test horizontaux
-		res = res && (align(0,0,6,0) != 0);
+		res = areAligned(0, 0, 6, 0) != 0;
 		if(print) {
 			printTest(1,0,0,6,0);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(0,0,6,0) faux");
 		}
 		
-		res = res && align(0,0,1,0) != 0;
+		res = res && areAligned(0,0,1,0) != 0;
 		if(print) {
 			printTest(1,0,0,1,0);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(0,0,1,0) faux");
 		}
 		
-		res = res && align(3,3,0,3) != 0;
+		res = res && areAligned(3,3,0,3) != 0;
 		if(print) {
 			printTest(1,3,3,0,3);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(3,3,0,3) faux");
 		}
 		
-		res = res && align(7,3,0,3) != 0;
+		res = res && areAligned(7,3,0,3) != 0;
 		if(print) {
 			printTest(1,7,3,0,3);
 		}
 		
-		if(res == false) {
+		if(!res) {
 			System.out.println("(7,3,0,3) faux");
 		}
 		
-		res = res && align(7,3,6,3) != 0;
+		res = res && areAligned(7,3,6,3) != 0;
 		if(print) {
 			printTest(1,7,3,6,3);
 		}
 		
-		if(res == false) {
+		if(!res) {
 			System.out.println("(7,3,6,3) faux");
 		}
 		
 		// test slash
-		res = res && align(0,0,1,1) != 0;
+		res = res && areAligned(0,0,1,1) != 0;
 		if(print) {
 			printTest(1,0,0,1,1);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(0,0,1,1) faux");
 		}
 		
-		res = res && align(0,0,4,7) != 0;
+		res = res && areAligned(0,0,4,7) != 0;
 		if(print) {
 			printTest(1,0,0,4,7);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(0,0,4,7) faux");
 		}
 		
-		res = res && align(6,7,5,6) != 0;
+		res = res && areAligned(6,7,5,6) != 0;
 		if(print) {
 			printTest(1,6,7,5,6);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(6,7,5,6) faux");
 		}
 		
-		res = res && align(6,7,2,0) != 0;
+		res = res && areAligned(6,7,2,0) != 0;
 		if(print) {
 			printTest(1,6,7,2,0);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(6,7,2,0) faux");
 		}
 		
-		res = res && align(6,7,4,3) != 0;
+		res = res && areAligned(6,7,4,3) != 0;
 		if(print) {
 			printTest(1,6,7,4,3);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(6,7,4,3) faux");
 		}
 		
 		// test antislash
-		res = res && align(0,0,0,1) != 0;
+		res = res && areAligned(0,0,0,1) != 0;
 		if(print) {
 			printTest(1,0,0,0,1);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(0,0,0,1) faux");
 		}
 		
-		res = res && align(6,0,6,1) != 0;
+		res = res && areAligned(6,0,6,1) != 0;
 		if(print) {
 			printTest(1,6,0,6,1);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(6,0,6,1) faux");
 		}
 		
-		res = res && align(6,0,3,7) != 0;
+		res = res && areAligned(6,0,3,7) != 0;
 		if(print) {
 			printTest(1,6,0,3,7);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(6,0,3,7) faux");
 		}
 		
-		res = res && align(0,7,3,0) != 0;
+		res = res && areAligned(0,7,3,0) != 0;
 		if(print) {
 			printTest(1,0,7,3,0);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(0,7,3,0) faux");
 		}
 		
-		res = res && align(0,7,0,6) != 0;
+		res = res && areAligned(0,7,0,6) != 0;
 		if(print) {
 			printTest(1,0,7,0,6);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(0,7,0,6) faux");
 		}
 		
-		res = res && align(2,7,4,3) != 0;
+		res = res && areAligned(2,7,4,3) != 0;
 		if(print) {
 			printTest(1,2,7,4,3);
 		}
@@ -311,43 +292,43 @@ public class Board {
 		}
 		
 		// test non align�
-		res = res && align(0,0,2,1) == 0;
+		res = res && areAligned(0,0,2,1) == 0;
 		if(print) {
 			printTest(1,0,0,2,1);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(0,0,2,1) faux");
 		}
 		
-		res = res && align(0,0,0,2) == 0;
+		res = res && areAligned(0,0,0,2) == 0;
 		if(print) {
 			printTest(1,0,0,0,2);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(0,0,0,2) faux");
 		}
 		
-		res = res && align(7,7,7,5) == 0;
+		res = res && areAligned(7,7,7,5) == 0;
 		if(print) {
 			printTest(1,7,7,7,5);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(7,7,7,5) faux");
 		}
 		
-		res = res && align(1,7,1,4) == 0;
+		res = res && areAligned(1,7,1,4) == 0;
 		if(print) {
 			printTest(1,1,7,1,4);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(1,7,1,4) faux");
 		}
 		
-		res = res && align(2,4,7,5) == 0;
+		res = res && areAligned(2,4,7,5) == 0;
 		if(print) {
 			printTest(1,2,4,7,5);
 		}
-		if(res == false) {
+		if(!res) {
 			System.out.println("(2,4,7,5) faux");
 		}
 		
@@ -355,166 +336,124 @@ public class Board {
 	}
 	
 	/**
-	 * indique si un déplacement entre deux tuiles est valide ou non
-	 * @param x1 coord x de la tuile 1
-	 * @param y1 coord y de la tuile 1
-	 * @param x2 coord x de la tuile 2
-	 * @param y2 coord x de la tuile 2
-	 * @return résultat du test
+	 * Indique si un déplacement entre deux tuiles est valide ou non.
+	 * @param x1 Coordonnée x de la tuile de départ.
+	 * @param y1 Coordonnée y de la tuile de départ.
+	 * @param x2 Coordonnée x de la tuile d'arrivée.
+	 * @param y2 Coordonnée x de la tuile d'arrivée.
+	 * @return Vrai (true) si un déplacement est valide ; faux (false) sinon.
 	 */
-	public boolean legitTravel(int x1, int y1 , int x2 , int y2) {
-		int resAlign = align(x1,y1,x2,y2);
-		if(resAlign == 1) { // y1 == y2
-			int y = y1;
-			if(x1 < x2) {
-				for(int x = x1 + 1 ; x <= x2 ; x++) {
-					if((x != x2 || y != y2) && align(x,y,x2,y2) != align(x,y,x1,y1)) {
-						System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
+	public boolean isMoveLegit(int x1, int y1, int x2, int y2) {
+		int resAlign = areAligned(x1, y1, x2, y2), x, y;
+		switch (resAlign) {
+			case Board.HORIZONTAL_ALIGN:
+				y = y1;
+				if (x1 < x2) {
+					for (x = x1+1; x <= x2; x++) {
+						if ((x != x2 || y != y2) && areAligned(x, y, x2, y2) != areAligned(x, y, x1, y1))
+							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
+						if (tab[y][x] == null || tab[y][x].occupied()) return false;
 					}
-					
-					if(tab[y][x] == null || tab[y][x].occupied()) {
-						return false;
-					}
-				}
-			}
-			else {
-				for(int x = x1 - 1 ; x >= x2 ; x--) {
-					if((x != x2 || y != y2) && align(x,y,x2,y2) != align(x,y,x1,y1)) {
-						System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
-					}
-					if(tab[y][x] == null || tab[y][x].occupied()) {
-						return false;
+				} else {
+					for (x = x1-1; x >= x2; x--) {
+						if ((x != x2 || y != y2) && areAligned(x,y,x2,y2) != areAligned(x,y,x1,y1))
+							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
+						if (tab[y][x] == null || tab[y][x].occupied()) return false;
 					}
 				}
-			}
-			return true;
-		}
-		else if(resAlign == 2) { // alignés en /
-			int x;
-			if(y1 < y2) {
-				x = x1;
-				if(y1 % 2 == 1) {
-					x--;
-				}
-				for(int y = y1 + 1; y <= y2 ; y++) {
-					if((x != x2 || y != y2) && align(x,y,x2,y2) != align(x,y,x1,y1)) {
-						System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
+				return true;
+			case Board.SLASH_ALIGN:
+				if (y1 < y2) {
+					x = x1;
+					if (y1 % 2 == 1) x--;
+					for (y = y1+1; y <= y2; y++) {
+						if ((x != x2 || y != y2) && areAligned(x, y, x2, y2) != areAligned(x, y, x1, y1))
+							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
+						if (tab[y][x] == null || tab[y][x].occupied()) return false;
+						if (y % 2 == 1) x--;
 					}
-					if(tab[y][x] == null || tab[y][x].occupied()) {
-						return false;
-					}
-					if(y % 2 == 1) {
-						x--;
-					}
-				}
-			}
-			else {
-				x = x1;
-				if(y1 % 2 == 0) {
-					x++;
-				}
-				for(int y = y1 - 1; y >= y2 ; y--) {
-					if((x != x2 || y != y2) && align(x,y,x2,y2) != align(x,y,x1,y1)) {
-						System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
-					}
-					if(tab[y][x] == null || tab[y][x].occupied()) {
-						return false;
-					}
-					if(y % 2 == 0) {
-						x++;
+				} else {
+					x = x1;
+					if (y1 % 2 == 0) x++;
+					for (y = y1-1; y >= y2; y--) {
+						if ((x != x2 || y != y2) && areAligned(x,y,x2,y2) != areAligned(x,y,x1,y1))
+							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
+						if (tab[y][x] == null || tab[y][x].occupied()) return false;
+						if (y % 2 == 0) x++;
 					}
 				}
-			}
-			return true;
-		}
-		else if(resAlign == 3){ // alignés en \
-			int x;
-			if(y1 < y2) {
-				x = x1;
-				if(y1 % 2 == 0) {
-					x++;
-				}
-				for(int y = y1 + 1; y <= y2 ; y++) { // parcours de toute les cases entre les deux tuiles
-					if((x != x2 || y != y2) && align(x,y,x2,y2) != align(x,y,x1,y1)) {
-						System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
+				return true;
+			case Board.ANTISLASH_ALIGN:
+				if (y1 < y2) {
+					x = x1;
+					if(y1 % 2 == 0) x++;
+					for (y = y1+1; y <= y2; y++) { // parcours de toute les cases entre les deux tuiles
+						if ((x != x2 || y != y2) && areAligned(x, y, x2, y2) != areAligned(x, y, x1, y1))
+							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
+						if(tab[y][x] == null || tab[y][x].occupied()) return false;
+						if(y % 2 == 0) x++;
 					}
-					if(tab[y][x] == null || tab[y][x].occupied()) {
-						return false;
-					}
-					if(y % 2 == 0) {
-						x++;
-					}
-				}
-			}
-			else {
-				x = x1;
-				if(y1 % 2 == 1) {
-					x--;
-				}
-				for(int y = y1 - 1; y >= y2 ; y--) {
-					if((x != x2 || y != y2) && align(x,y,x2,y2) != align(x,y,x1,y1)) {
-						System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
-					}
-					if(tab[y][x] == null || tab[y][x].occupied()) {
-						return false;
-					}
-					if(y % 2 == 1) {
-						x--;
+				} else {
+					x = x1;
+					if (y1 % 2 == 1) x--;
+					for(y = y1-1; y >= y2; y--) {
+						if ((x != x2 || y != y2) && areAligned(x, y, x2, y2) != areAligned(x, y, x1, y1))
+							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
+						if(tab[y][x] == null || tab[y][x].occupied()) return false;
+						if(y % 2 == 1) x--;
 					}
 				}
-			}
-			return true;			
-		}
-		else {
-			return false;
+				return true;
+			default:
+				return false;
 		}
 	}
 	
 	/**
-	 * teste la fonction legitTravel
-	 * @param print indique si la fonction doit afficher les tests ou non
-	 * @return résultat du test
+	 * Teste la fonction "isMoveLegit".
+	 * @param print Indique si la fonction doit afficher les tests ou non.
+	 * @return Vrai (true) si le test s'est bien passé ; faux (false) sinon.
 	 */
-	private boolean test_legitTravel(boolean print) {
+	private boolean test_isMoveLegit(boolean print) {
 		boolean res = true;	
 		shuffle();
-		takePosition(0,1);
-		takePosition(0,3);
-		takePosition(3,2);
-		takePosition(5,3);
-		takePosition(3,1);
+		occupyWithPenguin(0,1);
+		occupyWithPenguin(0,3);
+		occupyWithPenguin(3,2);
+		occupyWithPenguin(5,3);
+		occupyWithPenguin(3,1);
 		
 		// test horizontaux
-		res = res && legitTravel(0,0,6,0);
+		res = res && isMoveLegit(0,0,6,0);
 		if(print) {
-			System.out.println(legitTravel(0,0,6,0));
+			System.out.println(isMoveLegit(0,0,6,0));
 			printTest(2,0,0,6,0);
 		}
 		if(res == false) {
 			System.out.println("(0,0,6,0) faux");
 		}
 		
-		res = res && legitTravel(0,0,1,0);
+		res = res && isMoveLegit(0,0,1,0);
 		if(print) {
-			System.out.println(legitTravel(0,0,1,0));
+			System.out.println(isMoveLegit(0,0,1,0));
 			printTest(2,0,0,1,0);
 		}
 		if(res == false) {
 			System.out.println("(0,0,1,0) faux");
 		}
 		
-		res = res && !legitTravel(3,3,0,3);
+		res = res && !isMoveLegit(3,3,0,3);
 		if(print) {
-			System.out.println(legitTravel(3,3,0,3));
+			System.out.println(isMoveLegit(3,3,0,3));
 			printTest(2,3,3,0,3);
 		}
 		if(res == false) {
 			System.out.println("(3,3,0,3) faux");
 		}
 		
-		res = res && !legitTravel(7,3,0,3);
+		res = res && !isMoveLegit(7,3,0,3);
 		if(print) {
-			System.out.println(legitTravel(7,3,0,3));
+			System.out.println(isMoveLegit(7,3,0,3));
 			printTest(2,7,3,0,3);
 		}
 		
@@ -522,9 +461,9 @@ public class Board {
 			System.out.println("(7,3,0,3) faux");
 		}
 		
-		res = res && legitTravel(7,3,6,3);
+		res = res && isMoveLegit(7,3,6,3);
 		if(print) {
-			System.out.println(legitTravel(7,3,6,3));
+			System.out.println(isMoveLegit(7,3,6,3));
 			printTest(2,7,3,6,3);
 		}
 		
@@ -533,45 +472,45 @@ public class Board {
 		}
 		
 		// test slash
-		res = res && legitTravel(0,0,1,1);
+		res = res && isMoveLegit(0,0,1,1);
 		if(print) {
-			System.out.println(legitTravel(0,0,1,1));
+			System.out.println(isMoveLegit(0,0,1,1));
 			printTest(2,0,0,1,1);
 		}
 		if(res == false) {
 			System.out.println("(0,0,1,1) faux");
 		}
 		
-		res = res && legitTravel(0,0,4,7);
+		res = res && isMoveLegit(0,0,4,7);
 		if(print) {
-			System.out.println(legitTravel(0,0,4,7));
+			System.out.println(isMoveLegit(0,0,4,7));
 			printTest(2,0,0,4,7);
 		}
 		if(res == false) {
 			System.out.println("(0,0,4,7) faux");
 		}
 		
-		res = res && legitTravel(6,7,5,6);
+		res = res && isMoveLegit(6,7,5,6);
 		if(print) {
-			System.out.println(legitTravel(6,7,5,6));
+			System.out.println(isMoveLegit(6,7,5,6));
 			printTest(2,6,7,5,6);
 		}
 		if(res == false) {
 			System.out.println("(6,7,5,6) faux");
 		}
 		
-		res = res && !legitTravel(6,7,2,0);
+		res = res && !isMoveLegit(6,7,2,0);
 		if(print) {
-			System.out.println(legitTravel(6,7,2,0));
+			System.out.println(isMoveLegit(6,7,2,0));
 			printTest(2,6,7,2,0);
 		}
 		if(res == false) {
 			System.out.println("(6,7,2,0) faux");
 		}
 		
-		res = res && legitTravel(6,7,4,3);
+		res = res && isMoveLegit(6,7,4,3);
 		if(print) {
-			System.out.println(legitTravel(6,7,4,3));
+			System.out.println(isMoveLegit(6,7,4,3));
 			printTest(2,6,7,4,3);
 		}
 		if(res == false) {
@@ -579,54 +518,54 @@ public class Board {
 		}
 		
 		// test antislash
-		res = res && !legitTravel(0,0,0,1);
+		res = res && !isMoveLegit(0,0,0,1);
 		if(print) {
-			System.out.println(legitTravel(0,0,0,1));
+			System.out.println(isMoveLegit(0,0,0,1));
 			printTest(2,0,0,0,1);
 		}
 		if(res == false) {
 			System.out.println("(0,0,0,1) faux");
 		}
 		
-		res = res && legitTravel(6,0,6,1);
+		res = res && isMoveLegit(6,0,6,1);
 		if(print) {
-			System.out.println(legitTravel(6,0,6,1));
+			System.out.println(isMoveLegit(6,0,6,1));
 			printTest(2,6,0,6,1);
 		}
 		if(res == false) {
 			System.out.println("(6,0,6,1) faux");
 		}
 		
-		res = res && !legitTravel(6,0,3,7);
+		res = res && !isMoveLegit(6,0,3,7);
 		if(print) {
-			System.out.println(legitTravel(6,0,3,7));
+			System.out.println(isMoveLegit(6,0,3,7));
 			printTest(2,6,0,3,7);
 		}
 		if(res == false) {
 			System.out.println("(6,0,3,7) faux");
 		}
 		
-		res = res && !legitTravel(0,7,3,1);
+		res = res && !isMoveLegit(0,7,3,1);
 		if(print) {
-			System.out.println(legitTravel(0,7,3,1));
+			System.out.println(isMoveLegit(0,7,3,1));
 			printTest(2,0,7,3,1);
 		}
 		if(res == false) {
 			System.out.println("(0,7,3,1) faux");
 		}
 		
-		res = res && legitTravel(0,7,0,6);
+		res = res && isMoveLegit(0,7,0,6);
 		if(print) {
-			System.out.println(legitTravel(0,7,0,6));
+			System.out.println(isMoveLegit(0,7,0,6));
 			printTest(2,0,7,0,6);
 		}
 		if(res == false) {
 			System.out.println("(0,7,0,6) faux");
 		}
 		
-		res = res && legitTravel(2,7,4,3);
+		res = res && isMoveLegit(2,7,4,3);
 		if(print) {
-			System.out.println(legitTravel(2,7,4,3));
+			System.out.println(isMoveLegit(2,7,4,3));
 			printTest(2,2,7,4,3);
 		}
 		if(res == false) {
@@ -637,37 +576,37 @@ public class Board {
 	}
 
 	/**
-	 * effectue le déplacement du pingouin de la tuile 1 vers la tuile 2 si il est valide
-	 * @param x1 coord x de la tuile 1
-	 * @param y1 coord y de la tuile 1
-	 * @param x2 coord x de la tuile 2
-	 * @param y2 coord x de la tuile 2
-	 * @return tuile 1 si le déplacement s'est fait, null sinon
+	 * Effectue le déplacement du pingouin de sa tuile vers une autre tuile si cela est possible.
+	 * @param x1 Coordonnée x de la tuile de départ.
+	 * @param y1 Coordonnée y de la tuile de départ.
+	 * @param x2 Coordonnée x de la tuile d'arrivée.
+	 * @param y2 Coordonnée x de la tuile d'arrivée.
+	 * @return La tuile de départ si le déplacement s'est fait ; null sinon.
 	 */
-	public Tile makeMove(int x1, int y1 , int x2 , int y2) {
-		if(legitTravel(x1,y1,x2,y2) && tab[y1][x1].occupied()) {
-			takePosition(x2,y2);
+	public Tile makeMove(int x1, int y1, int x2, int y2) {
+		if (isMoveLegit(x1, y1, x2, y2) && tab[y1][x1].occupied()) {
+			occupyWithPenguin(x2,y2);
 			return removeTile(x1,y1);
 		}
 		return null;
 	}
 	
 	/**
-	 * teste la fonction makeMove
-	 * @param print indique si la fonction doit afficher les tests ou non
-	 * @return résultat du test
+	 * Teste la fonction "makeMove".
+	 * @param print Indique si la fonction doit afficher les tests ou non.
+	 * @return Vrai (true) si le test a réussi ; faux (false) sinon.
 	 */
 	private boolean test_makeMove(boolean print) {
 		boolean res = true;	
 		boolean r;
 		shuffle();
-		takePosition(0,0);
-		takePosition(4,1);
-		takePosition(2,2);
-		takePosition(1,3);
-		takePosition(0,6);
-		takePosition(2,6);
-		takePosition(3,6);
+		occupyWithPenguin(0,0);
+		occupyWithPenguin(4,1);
+		occupyWithPenguin(2,2);
+		occupyWithPenguin(1,3);
+		occupyWithPenguin(0,6);
+		occupyWithPenguin(2,6);
+		occupyWithPenguin(3,6);
 		
 		
 		// test horizontaux
@@ -782,24 +721,18 @@ public class Board {
 	}
 	
 	/**
-	 * annule un mouvement d'une tuile 1 vers une tuile 2
-	 * @param x1 coord x de la tuile 1
-	 * @param y1 coord y de la tuile 1
-	 * @param x2 coord x de la tuile 2
-	 * @param y2 coord x de la tuile 2
-	 * @param nbFish nombre de poisson sur la tuile 1
+	 * Annule un coup d'une tuile vers une autre.
+	 * @param x1 Coordonnée x de la tuile de départ.
+	 * @param y1 Coordonnée y de la tuile de départ.
+	 * @param x2 Coordonnée x de la tuile d'arrivée.
+	 * @param y2 Coordonnée x de la tuile d'arrivée.
+	 * @param nbFish Nombre de poissons sur la tuile de départ.
 	 */
-	public void reverseMove(int x1, int y1 , int x2 , int y2, int nbFish) {
+	public void reverseMove(int x1, int y1, int x2, int y2, int nbFish) {
 		if(tab[y2][x2].occupied() && tab[y1][x1] == null) {
-			// on quitte la case d'arrivée
-			tab[y2][x2].quit();
-			
-			// on recréé la case de départ avec le bon nombre de poissons
-			tab[y1][x1] = new Tile();
-			tab[y1][x1].setValue(nbFish);
-			
-			// on met le pingouin dessus
-			tab[y1][x1].taken();
+			tab[y2][x2].free(); // On quitte la tuile d'arrivée.
+			tab[y1][x1] = new Tile(nbFish); // On recrée la case de départ avec le bon nombre de poissons.
+			tab[y1][x1].occupy(); // On met le pingouin dessus.
 		}
 	}
 	
@@ -815,7 +748,7 @@ public class Board {
 			for(int x = 0 ; x < 8 ; x++) {
 				if(option == 0) {
 					if(tab[y][x] != null) {
-						System.out.print(tab[y][x].value() + " ");
+						System.out.print(tab[y][x].getFishNumber() + " ");
 					}
 					else {
 						System.out.print("  ");
@@ -957,11 +890,11 @@ public class Board {
 		if(s.nextInt() == 1){
 			System.out.println("afficher les tests ?(1 ou 0)");
 			if(s.nextInt() == 1){
-				result = test_align(true);
+				result = test_areAligned(true);
 				System.out.println(result);
 			}
 			else {
-				result = test_align(false);
+				result = test_areAligned(false);
 				System.out.println(result);
 			}
 		}
@@ -970,11 +903,11 @@ public class Board {
 		if(s.nextInt() == 1){
 			System.out.println("afficher les tests ?(1 ou 0)");
 			if(s.nextInt() == 1){
-				result = test_legitTravel(true);
+				result = test_isMoveLegit(true);
 				System.out.println(result);
 			}
 			else {
-				result = test_legitTravel(false);
+				result = test_isMoveLegit(false);
 				System.out.println(result);
 			}
 		}
