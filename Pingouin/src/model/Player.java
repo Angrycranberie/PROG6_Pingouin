@@ -1,10 +1,10 @@
-package Modèle;
+package model;
 
 public class Player {
 	private String name;
 	private int score;
 	private int nbTile;
-	private int penguins[][];
+	private Penguin penguins[];
 	private int nbPenguins;
 	private int colour;
 	private boolean playing;
@@ -17,7 +17,8 @@ public class Player {
 	public Player(int nbPenguins , int c , String name) {
 		score = 0;
 		nbTile = 0;
-		penguins = new int[nbPenguins][2];
+		colour = c;
+		penguins = new Penguin[nbPenguins];
 		this.nbPenguins = nbPenguins;
 		this.name = name;
 		playing = true;
@@ -59,7 +60,7 @@ public class Player {
 	 * retourne les coordonnées des pingouins du joueur
 	 * @return coordonnées des pingouins du joueur
 	 */
-	public int[][] penguins(){
+	public Penguin[] penguins(){
 		return penguins;
 	}
 	
@@ -110,9 +111,8 @@ public class Player {
 	 */
 	public void movePenguin(int x1, int y1, int x2, int y2) {
 		for(int i = 0 ; i < nbPenguins ; i++) {
-			if(penguins[i][0] == x1 && penguins[i][1] == y1) {
-				penguins[i][0] = x2;
-				penguins[i][1] = y2;
+			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
+				penguins[i].changePosition(x2,y2);
 			}
 		}
 	}

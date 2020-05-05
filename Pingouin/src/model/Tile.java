@@ -1,4 +1,4 @@
-package Modèle;
+package model;
 
 public class Tile {
 	private int value;
@@ -8,7 +8,7 @@ public class Tile {
 	 * affecte une valeur à une tuile
 	 * @param value
 	 */
-	public void setValue(int value) {
+	public Tile(int value) {
 		this.value = value;
 		occupied = false;
 	}
@@ -16,7 +16,7 @@ public class Tile {
 	/**
 	 * rend une tuile occupée par un pingouin
 	 */
-	public void taken() {
+	public void take() {
 		occupied = true;
 	}
 	
@@ -39,7 +39,7 @@ public class Tile {
 	 * indique si une tuile est occupée
 	 * @return occupation de la tuile
 	 */
-	public boolean occupied() {
+	public boolean isOccupied() {
 		return occupied;
 	}	
 }

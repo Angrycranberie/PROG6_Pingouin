@@ -1,7 +1,7 @@
-package Modèle;
+package model;
 
 public class Game {
-	private Player p[];
+	private Player players[];
 	private int nbPlayer;
 	private Board gameBoard;
 	private int currentPlayerNumber;
@@ -17,18 +17,18 @@ public class Game {
 	public Game(int nbPlayer,Player p1,Player p2,Player p3,Player p4) {
 		currentPlayerNumber = 1;
 		this.nbPlayer = nbPlayer;
-		p = new Player[nbPlayer];
+		players = new Player[nbPlayer];
 		if(nbPlayer >= 1) {
-			p[0] = p1;
+			players[0] = p1;
 		}
 		if(nbPlayer >= 2) {
-			p[1] = p2;
+			players[1] = p2;
 		}
 		if(nbPlayer >= 3) {
-			p[2] = p3;
+			players[2] = p3;
 		}
 		if(nbPlayer >= 4) {
-			p[3] = p4;
+			players[3] = p4;
 		}
 		gameBoard = new Board();
 	}
@@ -75,10 +75,10 @@ public class Game {
 	 * @return true le pingouin appartient au joueur courant false sinon
 	 */
 	private boolean goodPenguin(Player p,int x1, int y1) {
-		int penguins[][] = p.penguins();
+		Penguin penguins[] = p.penguins();
 		int nbPenguins = p.nbPenguins();
 		for(int i = 0; i < nbPenguins ; i++) {
-			if(penguins[i][0] == x1 && penguins[i][1] == y1) {
+			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
 				return true;
 			}
 		}
@@ -90,7 +90,7 @@ public class Game {
 	 * @return joueur courant
 	 */
 	private Player currentPlayer() {
-		return p[currentPlayerNumber - 1];
+		return players[currentPlayerNumber - 1];
 	}
 	
 	/**
@@ -98,8 +98,8 @@ public class Game {
 	 * @return indique si il y a ou non un prochain joueur
 	 */
 	public boolean nextPlayer() {
-		for(int i = 1 ; i <= 4 ; i++) {
-			if(p[(currentPlayerNumber - 1 + i) % nbPlayer].playing()) {
+		for(int i = 1 ; i <= nbPlayer ; i++) {
+			if(players[(currentPlayerNumber - 1 + i) % nbPlayer].playing()) {
 				currentPlayerNumber = (currentPlayerNumber - 1 + i) % nbPlayer + 1;
 				return true;
 			}
@@ -107,5 +107,7 @@ public class Game {
 		return false;
 	}
 	
-	
+	public int[][] legitMovePossibility(Penguin p){
+		return gameBoard.movePossibility(p.coord_x(),p.coord_y());
+	}
 }

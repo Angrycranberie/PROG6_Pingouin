@@ -1,4 +1,4 @@
-package Modèle;
+package model;
 
 public class History {
 	Move past[];
