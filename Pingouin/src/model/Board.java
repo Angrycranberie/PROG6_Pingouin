@@ -39,6 +39,16 @@ public class Board {
 	public void freeFromPenguin(int x, int y) { tab[y][x].free(); }
 	
 	/**
+	 * Renvoie la tuile de coordonnées x, y.
+	 * @param x Coordonnée x de la tuile cherchée.
+	 * @param y Coordonnée x de la tuile cherchée.
+	 * @return La tuile cherchée.
+	 */
+	public Tile getTile(int x, int y){
+		return tab[y][x];
+	}
+	
+	/**
 	 * Retire une tuile du plateau.
 	 * @param x Coordonnée x de la tuile à enlever.
 	 * @param y Coordonnée y de la tuile à enlever.

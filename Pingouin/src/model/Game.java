@@ -56,12 +56,20 @@ public class Game {
 	}
 	
 	/**
-	 * effectue le mouvement du pingouin de la tuile 1 vers la 2
-	 * @param x1 coordonnée x de la tuile 1
-	 * @param y1 coordonnée y de la tuile 1
-	 * @param x2 coordonnée x de la tuile 2
-	 * @param y2 coordonnée y de la tuile 2
-	 * @return indique si le mouvement s'est fait ou non
+	 * Renvoie le plateau associé au jeu.
+	 * @return Plateau de jeu.
+	 */
+	public Board getBoard(){
+		return board;
+	}
+
+	/**
+	 * Effectue le mouvement d'un pingouin d'une tuile à une autre.
+	 * @param x1 Coordonnée x de la tuile de départ.
+	 * @param y1 Coordonnée y de la tuile de départ.
+	 * @param x2 Coordonnée x de la tuile d'arrivée.
+	 * @param y2 Coordonnée y de la tuile d'arrivée.
+	 * @return Vrai (true) si le mouvement a été fait ; faux (false) sinon.
 	 */
 	public boolean movePenguin(int x1, int y1, int x2, int y2) {
 		Player p = getCurrentPlayer();
@@ -80,6 +88,7 @@ public class Game {
 			}
 		}
 		else {
+			System.out.println("Ce pingouin ne vous appartient pas.");
 			return false;
 		}
 	}
