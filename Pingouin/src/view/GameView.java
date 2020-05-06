@@ -16,6 +16,7 @@ public class GameView extends GraphicGame {
      */
     GameView(Game g) {
         game = g;
+        g.addPropertyChangeListener(this);
     }
 
     // TODO
