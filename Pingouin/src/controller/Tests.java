@@ -69,6 +69,11 @@ public class Tests {
 		System.out.println(controler.placePinguin(0, 7));
 		
 		g.getBoard().printBoard(1);
+		
+		System.out.println(controler.move(7, 7, 3, 0));
+		System.out.println(controler.move(3, 0, 1, 0));
+		g.getBoard().printBoard(1);
+		
 	}
 
 }

@@ -62,6 +62,8 @@ public class Game {
 				p.movePenguin(x1, y1, x2, y2);
 				return true;
 			}
+		} else {
+			System.out.println("Ce pingouin ne vous appartient pas.");
 		}
 		return false;
 	}
