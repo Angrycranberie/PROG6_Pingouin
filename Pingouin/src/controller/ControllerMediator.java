@@ -1,6 +1,7 @@
 package controller;
 
 import view.EventCollector;
+import view.UserInterface;
 
 /**
  * Classe de contrôleur principal. Interprète les clics et frappes au clavier.
@@ -16,6 +17,12 @@ public class ControllerMediator implements EventCollector {
 
 	@Override
 	public void timedAction() {
+		
+	}
+
+	@Override
+	public void addUI(UserInterface ui) {
+		// TODO Auto-generated method stub
 		
 	}
 	

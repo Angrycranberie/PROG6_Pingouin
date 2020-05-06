@@ -1,8 +1,6 @@
 package model;
 
 import controller.Player;
-import org.jetbrains.annotations.NotNull;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -126,7 +124,7 @@ public class Game {
 	}
 	
 	public int[][] legitMovePossibility(Penguin p){
-		return gameBoard.movePossibility(p.coord_x(),p.coord_y());
+		return board.movePossibility(p.coord_x(),p.coord_y());
 	}
 	
 	public boolean canPlay(Player p) {
