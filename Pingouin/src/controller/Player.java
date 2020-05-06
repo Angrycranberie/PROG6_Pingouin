@@ -1,14 +1,16 @@
 package controller;
 
-import java.awt.*;
-
+import model.Game;
 import model.Penguin;
+
+import java.awt.*;
 
 /**
  * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
  * @author Charly
  */
 public class Player {
+	private Game game;
 	private String name; // Nom du joueur.
 	private int fishScore; // Score associé au nombre de poissons obtenu.
 	private int tileScore; // Score associé au nombre de cases obtenues.
@@ -22,13 +24,22 @@ public class Player {
 	 * @param penguinsNumber Indique le nombre de pingouin du joueur
 	 * @param color Couleur du joueur.
 	 */
-	public Player(int penguinsNumber, Color color, String name) {
+	public Player(Game game, int penguinsNumber, Color color, String name) {
+		this.game = game;
 		this.fishScore = this.tileScore = 0;
 		this.penguinsNumber = penguinsNumber;
 		this.color = color;
 		penguins = new Penguin[penguinsNumber];
 		this.name = name;
 		playing = true;
+	}
+	
+	/**
+	 * Retourne le jeu.
+	 * @return Le Jeu.
+	 */
+	public Game getGame() {
+		return game;
 	}
 	
 	/**
@@ -122,5 +133,13 @@ public class Player {
 				penguins[i].changePosition(x2,y2);
 			}
 		}
+	}
+	
+	// TODO
+	/**
+	 * Joue un coup
+	 */
+	void play() {
+		return ;
 	}
 }

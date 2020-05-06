@@ -2,6 +2,10 @@ package model;
 
 import controller.Player;
 
+/**
+ * Classe Game. Gère une partie du jeu : ordre des tours, coups sur le plateau.
+ * @author Charly
+ */
 public class Game {
 	private Player players[];
 	private int nbPlayer;
