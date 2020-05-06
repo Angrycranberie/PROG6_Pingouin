@@ -16,6 +16,11 @@ public class ControllerMediator implements EventCollector {
 	}
 
 	@Override
+	public void addUI(UserInterface ui) {
+
+	}
+
+	@Override
 	public void timedAction() {
 		
 	}
