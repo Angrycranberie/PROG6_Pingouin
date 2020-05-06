@@ -37,12 +37,6 @@ public class ControlerMediator implements EventCollector {
 	public void timedAction() {
 		
 	}
-
-	@Override
-	public void addUI(UserInterface ui) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	/**
 	 * Place un pingouin du joueur courant aux coordonnées d'entrée.

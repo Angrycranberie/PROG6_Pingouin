@@ -1,6 +1,5 @@
 package controller;
 
-import model.Game;
 import model.Penguin;
 
 import java.awt.Color;
@@ -14,8 +13,8 @@ public class AIRandom extends Player {
 
 	Random r;
 	
-	public AIRandom(Game game, int penguinsNumber, Color color, String name) {
-		super(game, penguinsNumber, color, name);
+	public AIRandom(int penguinsNumber, Color color, String name) {
+		super(penguinsNumber, color, name);
 		r = new Random();
 	}
 

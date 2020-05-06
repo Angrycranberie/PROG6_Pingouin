@@ -30,6 +30,9 @@ public class Game {
 		if(playerCount >= 2) players[1] = p2;
 		if(playerCount >= 3) players[2] = p3;
 		if(playerCount >= 4) players[3] = p4;
+		for(int i = 0 ; i < playerCount ; i++){
+			players[i].setGame(this);
+		}
 		currentPlayerNumber = 1;
 		board = new Board();
 		support = new PropertyChangeSupport(this);

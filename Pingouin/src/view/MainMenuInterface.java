@@ -1,7 +1,5 @@
 package view;
 
-import com.sun.tools.javac.Main;
-
 import javax.swing.*;
 import javax.swing.plaf.basic.DefaultMenuLayout;
 import java.awt.*;
