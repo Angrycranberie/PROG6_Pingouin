@@ -38,6 +38,13 @@ public class Game {
 	public int getCurrentPlayerNumber() { return currentPlayerNumber; }
 	
 	/**
+	 * Renvoie le plateau associé au jeu.
+	 * @return Plateau de jeu.
+	 */
+	public Board getBoard(){
+		return gameBoard;
+	}
+	/**
 	 * Effectue le mouvement d'un pingouin d'une tuile à une autre.
 	 * @param x1 Coordonnée x de la tuile de départ.
 	 * @param y1 Coordonnée y de la tuile de départ.
@@ -80,7 +87,7 @@ public class Game {
 	 * Retourne directement le joueur courant (et non son numéro).
 	 * @return Joueur courant.
 	 */
-	private Player getCurrentPlayer() { return players[currentPlayerNumber - 1]; }
+	public Player getCurrentPlayer() { return players[currentPlayerNumber - 1]; }
 	
 	/**
 	 * Détermine quel est le prochain joueur.
