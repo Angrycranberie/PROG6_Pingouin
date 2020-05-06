@@ -39,6 +39,16 @@ public class Board {
 	public void freeFromPenguin(int x, int y) { tab[y][x].free(); }
 	
 	/**
+	 * Renvoie la tuile de coordonnées x, y.
+	 * @param x Coordonnée x de la tuile cherchée.
+	 * @param y Coordonnée x de la tuile cherchée.
+	 * @return La tuile cherchée.
+	 */
+	public Tile getTile(int x, int y){
+		return tab[y][x];
+	}
+	
+	/**
 	 * Retire une tuile du plateau.
 	 * @param x Coordonnée x de la tuile à enlever.
 	 * @param y Coordonnée y de la tuile à enlever.
@@ -607,6 +617,7 @@ public class Board {
 		occupyWithPenguin(0,6);
 		occupyWithPenguin(2,6);
 		occupyWithPenguin(3,6);
+
 		
 		
 		// test horizontaux
@@ -872,6 +883,283 @@ public class Board {
 		System.out.println();
 	}
 	
+	public int[][] movePossibility(int x1, int y1) {
+		// création du tableau à rendre
+		int result[][] = new int[60][2];
+		int index = 0;
+		
+		int x,y;
+		
+		boolean cond = true;
+		// coups à l'horizontal partie droit
+		y = y1;
+		for(x = x1 + 1 ; x < 8 && cond; x++) {
+			if(tab[y][x] != null && !tab[y][x].occupied()) {
+				result[index][0] = x;
+				result[index][1] = y;
+				index++;
+			}
+			else {
+				cond = false;
+			}
+		}
+		
+		// coups en antislash partie basse
+		cond = true;
+		x = x1;
+		if(y1 % 2 == 0) {
+			x++;
+		}
+		for(y = y1 + 1; y < 8 && x < 8 && cond; y++) {
+			if(tab[y][x] != null && !tab[y][x].occupied()) {
+				result[index][0] = x;
+				result[index][1] = y;
+				index++;
+				}
+			else {
+				cond = false;
+			}
+			if(y % 2 == 0) {
+				x++;
+			}
+		}
+		
+		// coups en slash partie basse
+		cond = true;
+		x = x1;
+		if(y1 % 2 == 1) {
+			x--;
+		}
+		for(y = y1 + 1; y < 8 && x >= 0 && cond; y++) {
+			if(tab[y][x] != null && !tab[y][x].occupied()) {
+				result[index][0] = x;
+				result[index][1] = y;
+				index++;
+				}
+			else {
+				cond = false;
+			}
+			if(y % 2 == 1) {
+				x--;
+			}
+		}
+		
+		// coups à l'horizontal partie gauche
+		cond = true;
+		y = y1;
+		for(x = x1 - 1 ; x >= 0  && cond; x--) {
+			if(tab[y][x] != null && !tab[y][x].occupied()) {
+				result[index][0] = x;
+				result[index][1] = y;
+				index++;
+			}
+			else {
+				cond = false;
+			}
+		}
+		
+		// coups en antislash partie haute
+		cond = true;
+		x = x1;
+		if(y1 % 2 == 1) {
+			x--;
+		}
+		for(y = y1 - 1; y >= 0 && x >= 0 && cond; y--) {
+			if(tab[y][x] != null && !tab[y][x].occupied()) {
+				result[index][0] = x;
+				result[index][1] = y;
+				index++;
+			}
+			else {
+				cond = false;
+			}
+			if(y % 2 == 1) {
+				x--;
+			}
+		}
+		
+		// coups en slash partie haute
+		cond = true;
+		x = x1;
+		if(y1 % 2 == 0) {
+			x++;
+		}
+		for(y = y1 - 1; y >= 0 && x < 8 && cond; y--) {
+			if(tab[y][x] != null && !tab[y][x].occupied()) {
+				result[index][0] = x;
+				result[index][1] = y;
+				index++;
+			}
+			else {
+				cond = false;
+			}
+			if(y % 2 == 0) {
+				x++;
+			}
+		}
+		
+		for(int i = index ; i < 60 ; i++) {
+			result[i][0] = -1;
+			result[i][1] = -1;
+		}
+		
+		return result;
+	}
+	
+	public boolean test_movePossibility(boolean print) {
+		shuffle();
+		boolean result = true;
+		
+		boolean not_end;
+		boolean equality;
+		int length;
+		int possibility[][];
+		
+		// test (0,0)
+		if(print) {
+			System.out.println("debut test (0,0)");
+		}
+		not_end = true;
+		equality = true;
+		length = 60;
+		possibility = movePossibility(0,0);
+		int result_0_0[][] = {{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{1,1},{1,2},{2,3},{2,4},{3,5},{3,6},{4,7},{0,1}};
+		for(int i = 0; i < 60 && not_end; i++) {
+			if(possibility[i][0] != -1) {
+				if(print) {
+					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
+				}
+				if(i < result_0_0.length && (possibility[i][0] != result_0_0[i][0] || possibility[i][1] != result_0_0[i][1])) {
+					if(print) {
+						System.out.println("attendu x : " + result_0_0[i][0] + " y : " + result_0_0[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
+					}
+					equality = false;
+				}
+			}
+			else {
+				not_end = false;
+				length = i;
+			}
+		}
+		equality = equality && result_0_0.length == length;
+		if(!equality) {
+			if(print) {
+				System.out.println("erreur en (0,0)");
+			}
+		}
+		result = result && equality;
+		
+		
+		// test (4,3)
+		if(print) {
+			System.out.println("debut test (4,3)");
+		}
+		not_end = true;
+		equality = true;
+		length = 60;
+		possibility = movePossibility(4,3);
+		int result_4_3[][] = {{5,3},{6,3},{7,3},{4,4},{5,5},{5,6},{6,7},{3,4},{3,5},{2,6},{2,7},{3,3},{2,3},{1,3},{0,3},{3,2},{3,1},{2,0},{4,2},{5,1},{5,0}};
+		for(int i = 0; i < 60 && not_end; i++) {
+			if(possibility[i][0] != -1) {
+				if(print) {
+					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
+				}
+				if(i < result_4_3.length && possibility[i][0] != result_4_3[i][0] || possibility[i][1] != result_4_3[i][1]) {
+					if(print) {
+						System.out.println("attendu x : " + result_4_3[i][0] + " y : " + result_4_3[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
+					}
+					equality = false;
+				}
+			}
+			else {
+				not_end = false;
+				length = i;
+			}
+		}
+		equality = equality && result_4_3.length == length;
+		if(!equality) {
+			if(print) {
+				System.out.println("erreur en (4,3)");
+			}
+		}
+		result = result && equality;
+		
+		
+		// test (2,6)
+		if(print) {
+			System.out.println("debut test (2,6)");
+		}
+		not_end = true;
+		equality = true;
+		length = 60;
+		possibility = movePossibility(2,6);
+		int result_2_6[][] = {{3,6},{4,6},{5,6},{6,6},{3,7},{2,7},{1,6},{0,6},{2,5},{1,4},{1,3},{0,2},{0,1},{3,5},{3,4},{4,3},{4,2},{5,1},{5,0}};
+		for(int i = 0; i < 60 && not_end; i++) {
+			if(possibility[i][0] != -1) {
+				if(print) {
+					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
+				}
+				if(i < result_2_6.length && possibility[i][0] != result_2_6[i][0] || possibility[i][1] != result_2_6[i][1]) {
+					if(print) {
+						System.out.println("attendu x : " + result_2_6[i][0] + " y : " + result_2_6[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
+					}
+					equality = false;
+				}
+			}
+			else {
+				not_end = false;
+				length = i;
+			}
+		}
+		equality = equality && result_2_6.length == length;
+		if(!equality) {
+			if(print) {
+				System.out.println("erreur en (2,6)");
+			}
+		}
+		result = result && equality;
+
+		// test (2,6) avec pingouins et trous
+		if(print) {
+			System.out.println("debut test (2,6) bis");
+		}
+		occupyWithPenguin(2,7);
+		occupyWithPenguin(5,0);
+		removeTile(1,3);
+		
+		not_end = true;
+		equality = true;
+		length = 60;
+		possibility = movePossibility(2,6);
+		int result_2_6_bis[][] = {{3,6},{4,6},{5,6},{6,6},{3,7},{1,6},{0,6},{2,5},{1,4},{3,5},{3,4},{4,3},{4,2},{5,1}};
+		for(int i = 0; i < 60 && not_end; i++) {
+			if(possibility[i][0] != -1) {
+				if(print) {
+					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
+				}
+				if(i < result_2_6_bis.length && possibility[i][0] != result_2_6_bis[i][0] || possibility[i][1] != result_2_6_bis[i][1]) {
+					if(print) {
+						System.out.println("attendu x : " + result_2_6_bis[i][0] + " y : " + result_2_6_bis[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
+					}
+					equality = false;
+				}
+			}
+			else {
+				not_end = false;
+				length = i;
+			}
+		}
+		equality = equality && result_2_6_bis.length == length;
+		if(!equality) {
+			if(print) {
+				System.out.println("erreur en (2,6) bis");
+			}
+		}
+		result = result && equality;
+				
+		return result;
+	}
+	
 	/**
 	 * lance les tests de la classe
 	 */
@@ -921,6 +1209,19 @@ public class Board {
 			}
 			else {
 				result = test_makeMove(false);
+				System.out.println(result);
+			}
+		}
+		
+		System.out.println("tester les prévisions des coups possibles ?(1 ou 0)"); // vérifie la fonction qui cherche les coups possibles
+		if(s.nextInt() == 1){
+			System.out.println("afficher les tests ?(1 ou 0)");
+			if(s.nextInt() == 1){
+				result = test_movePossibility(true);
+				System.out.println(result);
+			}
+			else {
+				result = test_movePossibility(false);
 				System.out.println(result);
 			}
 		}

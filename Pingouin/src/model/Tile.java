@@ -20,7 +20,7 @@ public class Tile {
 	 * On vérifie que le nombre de poisson entré est bien entre 1 et 3.
 	 * Si ce n'est pas le cas, on ramène ce nombre dans la plage correcte.
 	 */
-	Tile(int fishNumber) {
+	public Tile(int fishNumber) {
 		if (fishNumber < 1) this.setFishNumber(Tile.ONE_FISH);
 		else this.setFishNumber(Math.min(fishNumber, 3));
 		this.free();
