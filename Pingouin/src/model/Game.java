@@ -137,7 +137,8 @@ public class Game {
 	
 	public int[][] legitMovePossibility(Penguin p){
 		return board.movePossibility(p.coord_x(),p.coord_y());
-	}
+	}	/**
+
 	
 	/**
 	 * Détermine si le joueur p peut jouer un coup.
@@ -172,5 +173,52 @@ public class Game {
 			p.addTile();
 		}
 		p.stopPlaying();
+	}
+	
+	/**
+	 * Affiche le tableau des scores.
+	 */
+	public void printScoreboard(){
+		Player currPlayer;
+		
+		System.out.println("~~~ Tableau des scores ~~~");
+		for(int i = 0 ; i < playerCount ; i++){
+			currPlayer = players[i];
+			System.out.println("Joueur " + currPlayer.getName() + " : " + 
+					currPlayer.getFishScore() + " points ; " + 
+					currPlayer.getTileScore() + " tuiiles.");
+		}
+	}
+	
+	/**
+	 * Termine la partie. Affiche le score des joueurs et le gagnant.
+	 * La gestion des égalités, s'il y a plus de 2 joueurs, n'est pas
+	 * fonctionnelle.
+	 */
+	public void endGame(){
+		printScoreboard();
+		Player currPlayer = players[0];
+		Player topPlayer = currPlayer;
+		int scoreMax = topPlayer.getFishScore();
+		int tileMax = topPlayer.getTileScore();
+		for(int i = 1 ; i < playerCount ; i++){
+			currPlayer = players[1];
+			if(scoreMax < currPlayer.getFishScore()){
+				topPlayer = currPlayer;
+				scoreMax = topPlayer.getFishScore();
+				tileMax = topPlayer.getTileScore();
+			} else if (scoreMax == currPlayer.getFishScore()){
+				if(tileMax < currPlayer.getTileScore()){
+					topPlayer = currPlayer;
+					scoreMax = topPlayer.getFishScore();
+					tileMax = topPlayer.getTileScore();
+				} else if (tileMax == currPlayer.getTileScore()) {
+					System.out.println("Egalité ! Les joueurs " + topPlayer.getName() 
+							+ " et " + currPlayer.getName() + " gagnent !");
+					return;
+				}
+			}
+		}
+		System.out.println(topPlayer.getName() + " gagne la partie !");
 	}
 }

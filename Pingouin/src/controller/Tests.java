@@ -92,8 +92,9 @@ public class Tests {
 
 		g.getBoard().printBoard(1);
 		
-		controler.stillPlaying();
+		controler.startTurn();
 		g.getBoard().printBoard(1);
-	
+		System.out.println(controler.move(2, 1, 5, 1));
+		g.getBoard().printBoard(1);
 	}
 }

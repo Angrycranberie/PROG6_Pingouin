@@ -90,14 +90,27 @@ public class ControlerMediator implements EventCollector {
 	 * Si non, on retire ses pingouins de la partie et on l'empêche de jouer à nouveau.
 	 * @return Vrai si le joueur peut encore jouer, Faux sinon.
 	 */
-	public boolean stillPlaying(){
+	private boolean stillPlaying(){
 		Player currPlayer = game.getCurrentPlayer();
 		if(game.canPlay(currPlayer)){
 			game.endPlayer(currPlayer);
-			game.nextPlayer();
 			return false;
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * Commence le tour du joueur courant : vérifie s'il peut encore jouer.
+	 * Si non, lui fait finir la partie, puis vérifie qu'il reste des joueurs.
+	 * @return Vrai s'il reste des joueurs, Faux sinon.
+	 */
+	public boolean startTurn(){
+		if(!stillPlaying()){
+			if(!game.nextPlayer()){
+				return false;
+			}
+		}
+		return true;
 	}
 }
