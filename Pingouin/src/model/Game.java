@@ -1,7 +1,6 @@
 package model;
 
-import org.jetbrains.annotations.NotNull;
-
+import controller.Player;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -17,12 +16,12 @@ public class Game {
 	private PropertyChangeSupport support;
 	
 	/**
-	 * Initialisation du jeu.
-	 * @param playerCount Nombre de joueurs effectif.
-	 * @param p1 Joueur n°1.
-	 * @param p2 Joueur n°2.
-	 * @param p3 Joueur n°3.
-	 * @param p4 Joueur n°4.
+	 * initialise le jeu
+	 * @param nbPlayer nombre de joueur
+	 * @param p1 joueur 1
+	 * @param p2 joueur 2
+	 * @param p3 joueur 3
+	 * @param p4 joueur 4
 	 */
 	public Game(int playerCount, Player p1, Player p2, Player p3, Player p4) {
 		this.playerCount = playerCount;
@@ -31,6 +30,9 @@ public class Game {
 		if(playerCount >= 2) players[1] = p2;
 		if(playerCount >= 3) players[2] = p3;
 		if(playerCount >= 4) players[3] = p4;
+		for(int i = 0 ; i < playerCount ; i++){
+			players[i].setGame(this);
+		}
 		currentPlayerNumber = 1;
 		board = new Board();
 		support = new PropertyChangeSupport(this);
@@ -49,11 +51,21 @@ public class Game {
 	public void removePropertyChangeListener(PropertyChangeListener pcl) { support.removePropertyChangeListener(pcl); }
 	
 	/**
-	 * Retourne le numéro du joueur courant.
-	 * @return Numéro du joueur courant.
+	 * retourne le numéro du joueur courant
+	 * @return numéro joueur courant
 	 */
-	public int getCurrentPlayerNumber() { return currentPlayerNumber; }
+	public int currentPlayerNumber() {
+		return currentPlayerNumber;
+	}
 	
+	/**
+	 * Renvoie le plateau associé au jeu.
+	 * @return Plateau de jeu.
+	 */
+	public Board getBoard(){
+		return board;
+	}
+
 	/**
 	 * Effectue le mouvement d'un pingouin d'une tuile à une autre.
 	 * @param x1 Coordonnée x de la tuile de départ.
@@ -74,18 +86,24 @@ public class Game {
 				support.firePropertyChange("game", oldGame, this);
 				return true;
 			}
+			else {
+				return false;
+			}
 		}
-		return false;
+		else {
+			System.out.println("Ce pingouin ne vous appartient pas.");
+			return false;
+		}
 	}
 
 	/**
-	 * Indique si le pingouin situé sur la tuile donnée est bien le pingouin du joueur courant.
-	 * @param x1 Coordonnée x de la tuile où se situe le pingouin.
-	 * @param y1 Coordonnée y de la tuile où se situe le pingouin.
-	 * @return Vrai (true) si le pingouin appartient au joueur courant ; faux (false) sinon.
+	 * indique si le pingouin situé sur la tuile donnée est bien le pingouin du joueur courant
+	 * @param x1 coordonnée x de la tuile
+	 * @param y1 coordonnée y de la tuile
+	 * @return true le pingouin appartient au joueur courant false sinon
 	 */
 	public boolean hasPenguinGoodOwning(Player p, int x1, int y1) {
-		int[][] penguins = p.getPenguins();
+		Penguin penguins[] = p.penguins();
 		int nbPenguins = p.getPenguinsNumber();
 		for(int i = 0; i < nbPenguins ; i++) {
 			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
@@ -96,18 +114,17 @@ public class Game {
 	}
 	
 	/**
-	 * Retourne directement le joueur courant (et non son numéro).
-	 * @return Joueur courant.
+	 * retourne le joueur courant
+	 * @return joueur courant
 	 */
 	public Player getCurrentPlayer() { return players[currentPlayerNumber - 1]; }
 	
 	/**
-	 * Détermine quel est le prochain joueur.
-	 * Par effet de bord, on incrémente le numéro du joueur courant.
-	 * @return Vrai (true) s'il y a bien un prochain joueur ; faux (false) sinon.
+	 * détermine le prochain joueur
+	 * @return indique si il y a ou non un prochain joueur
 	 */
 	public boolean nextPlayer() {
-		for (int i = 1; i <= 4; i++) {
+		for(int i = 1 ; i <= playerCount ; i++) {
 			int loopPlayerNumber = (currentPlayerNumber - 1 + i) % playerCount;
 			if (players[loopPlayerNumber].isPlaying()) {
 				support.firePropertyChange("currentPlayerNumber", currentPlayerNumber, loopPlayerNumber+1);
@@ -119,6 +136,17 @@ public class Game {
 	}
 	
 	public int[][] legitMovePossibility(Penguin p){
-		return gameBoard.movePossibility(p.coord_x(),p.coord_y());
+		return board.movePossibility(p.coord_x(),p.coord_y());
+	}
+	
+	public boolean canPlay(Player p) {
+		boolean possibility = false;
+		int movePossibility[][];
+		Penguin penguins[] = p.penguins();
+		for(int i = 0 ; i < p.getPenguinsNumber() ; i++) {
+			movePossibility = legitMovePossibility(penguins[i]);
+			possibility = possibility || movePossibility[0][0] == -1;
+		}
+		return possibility;
 	}
 }

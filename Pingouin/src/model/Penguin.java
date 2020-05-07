@@ -1,11 +1,11 @@
 package model;
 
 public class Penguin {
-	int x;
-	int y;
+	private int x;
+	private int y;
 	
 	/**
-	 * créé un pingouin 
+	 * Crée un pingouin 
 	 * @param x coord x du pingouin
 	 * @param y coord y du pingouin
 	 */
@@ -15,7 +15,7 @@ public class Penguin {
 	}
 	
 	/**
-	 * retourne la coordonnée x du pingouin
+	 * Retourne la coordonnée x du pingouin
 	 * @return coord x
 	 */
 	public int coord_x() {
@@ -23,13 +23,18 @@ public class Penguin {
 	}
 	
 	/**
-	 * retourne la coordonnée y du pingouin
+	 * Retourne la coordonnée y du pingouin
 	 * @return coord y
 	 */
 	public int coord_y() {
 		return y;
 	}
 	
+	/**
+	 * Change les coordonnées du pingouin
+	 * @param x la nouvelle coordonnée x
+	 * @param y la nouvelle coordonnée y
+	 */
 	public void changePosition(int x, int y) {
 		this.x = x;
 		this.y = y;

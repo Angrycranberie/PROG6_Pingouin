@@ -1,17 +1,20 @@
 package controller;
 
-import java.awt.*;
-
+import model.Game;
 import model.Penguin;
+
+import java.awt.*;
 
 /**
  * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
  * @author Charly
  */
 public class Player {
+	private Game game;
 	private String name; // Nom du joueur.
 	private int fishScore; // Score associé au nombre de poissons obtenu.
 	private int tileScore; // Score associé au nombre de cases obtenues.
+	private int amountPlaced; // Nombre courant de pingouins placés.
 	private Penguin penguins[]; // Liste des pingouins du joueur.
 	private int penguinsNumber; // Nombre de pingouins du joueur.
 	private Color color; // Couleur du joueur.
@@ -22,13 +25,26 @@ public class Player {
 	 * @param penguinsNumber Indique le nombre de pingouin du joueur
 	 * @param color Couleur du joueur.
 	 */
+
 	public Player(int penguinsNumber, Color color, String name) {
-		this.fishScore = this.tileScore = 0;
+		this.fishScore = this.tileScore = this.amountPlaced = 0;
 		this.penguinsNumber = penguinsNumber;
 		this.color = color;
 		penguins = new Penguin[penguinsNumber];
 		this.name = name;
 		playing = true;
+	}
+	
+	public void setGame(Game g){
+		this.game = g;
+	}
+	
+	/**
+	 * Retourne le jeu.
+	 * @return Le Jeu.
+	 */
+	public Game getGame() {
+		return game;
 	}
 	
 	/**
@@ -80,6 +96,22 @@ public class Player {
 	}
 	
 	/**
+	 * Retourne le nombre de pingouins placés par le joueur.
+	 * @return Le nombre de pingouins placés par le joueur.
+	 */
+	public int getAmountPlaced() {
+		return amountPlaced;
+	}
+	
+	/**
+	 * Augmente le nombre de pingouins placés par le joueur de i.
+	 * @param i Valeur de l'augmentation.
+	 */
+	public void addAmount(int i) {
+		amountPlaced += i;
+	}
+	
+	/**
 	 * Retourne le nom du joueur.
 	 * @return Nom du joueur.
 	 */
@@ -122,5 +154,12 @@ public class Player {
 				penguins[i].changePosition(x2,y2);
 			}
 		}
+	}
+	// TODO
+	/**
+	 * Joue un coup
+	 */
+	void play() {
+		return ;
 	}
 }
