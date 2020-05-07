@@ -76,6 +76,24 @@ public class Tests {
 		System.out.println(controler.move(3, 0, 1, 0));
 		g.getBoard().printBoard(1);
 		
-	}
+		p1 = new Player(4, new Color(240, 46, 0), "Joueur 1");
+		p2 = new Player(4, new Color(46, 240, 0), "Joueur 2");
+		g = new Game(2, p1, p2, null, null);
+		controler = new ControlerMediator(g);
+		
+		controler.placePinguin(0, 0);
+		controler.placePinguin(0, 2);
+		controler.placePinguin(0, 1);
+		controler.placePinguin(1, 2);
+		controler.placePinguin(1, 0);
+		controler.placePinguin(2, 1);
+		controler.placePinguin(1, 1);
+		controler.placePinguin(2, 0);
 
+		g.getBoard().printBoard(1);
+		
+		controler.stillPlaying();
+		g.getBoard().printBoard(1);
+	
+	}
 }

@@ -120,8 +120,8 @@ public class Game {
 	public Player getCurrentPlayer() { return players[currentPlayerNumber - 1]; }
 	
 	/**
-	 * détermine le prochain joueur
-	 * @return indique si il y a ou non un prochain joueur
+	 * Passe au joueur suivant, s'il existe.
+	 * @return Vrai si on a choisi un joueur suivant, Faux sinon.
 	 */
 	public boolean nextPlayer() {
 		for(int i = 1 ; i <= playerCount ; i++) {
@@ -139,6 +139,11 @@ public class Game {
 		return board.movePossibility(p.coord_x(),p.coord_y());
 	}
 	
+	/**
+	 * Détermine si le joueur p peut jouer un coup.
+	 * @param p Joueur à examiner.
+	 * @return Vrai s'il peut jouer, Faux sinon.
+	 */
 	public boolean canPlay(Player p) {
 		boolean possibility = false;
 		int movePossibility[][];
@@ -148,5 +153,24 @@ public class Game {
 			possibility = possibility || movePossibility[0][0] == -1;
 		}
 		return possibility;
+	}
+	
+	/**
+	 * Retire les pingouins du joueur p de la partie, lui attribue les tuiles
+	 * sous ces pingouins, puis retire le joueur de la partie.
+	 * @param p Joueur à faire terminer la partie.
+	 */
+	/* A déplacer dans Player ? */
+	public void endPlayer(Player p){
+		Penguin [] listPenguin = p.penguins();
+		Penguin curr;
+		Tile rmTile;
+		for(int i = 0 ; i < p.getPenguinsNumber() ; i++){
+			curr = listPenguin[i];
+			rmTile = board.removeTile(curr.coord_x(), curr.coord_y());
+			p.changeScore(rmTile.getFishNumber());
+			p.addTile();
+		}
+		p.stopPlaying();
 	}
 }

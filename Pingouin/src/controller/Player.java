@@ -64,6 +64,13 @@ public class Player {
 	}
 	
 	/**
+	 * Fixe la valeur playing à false.
+	 */
+	public void stopPlaying(){
+		playing = false;
+	}
+	
+	/**
 	 * Retourne le score secondaire du joueur, associé au nombre de tuiles récupérées.
 	 * @return Nombre de tuiles récupérées.
 	 */
