@@ -17,10 +17,14 @@ public class ControlerMediator implements EventCollector {
 
 	Game game;
 	Board board;
+	int x1, y1, x2, y2;
+	private int toPlace;
 	
 	public ControlerMediator(Game g){
 		game = g;
 		board = g.getBoard();
+		x1 = y1 = x2 = y2 = -1;
+		setToPlace(game.getPlayerCount()*(game.getCurrentPlayer().getPenguinsNumber()));
 	}
 	
 	@Override
@@ -36,6 +40,35 @@ public class ControlerMediator implements EventCollector {
 	@Override
 	public void timedAction() {
 		
+	}
+	
+	/**
+	 * Lis une coordonnée entrée au clavier et l'interprête.
+	 * @param val Entier lu au clavier.
+	 * @return Vrai si le dernier mouvement est correct, Faux sinon.
+	 */
+	public boolean keyInput(int val){
+		boolean ret = false;
+		
+		if(val < 0){
+			System.out.println("Coordonnée négative. Erreur.");
+		} else {
+			if(x1 < 0)x1 = val;
+			else if (y1 < 0){
+				y1 = val;
+				if(getToPlace() > 0){
+					if(ret = placePinguin(x1, y1)) setToPlace(getToPlace() - 1);
+					x1 = y1 = -1;
+				}
+			} else if (x2 < 0) x2 = val;
+			else {
+				y2 = val;
+				ret = move(x1, y1, x2, y2);
+				x1 = y1 = x2 = y2 = -1;
+			}
+			
+		}
+		return ret;
 	}
 	
 	/**
@@ -112,5 +145,13 @@ public class ControlerMediator implements EventCollector {
 			}
 		}
 		return true;
+	}
+
+	public int getToPlace() {
+		return toPlace;
+	}
+
+	public void setToPlace(int toPlace) {
+		this.toPlace = toPlace;
 	}
 }

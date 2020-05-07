@@ -65,6 +65,14 @@ public class Game {
 	public Board getBoard(){
 		return board;
 	}
+	
+	/**
+	 * Renvoie le nombre de joueurs dans la partie.
+	 * @return Nombre de joueurs.
+	 */
+	public int getPlayerCount(){
+		return playerCount;
+	}
 
 	/**
 	 * Effectue le mouvement d'un pingouin d'une tuile à une autre.
@@ -186,7 +194,7 @@ public class Game {
 			currPlayer = players[i];
 			System.out.println("Joueur " + currPlayer.getName() + " : " + 
 					currPlayer.getFishScore() + " points ; " + 
-					currPlayer.getTileScore() + " tuiiles.");
+					currPlayer.getTileScore() + " tuiles.");
 		}
 	}
 	
