@@ -152,185 +152,58 @@ public class Board {
 	}
 	
 	/**
-	 * Test de la fonction "areAligned".
+	 * Test de la fonction "areAligned". (test : nbFonc = 0)
 	 * @param print Indique si la fonction doit afficher les tests ou non.
 	 * @return Indique si le test a réussi.
 	 */
 	private boolean test_areAligned(boolean print) {
 		boolean res = true;
+		
 		// test horizontaux
-		res = areAligned(0, 0, 6, 0) != 0;
-		if(print) {
-			printTest(1,0,0,6,0);
-		}
-		if(!res) {
-			System.out.println("(0,0,6,0) faux");
-		}
+		res = res && runTest(0,print,0,0,6,0,true);
 		
-		res = res && areAligned(0,0,1,0) != 0;
-		if(print) {
-			printTest(1,0,0,1,0);
-		}
-		if(!res) {
-			System.out.println("(0,0,1,0) faux");
-		}
+		res = res && runTest(0,print,0,0,1,0,true);
 		
-		res = res && areAligned(3,3,0,3) != 0;
-		if(print) {
-			printTest(1,3,3,0,3);
-		}
-		if(!res) {
-			System.out.println("(3,3,0,3) faux");
-		}
+		res = res && runTest(0,print,3,3,0,3,true);
 		
-		res = res && areAligned(7,3,0,3) != 0;
-		if(print) {
-			printTest(1,7,3,0,3);
-		}
+		res = res && runTest(0,print,7,3,0,3,true);
 		
-		if(!res) {
-			System.out.println("(7,3,0,3) faux");
-		}
-		
-		res = res && areAligned(7,3,6,3) != 0;
-		if(print) {
-			printTest(1,7,3,6,3);
-		}
-		
-		if(!res) {
-			System.out.println("(7,3,6,3) faux");
-		}
+		res = res && runTest(0,print,7,3,6,3,true);
 		
 		// test slash
-		res = res && areAligned(0,0,1,1) != 0;
-		if(print) {
-			printTest(1,0,0,1,1);
-		}
-		if(!res) {
-			System.out.println("(0,0,1,1) faux");
-		}
+		res = res && runTest(0,print,0,0,1,1,true);
 		
-		res = res && areAligned(0,0,4,7) != 0;
-		if(print) {
-			printTest(1,0,0,4,7);
-		}
-		if(!res) {
-			System.out.println("(0,0,4,7) faux");
-		}
+		res = res && runTest(0,print,0,0,4,7,true);
 		
-		res = res && areAligned(6,7,5,6) != 0;
-		if(print) {
-			printTest(1,6,7,5,6);
-		}
-		if(!res) {
-			System.out.println("(6,7,5,6) faux");
-		}
+		res = res && runTest(0,print,6,7,5,6,true);
 		
-		res = res && areAligned(6,7,2,0) != 0;
-		if(print) {
-			printTest(1,6,7,2,0);
-		}
-		if(!res) {
-			System.out.println("(6,7,2,0) faux");
-		}
+		res = res && runTest(0,print,6,7,2,0,true);
 		
-		res = res && areAligned(6,7,4,3) != 0;
-		if(print) {
-			printTest(1,6,7,4,3);
-		}
-		if(!res) {
-			System.out.println("(6,7,4,3) faux");
-		}
+		res = res && runTest(0,print,6,7,4,3,true);
 		
 		// test antislash
-		res = res && areAligned(0,0,0,1) != 0;
-		if(print) {
-			printTest(1,0,0,0,1);
-		}
-		if(!res) {
-			System.out.println("(0,0,0,1) faux");
-		}
+		res = res && runTest(0,print,0,0,0,1,true);
 		
-		res = res && areAligned(6,0,6,1) != 0;
-		if(print) {
-			printTest(1,6,0,6,1);
-		}
-		if(!res) {
-			System.out.println("(6,0,6,1) faux");
-		}
+		res = res && runTest(0,print,6,0,6,1,true);
 		
-		res = res && areAligned(6,0,3,7) != 0;
-		if(print) {
-			printTest(1,6,0,3,7);
-		}
-		if(!res) {
-			System.out.println("(6,0,3,7) faux");
-		}
+		res = res && runTest(0,print,6,0,3,7,true);
 		
-		res = res && areAligned(0,7,3,0) != 0;
-		if(print) {
-			printTest(1,0,7,3,0);
-		}
-		if(!res) {
-			System.out.println("(0,7,3,0) faux");
-		}
+		res = res && runTest(0,print,0,7,3,0,true);
 		
-		res = res && areAligned(0,7,0,6) != 0;
-		if(print) {
-			printTest(1,0,7,0,6);
-		}
-		if(!res) {
-			System.out.println("(0,7,0,6) faux");
-		}
+		res = res && runTest(0,print,0,7,0,6,true);
 		
-		res = res && areAligned(2,7,4,3) != 0;
-		if(print) {
-			printTest(1,2,7,4,3);
-		}
-		if(res == false) {
-			System.out.println("(2,7,4,3) faux");
-		}
+		res = res && runTest(0,print,2,7,4,3,true);
 		
-		// test non align�
-		res = res && areAligned(0,0,2,1) == 0;
-		if(print) {
-			printTest(1,0,0,2,1);
-		}
-		if(!res) {
-			System.out.println("(0,0,2,1) faux");
-		}
+		// test non alignés
+		res = res && runTest(0,print,0,0,2,1,false);
 		
-		res = res && areAligned(0,0,0,2) == 0;
-		if(print) {
-			printTest(1,0,0,0,2);
-		}
-		if(!res) {
-			System.out.println("(0,0,0,2) faux");
-		}
+		res = res && runTest(0,print,0,0,0,2,false);
 		
-		res = res && areAligned(7,7,7,5) == 0;
-		if(print) {
-			printTest(1,7,7,7,5);
-		}
-		if(!res) {
-			System.out.println("(7,7,7,5) faux");
-		}
+		res = res && runTest(0,print,7,7,7,5,false);
 		
-		res = res && areAligned(1,7,1,4) == 0;
-		if(print) {
-			printTest(1,1,7,1,4);
-		}
-		if(!res) {
-			System.out.println("(1,7,1,4) faux");
-		}
+		res = res && runTest(0,print,1,7,1,4,false);
 		
-		res = res && areAligned(2,4,7,5) == 0;
-		if(print) {
-			printTest(1,2,4,7,5);
-		}
-		if(!res) {
-			System.out.println("(2,4,7,5) faux");
-		}
+		res = res && runTest(0,print,2,4,7,5,false);
 		
 		return res;
 	}
@@ -410,7 +283,7 @@ public class Board {
 	}
 	
 	/**
-	 * Teste la fonction "isMoveLegit".
+	 * Teste la fonction "isMoveLegit". (test : nbFonc = 1)
 	 * @param print Indique si la fonction doit afficher les tests ou non.
 	 * @return Vrai (true) si le test s'est bien passé ; faux (false) sinon.
 	 */
@@ -424,153 +297,39 @@ public class Board {
 		occupyWithPenguin(3,1);
 		
 		// test horizontaux
-		res = res && isMoveLegit(0,0,6,0);
-		if(print) {
-			System.out.println(isMoveLegit(0,0,6,0));
-			printTest(2,0,0,6,0);
-		}
-		if(res == false) {
-			System.out.println("(0,0,6,0) faux");
-		}
+		res = res && runTest(1,print,0,0,6,0,true);
 		
-		res = res && isMoveLegit(0,0,1,0);
-		if(print) {
-			System.out.println(isMoveLegit(0,0,1,0));
-			printTest(2,0,0,1,0);
-		}
-		if(res == false) {
-			System.out.println("(0,0,1,0) faux");
-		}
+		res = res && runTest(1,print,0,0,1,0,true);
 		
-		res = res && !isMoveLegit(3,3,0,3);
-		if(print) {
-			System.out.println(isMoveLegit(3,3,0,3));
-			printTest(2,3,3,0,3);
-		}
-		if(res == false) {
-			System.out.println("(3,3,0,3) faux");
-		}
+		res = res && runTest(1,print,3,3,0,3,false);
 		
-		res = res && !isMoveLegit(7,3,0,3);
-		if(print) {
-			System.out.println(isMoveLegit(7,3,0,3));
-			printTest(2,7,3,0,3);
-		}
+		res = res && runTest(1,print,7,3,0,3,false);
 		
-		if(res == false) {
-			System.out.println("(7,3,0,3) faux");
-		}
-		
-		res = res && isMoveLegit(7,3,6,3);
-		if(print) {
-			System.out.println(isMoveLegit(7,3,6,3));
-			printTest(2,7,3,6,3);
-		}
-		
-		if(res == false) {
-			System.out.println("(7,3,6,3) faux");
-		}
+		res = res && runTest(1,print,7,3,6,3,true);
 		
 		// test slash
-		res = res && isMoveLegit(0,0,1,1);
-		if(print) {
-			System.out.println(isMoveLegit(0,0,1,1));
-			printTest(2,0,0,1,1);
-		}
-		if(res == false) {
-			System.out.println("(0,0,1,1) faux");
-		}
+		res = res && runTest(1,print,0,0,1,1,true);
 		
-		res = res && isMoveLegit(0,0,4,7);
-		if(print) {
-			System.out.println(isMoveLegit(0,0,4,7));
-			printTest(2,0,0,4,7);
-		}
-		if(res == false) {
-			System.out.println("(0,0,4,7) faux");
-		}
+		res = res && runTest(1,print,0,0,4,7,true);
 		
-		res = res && isMoveLegit(6,7,5,6);
-		if(print) {
-			System.out.println(isMoveLegit(6,7,5,6));
-			printTest(2,6,7,5,6);
-		}
-		if(res == false) {
-			System.out.println("(6,7,5,6) faux");
-		}
+		res = res && runTest(1,print,6,7,5,6,true);
 		
-		res = res && !isMoveLegit(6,7,2,0);
-		if(print) {
-			System.out.println(isMoveLegit(6,7,2,0));
-			printTest(2,6,7,2,0);
-		}
-		if(res == false) {
-			System.out.println("(6,7,2,0) faux");
-		}
+		res = res && runTest(1,print,6,7,2,0,false);
 		
-		res = res && isMoveLegit(6,7,4,3);
-		if(print) {
-			System.out.println(isMoveLegit(6,7,4,3));
-			printTest(2,6,7,4,3);
-		}
-		if(res == false) {
-			System.out.println("(6,7,4,3) faux");
-		}
+		res = res && runTest(1,print,6,7,4,3,true);
 		
 		// test antislash
-		res = res && !isMoveLegit(0,0,0,1);
-		if(print) {
-			System.out.println(isMoveLegit(0,0,0,1));
-			printTest(2,0,0,0,1);
-		}
-		if(res == false) {
-			System.out.println("(0,0,0,1) faux");
-		}
+		res = res && runTest(1,print,0,0,0,1,false);
 		
-		res = res && isMoveLegit(6,0,6,1);
-		if(print) {
-			System.out.println(isMoveLegit(6,0,6,1));
-			printTest(2,6,0,6,1);
-		}
-		if(res == false) {
-			System.out.println("(6,0,6,1) faux");
-		}
+		res = res && runTest(1,print,6,0,6,1,true);
 		
-		res = res && !isMoveLegit(6,0,3,7);
-		if(print) {
-			System.out.println(isMoveLegit(6,0,3,7));
-			printTest(2,6,0,3,7);
-		}
-		if(res == false) {
-			System.out.println("(6,0,3,7) faux");
-		}
+		res = res && runTest(1,print,6,0,3,7,false);
 		
-		res = res && !isMoveLegit(0,7,3,1);
-		if(print) {
-			System.out.println(isMoveLegit(0,7,3,1));
-			printTest(2,0,7,3,1);
-		}
-		if(res == false) {
-			System.out.println("(0,7,3,1) faux");
-		}
+		res = res && runTest(1,print,0,7,3,1,false);
 		
-		res = res && isMoveLegit(0,7,0,6);
-		if(print) {
-			System.out.println(isMoveLegit(0,7,0,6));
-			printTest(2,0,7,0,6);
-		}
-		if(res == false) {
-			System.out.println("(0,7,0,6) faux");
-		}
+		res = res && runTest(1,print,0,7,0,6,true);
 		
-		res = res && isMoveLegit(2,7,4,3);
-		if(print) {
-			System.out.println(isMoveLegit(2,7,4,3));
-			printTest(2,2,7,4,3);
-		}
-		if(res == false) {
-			System.out.println("(2,7,4,3) faux");
-		}
+		res = res && runTest(1,print,2,7,4,3,true);
 		
 		return res;
 	}
@@ -592,13 +351,12 @@ public class Board {
 	}
 	
 	/**
-	 * Teste la fonction "makeMove".
+	 * Teste la fonction "makeMove". ( test : nbFonc = 2)
 	 * @param print Indique si la fonction doit afficher les tests ou non.
 	 * @return Vrai (true) si le test a réussi ; faux (false) sinon.
 	 */
 	private boolean test_makeMove(boolean print) {
-		boolean res = true;	
-		boolean r;
+		boolean res = true;
 		shuffle();
 		occupyWithPenguin(0,0);
 		occupyWithPenguin(4,1);
@@ -611,113 +369,30 @@ public class Board {
 		
 		
 		// test horizontaux
-		res = (r = makeMove(1,3,5,3) != null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,1,3,5,3);
-		}
-		if(r == false) {
-			System.out.println("(1,3,5,3) faux");
-		}
+		res = res && runTest(2,print,1,3,5,3,true);
 		
-		res = (r = makeMove(2,6,0,2) == null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,2,6,0,2);
-		}
-		if(r == false) {
-			System.out.println("(2,6,0,2) faux");
-		}
+		res = res && runTest(2,print,2,6,0,2,false);
 		
-		res = (r = makeMove(2,6,1,4) != null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,2,6,1,4);
-		}
-		if(r == false) {
-			System.out.println("(2,6,1,4) faux");
-		}
+		res = res && runTest(2,print,2,6,1,4,true);
 		
-		res = (r = makeMove(3,6,5,2) == null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,3,6,5,2);
-		}
-		if(r == false) {
-			System.out.println("(3,6,5,2) faux");
-		}
+		res = res && runTest(2,print,3,6,5,2,false);
 		
-		res = (r = makeMove(3,6,4,4) != null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,3,6,4,4);
-		}
-		if(r == false) {
-			System.out.println("(3,6,4,4) faux");
-		}
+		res = res && runTest(2,print,3,6,4,4,true);
 		
-		res = (r = makeMove(0,6,1,6) != null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,0,6,1,6);
-		}
-		if(r == false) {
-			System.out.println("(0,6,1,6) faux");
-		}
+		res = res && runTest(2,print,0,6,1,6,true);
 		
-		res = (r = makeMove(1,6,4,6) == null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,1,6,4,6);
-		}
-		if(r == false) {
-			System.out.println("(1,6,4,6) faux");
-		}
+		res = res && runTest(2,print,1,6,4,6,false);
 		
-		res = (r = makeMove(1,6,2,6) == null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,1,6,2,6);
-		}
-		if(r == false) {
-			System.out.println("(1,6,2,6) faux");
-		}
+		res = res && runTest(2,print,1,6,2,6,false);
 		
-		res = (r = makeMove(0,0,5,0) != null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,0,0,5,0);
-		}
-		if(r == false) {
-			System.out.println("(0,0,5,0) faux");
-		}
+		res = res && runTest(2,print,0,0,5,0,true);
 		
-		res = (r = makeMove(4,1,4,0) != null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,4,1,4,0);
-		}
-		if(r == false) {
-			System.out.println("(4,1,4,0) faux");
-		}
+		res = res && runTest(2,print,4,1,4,0,true);
 		
-		res = (r = makeMove(0,1,3,0) == null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,0,1,3,0);
-		}
-		if(r == false) {
-			System.out.println("(0,1,3,0) faux");
-		}
+		res = res && runTest(2,print,0,1,3,0,false);
 		
-		res = (r = makeMove(5,7,6,4) == null) && res;
-		if(print) {
-			System.out.println(r);
-			printTest(3,5,7,6,4);
-		}
-		if(r == false) {
-			System.out.println("(5,7,6,4) faux");
-		}
+		res = res && runTest(2,print,5,7,6,4,false);
+		
 		return res;
 	}
 	
@@ -770,107 +445,6 @@ public class Board {
 			}
 			System.out.println();
 		}
-	}
-	
-	/**
-	 * affiche le plateau en fonction du test effectué
-	 * @param option détermine quel test est effectué : 1 test alignement, 2 déplacement valide , 3 exécution du déplacement
-	 * @param x1 coord x de la tuile 1
-	 * @param y1 coord y de la tuile 1
-	 * @param x2 coord x de la tuile 2
-	 * @param y2 coord x de la tuile 2
-	 */
-	public void printTest(int option, int x1, int y1 , int x2, int y2) {
-		for(int y = 0 ; y < 8 ; y++) {
-			if(y % 2 == 0) {
-				System.out.print(" ");
-			}
-			for(int x = 0 ; x < 8 ; x++) {
-				if(option == 1) { // alignement
-					if(x == x1 && y == y1) {
-						System.out.print("1 ");
-					}
-					else if(x == x2 && y == y2) {
-						System.out.print("2 ");
-					}
-					else {
-						System.out.print(". ");
-					}
-				}
-				else if(option == 2) { // deplacement légal
-					if(x == x1 && y == y1) {
-						if(tab[y][x] == null) {
-							System.out.print("V ");
-						}
-						else if(tab[y][x].occupied()) {
-							System.out.print("X ");
-						}
-						else{
-							System.out.print("@ ");
-						}
-					}
-					else if(x == x2 && y == y2) {
-						if(tab[y][x] == null) {
-							System.out.print("V ");
-						}
-						else if(tab[y][x].occupied()) {
-							System.out.print("X ");
-						}
-						else{
-							System.out.print("@ ");
-						}
-					}
-					else {
-						if(tab[y][x] == null) {
-							System.out.print("O ");
-						}
-						else if(tab[y][x].occupied()) {
-							System.out.print("B ");
-						}
-						else{
-							System.out.print(". ");
-						}
-					}
-				}
-				else if(option == 3){ // déplacement
-					if(x == x1 && y == y1) {
-						if(tab[y][x] == null) {
-							System.out.print("V ");
-						}
-						else if(tab[y][x].occupied()) {
-							System.out.print("X ");
-						}
-						else{
-							System.out.print("@ ");
-						}
-					}
-					else if(x == x2 && y == y2) {
-						if(tab[y][x] == null) {
-							System.out.print("V ");
-						}
-						else if(tab[y][x].occupied()) {
-							System.out.print("X ");
-						}
-						else{
-							System.out.print("@ ");
-						}
-					}
-					else {
-						if(tab[y][x] == null) {
-							System.out.print("O ");
-						}
-						else if(tab[y][x].occupied()) {
-							System.out.print("B ");
-						}
-						else{
-							System.out.print(". ");
-						}
-					}
-				}
-			}
-			System.out.println();
-		}
-		System.out.println();
 	}
 	
 	public int[][] movePossibility(int x1, int y1) {
@@ -1000,115 +574,34 @@ public class Board {
 		shuffle();
 		boolean result = true;
 		
-		boolean not_end;
-		boolean equality;
-		int length;
-		int possibility[][];
-		
 		// test (0,0)
 		if(print) {
 			System.out.println("debut test (0,0)");
 		}
-		not_end = true;
-		equality = true;
-		length = 60;
-		possibility = movePossibility(0,0);
+
+		
 		int result_0_0[][] = {{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{1,1},{1,2},{2,3},{2,4},{3,5},{3,6},{4,7},{0,1}};
-		for(int i = 0; i < 60 && not_end; i++) {
-			if(possibility[i][0] != -1) {
-				if(print) {
-					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
-				}
-				if(i < result_0_0.length && (possibility[i][0] != result_0_0[i][0] || possibility[i][1] != result_0_0[i][1])) {
-					if(print) {
-						System.out.println("attendu x : " + result_0_0[i][0] + " y : " + result_0_0[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
-					}
-					equality = false;
-				}
-			}
-			else {
-				not_end = false;
-				length = i;
-			}
-		}
-		equality = equality && result_0_0.length == length;
-		if(!equality) {
-			if(print) {
-				System.out.println("erreur en (0,0)");
-			}
-		}
-		result = result && equality;
+		result = result && runTestPossibility(result_0_0,0,0,print);
 		
 		
 		// test (4,3)
 		if(print) {
 			System.out.println("debut test (4,3)");
 		}
-		not_end = true;
-		equality = true;
-		length = 60;
-		possibility = movePossibility(4,3);
+		
 		int result_4_3[][] = {{5,3},{6,3},{7,3},{4,4},{5,5},{5,6},{6,7},{3,4},{3,5},{2,6},{2,7},{3,3},{2,3},{1,3},{0,3},{3,2},{3,1},{2,0},{4,2},{5,1},{5,0}};
-		for(int i = 0; i < 60 && not_end; i++) {
-			if(possibility[i][0] != -1) {
-				if(print) {
-					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
-				}
-				if(i < result_4_3.length && possibility[i][0] != result_4_3[i][0] || possibility[i][1] != result_4_3[i][1]) {
-					if(print) {
-						System.out.println("attendu x : " + result_4_3[i][0] + " y : " + result_4_3[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
-					}
-					equality = false;
-				}
-			}
-			else {
-				not_end = false;
-				length = i;
-			}
-		}
-		equality = equality && result_4_3.length == length;
-		if(!equality) {
-			if(print) {
-				System.out.println("erreur en (4,3)");
-			}
-		}
-		result = result && equality;
+		result = result && runTestPossibility(result_4_3,4,3,print);
 		
 		
 		// test (2,6)
 		if(print) {
 			System.out.println("debut test (2,6)");
 		}
-		not_end = true;
-		equality = true;
-		length = 60;
-		possibility = movePossibility(2,6);
+		
 		int result_2_6[][] = {{3,6},{4,6},{5,6},{6,6},{3,7},{2,7},{1,6},{0,6},{2,5},{1,4},{1,3},{0,2},{0,1},{3,5},{3,4},{4,3},{4,2},{5,1},{5,0}};
-		for(int i = 0; i < 60 && not_end; i++) {
-			if(possibility[i][0] != -1) {
-				if(print) {
-					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
-				}
-				if(i < result_2_6.length && possibility[i][0] != result_2_6[i][0] || possibility[i][1] != result_2_6[i][1]) {
-					if(print) {
-						System.out.println("attendu x : " + result_2_6[i][0] + " y : " + result_2_6[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
-					}
-					equality = false;
-				}
-			}
-			else {
-				not_end = false;
-				length = i;
-			}
-		}
-		equality = equality && result_2_6.length == length;
-		if(!equality) {
-			if(print) {
-				System.out.println("erreur en (2,6)");
-			}
-		}
-		result = result && equality;
+		result = result && runTestPossibility(result_2_6,2,6,print);
 
+		
 		// test (2,6) avec pingouins et trous
 		if(print) {
 			System.out.println("debut test (2,6) bis");
@@ -1117,19 +610,52 @@ public class Board {
 		occupyWithPenguin(5,0);
 		removeTile(1,3);
 		
-		not_end = true;
-		equality = true;
-		length = 60;
-		possibility = movePossibility(2,6);
 		int result_2_6_bis[][] = {{3,6},{4,6},{5,6},{6,6},{3,7},{1,6},{0,6},{2,5},{1,4},{3,5},{3,4},{4,3},{4,2},{5,1}};
+		result = result && runTestPossibility(result_2_6_bis,2,6,print);
+				
+		
+		return result;
+	}
+	
+	public boolean runTest(int nbFonc, boolean print, int x1 , int y1 , int x2 , int y2 ,boolean boolWanted) {
+		boolean boolObtained = true;
+		String Fonc = "";
+		switch(nbFonc) {
+		case 0:
+			boolObtained = areAligned(x1,y1,x2,y2) != 0;
+			Fonc = "areAligned";
+			break;
+		case 1:
+			boolObtained = isMoveLegit(x1,y1,x2,y2);
+			Fonc = "isMoveLegit";
+			break;
+		case 2:
+			boolObtained = makeMove(x1,y1,x2,y2) != null;
+			Fonc = "makeMove";
+			break;
+		default:
+			break;
+		}
+		if(print) {
+			System.out.println(boolObtained);
+			printTest(nbFonc,x1,y1,x2,y2);
+		}
+		if(boolWanted != boolObtained) {
+			System.out.println(Fonc + "(" + x1 + "," + y1 + "," + x2 + "," + y2 + ") n'a pas eu le bon résultat" );
+		}
+		return boolWanted == boolObtained;
+	}
+	
+	public boolean runTestPossibility(int wanted[][],int x, int y, boolean print) {
+		int obtained[][] = movePossibility(x,y);
+		boolean not_end = true;
+		boolean equality = true;
+		int length = 60;
 		for(int i = 0; i < 60 && not_end; i++) {
-			if(possibility[i][0] != -1) {
-				if(print) {
-					System.out.println("recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
-				}
-				if(i < result_2_6_bis.length && possibility[i][0] != result_2_6_bis[i][0] || possibility[i][1] != result_2_6_bis[i][1]) {
+			if(obtained[i][0] != -1) {
+				if(i < wanted.length && obtained[i][0] != wanted[i][0] || obtained[i][1] != wanted[i][1]) {
 					if(print) {
-						System.out.println("attendu x : " + result_2_6_bis[i][0] + " y : " + result_2_6_bis[i][1] + " ; recu x : " + possibility[i][0] + " y : " + possibility[i][1]);
+						System.out.println("attendu x : " + wanted[i][0] + " y : " + wanted[i][1] + " ; recu x : " + obtained[i][0] + " y : " + obtained[i][1]);
 					}
 					equality = false;
 				}
@@ -1139,15 +665,68 @@ public class Board {
 				length = i;
 			}
 		}
-		equality = equality && result_2_6_bis.length == length;
+		equality = equality && wanted.length == length;
 		if(!equality) {
 			if(print) {
-				System.out.println("erreur en (2,6) bis");
+				System.out.println("erreur en (" + x + "," + y +")");
 			}
 		}
-		result = result && equality;
-				
-		return result;
+		return equality;
+	}
+	
+	/**
+	 * affiche le plateau en fonction du test effectué
+	 * @param option détermine quel test est effectué : 1 test alignement, 2 déplacement valide , 3 exécution du déplacement
+	 * @param x1 coord x de la tuile 1
+	 * @param y1 coord y de la tuile 1
+	 * @param x2 coord x de la tuile 2
+	 * @param y2 coord x de la tuile 2
+	 */
+	public void printTest(int option, int x1, int y1 , int x2, int y2) {
+		char charac[][][] = {{{'1','1','1'},{'2','2','2'},{'.','.','.'}},{{'V','X','@'},{'V','X','@'},{'O','B','.'}},{{'V','X','@'},{'V','X','@'},{'O','B','.'}}};
+		for(int y = 0 ; y < 8 ; y++) {
+			if(y % 2 == 0) {
+				System.out.print(" ");
+			}
+			for(int x = 0 ; x < 8 ; x++) {
+				if(x == x1 && y == y1) {
+					if(tab[y][x] == null) {
+						System.out.print(charac[option][0][0]);
+					}
+					else if(tab[y][x].occupied()) {
+						System.out.print(charac[option][0][1]);
+					}
+					else{
+						System.out.print(charac[option][0][2]);
+					}
+				}
+				else if(x == x2 && y == y2) {
+					if(tab[y][x] == null) {
+						System.out.print(charac[option][1][0]);
+					}
+					else if(tab[y][x].occupied()) {
+						System.out.print(charac[option][1][1]);
+					}
+					else{
+						System.out.print(charac[option][1][2]);
+					}
+				}
+				else {
+					if(tab[y][x] == null) {
+						System.out.print(charac[option][2][0]);
+					}
+					else if(tab[y][x].occupied()) {
+						System.out.print(charac[option][2][1]);
+					}
+					else{
+						System.out.print(charac[option][2][2]);
+					}
+				}
+				System.out.print(" ");
+			}
+			System.out.println();
+		}
+		System.out.println();
 	}
 	
 	/**
