@@ -51,6 +51,119 @@ public class Board {
 	}
 	
 	/**
+	 * retourne la prochaine tuile dans une direction et un sens donné en partant d'une tuile, retourne null si la tuile est hors plateau
+	 * @param x coord x de la tuile de départ
+	 * @param y coord y de la tuile de départ
+	 * @param way direction 
+	 * @param direction sens (0 haut-gauche , 1 bas-droite)
+	 * @return tuile dans la direction et sens demandé
+	 */
+	public int[] nextTile(int x, int y, int way, boolean direction) {
+		int next[] = {-1,-1};
+		switch(way) {
+		case HORIZONTAL_ALIGN:
+			next[1] = y;
+			if(direction) {
+				next[0] = x + 1;
+			}
+			else {
+				next[0] = x - 1;
+			}
+			break;
+		case SLASH_ALIGN:
+			if(direction) {
+				next[1] = y + 1;
+				if(y % 2 == 1) {
+					next[0] = x - 1;
+				}
+				else {
+					next[0] = x;
+				}
+			}
+			else {
+				next[1] = y - 1;
+				if(y % 2 == 0) {
+					next[0] = x + 1;
+				}
+				else {
+					next[0] = x;
+				}
+			}
+			break;
+		case ANTISLASH_ALIGN:
+			if(direction) {
+				next[1] = y + 1;
+				if(y % 2 == 0) {
+					next[0] = x + 1;
+				}
+				else {
+					next[0] = x;
+				}
+			}
+			else {
+				next[1] = y - 1;
+				if(y % 2 == 1) {
+					next[0] = x - 1;
+				}
+				else {
+					next[0] = x;
+				}
+			}
+			break;
+		}
+		
+		if((next[0] < 8 && next[0] >= 0) && (next[1] < 8 && next[1] >= 0) && (next[1] % 2 == 1 || next[0] < 7)) {
+			return next;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	private boolean test_nextTile(boolean print) {
+		boolean res = true;	
+		
+		int result_2_3[] = {3,3};
+		res = res && runTestNextTile(result_2_3,HORIZONTAL_ALIGN,true,2,3,print);
+		
+		int result_2_2[] = {1,2};
+		res = res && runTestNextTile(result_2_2,HORIZONTAL_ALIGN,false,2,2,print);
+		
+		int result_4_2_true[] = {5,3};
+		res = res && runTestNextTile(result_4_2_true,ANTISLASH_ALIGN,true,4,2,print);
+
+		int result_4_2_false[] = {4,1};
+		res = res && runTestNextTile(result_4_2_false,ANTISLASH_ALIGN,false,4,2,print);
+		
+		int result_3_4_true[] = {4,5};
+		res = res && runTestNextTile(result_3_4_true,SLASH_ALIGN,true,3,4,print);
+		
+		int result_3_4_false[] = {3,3};
+		res = res && runTestNextTile(result_3_4_false,SLASH_ALIGN,false,3,4,print);
+		
+		
+		int result_7_7[] = null;
+		res = res && runTestNextTile(result_7_7,HORIZONTAL_ALIGN,true,7,7,print);
+		
+		int result_0_5[] = null;
+		res = res && runTestNextTile(result_0_5,HORIZONTAL_ALIGN,false,0,5,print);
+		
+		int result_0_7_true[] = null;
+		res = res && runTestNextTile(result_0_7_true,ANTISLASH_ALIGN,true,0,7,print);
+		
+		int result_0_7_false[] = null;
+		res = res && runTestNextTile(result_0_7_false,ANTISLASH_ALIGN,false,0,7,print);
+		
+		int result_7_1[] = null;
+		res = res && runTestNextTile(result_7_1,SLASH_ALIGN,false,7,1,print);
+		
+		int result_3_7[] = null;
+		res = res && runTestNextTile(result_3_7,SLASH_ALIGN,true,3,7,print);
+		
+		return res;
+	}
+	
+	/**
 	 * Distribue aléatoirement les poissons sur le plateau de jeu.
 	 */
 	public void shuffle() {
@@ -118,6 +231,15 @@ public class Board {
 	 * @return 0 : pas d'alignement ou erreur de tuile ; 1 : horizontal ; 2 : en slash ; 3 en antislash.
 	 */
 	public int areAligned(int x1, int y1, int x2, int y2) {
+		if(y1 > y2) {
+			int temp = y2;
+			y2 = y1;
+			y1 = temp;
+			temp = x2;
+			x2 = x1;
+			x1 = temp;
+		}
+		
 		// Vérification de la validité des tuiles.
 		boolean trueTile = tab[y1][x1] != null && tab[y2][x2] != null;
 
@@ -126,23 +248,17 @@ public class Board {
 
 		// Recherche d'un alignement diagonal droit (slash).
 		boolean slash;
-		if (y1 < y2) {
-			if(y1 % 2 == 0) slash = x1 + ((y1 - y2) / 2) == x2;
-			else slash = x1 + ((y1 + 1 - y2) / 2) - 1 == x2;
-		} else {
-			if(y2 % 2 == 0) slash = x2 + ((y2 - y1) / 2) == x1;
-			else slash = x2 + ((y2 + 1 - y1) / 2) - 1 == x1;
-		}
+		if(y1 % 2 == 0) 
+			slash = x1 + ((y1 - y2) / 2) == x2;
+		else 
+			slash = x1 + ((y1 + 1 - y2) / 2) - 1 == x2;
 
 		// Recherche d'un alignement diagonal gauche (antislash).
 		boolean antislash;
-		if (y1 < y2) {
-			if(y1 % 2 == 0) antislash = x1 + ((y2 - y1 - 1) / 2) + 1 == x2;
-			else antislash = x1 + ((y2  - y1) / 2)  == x2;
-		} else {
-			if(y2 % 2 == 0) antislash = x2 + ((y1 - y2 - 1) / 2) + 1== x1;
-			else antislash = x2 + ((y1 - y2) / 2)  == x1;
-		}
+		if(y1 % 2 == 0) 
+			antislash = x1 + ((y2 - y1 - 1) / 2) + 1 == x2;
+		else 
+			antislash = x1 + ((y2  - y1) / 2)  == x2;
 
 		if (trueTile && (horizontal || slash || antislash)) {
 			if (horizontal) return Board.HORIZONTAL_ALIGN;
@@ -217,64 +333,28 @@ public class Board {
 	 * @return Vrai (true) si un déplacement est valide ; faux (false) sinon.
 	 */
 	public boolean isMoveLegit(int x1, int y1, int x2, int y2) {
-		int resAlign = areAligned(x1, y1, x2, y2), x, y;
+		int resAlign = areAligned(x1, y1, x2, y2);
+		int coord[] = {x1,y1};
 		switch (resAlign) {
 			case Board.HORIZONTAL_ALIGN:
-				y = y1;
-				if (x1 < x2) {
-					for (x = x1+1; x <= x2; x++) {
-						if ((x != x2 || y != y2) && areAligned(x, y, x2, y2) != areAligned(x, y, x1, y1))
-							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
-						if (tab[y][x] == null || tab[y][x].occupied()) return false;
-					}
-				} else {
-					for (x = x1-1; x >= x2; x--) {
-						if ((x != x2 || y != y2) && areAligned(x,y,x2,y2) != areAligned(x,y,x1,y1))
-							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
-						if (tab[y][x] == null || tab[y][x].occupied()) return false;
-					}
+				while(coord[0] != x2 || coord[1] != y2) {
+					coord = nextTile(coord[0],coord[1],HORIZONTAL_ALIGN,x2 > x1);
+					if (tab[coord[1]][coord[0]] == null || tab[coord[1]][coord[0]].occupied()) 
+						return false;
 				}
 				return true;
 			case Board.SLASH_ALIGN:
-				if (y1 < y2) {
-					x = x1;
-					if (y1 % 2 == 1) x--;
-					for (y = y1+1; y <= y2; y++) {
-						if ((x != x2 || y != y2) && areAligned(x, y, x2, y2) != areAligned(x, y, x1, y1))
-							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
-						if (tab[y][x] == null || tab[y][x].occupied()) return false;
-						if (y % 2 == 1) x--;
-					}
-				} else {
-					x = x1;
-					if (y1 % 2 == 0) x++;
-					for (y = y1-1; y >= y2; y--) {
-						if ((x != x2 || y != y2) && areAligned(x,y,x2,y2) != areAligned(x,y,x1,y1))
-							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
-						if (tab[y][x] == null || tab[y][x].occupied()) return false;
-						if (y % 2 == 0) x++;
-					}
+				while(coord[0] != x2 || coord[1] != y2) {
+					coord = nextTile(coord[0],coord[1],SLASH_ALIGN,y2 > y1);
+					if (tab[coord[1]][coord[0]] == null || tab[coord[1]][coord[0]].occupied()) 
+						return false;
 				}
 				return true;
 			case Board.ANTISLASH_ALIGN:
-				if (y1 < y2) {
-					x = x1;
-					if(y1 % 2 == 0) x++;
-					for (y = y1+1; y <= y2; y++) { // parcours de toute les cases entre les deux tuiles
-						if ((x != x2 || y != y2) && areAligned(x, y, x2, y2) != areAligned(x, y, x1, y1))
-							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
-						if(tab[y][x] == null || tab[y][x].occupied()) return false;
-						if(y % 2 == 0) x++;
-					}
-				} else {
-					x = x1;
-					if (y1 % 2 == 1) x--;
-					for(y = y1-1; y >= y2; y--) {
-						if ((x != x2 || y != y2) && areAligned(x, y, x2, y2) != areAligned(x, y, x1, y1))
-							System.out.println("erreur -> x : " + x + " y : " + y + " x1 : " + x1 + "  y1 : " + y1 + " x2 : " + x2 + "  y2 : " + y2);
-						if(tab[y][x] == null || tab[y][x].occupied()) return false;
-						if(y % 2 == 1) x--;
-					}
+				while(coord[0] != x2 || coord[1] != y2) {
+					coord = nextTile(coord[0],coord[1],ANTISLASH_ALIGN,y2 > y1);
+					if (tab[coord[1]][coord[0]] == null || tab[coord[1]][coord[0]].occupied()) 
+						return false;
 				}
 				return true;
 			default:
@@ -447,120 +527,48 @@ public class Board {
 		}
 	}
 	
-	public int[][] movePossibility(int x1, int y1) {
+	private int possibilityDirection(int x,int y,int way,boolean direction,int result[][],int index) {
+		int coord[] = {-1,-1};
+		boolean cond = true;
+		coord[0] = x;
+		coord[1] = y;
+		while(coord != null && cond) {
+			coord = nextTile(coord[0],coord[1],way,direction);
+			if (coord != null && tab[coord[1]][coord[0]] != null && !tab[coord[1]][coord[0]].occupied()) {
+				result[index][0] = coord[0];
+				result[index][1] = coord[1];
+				index++;
+			}
+			else {
+				cond = false;
+			}
+		}
+		return index;
+	}
+	
+	public int[][] movePossibility(int x, int y) {
 		// création du tableau à rendre
 		int result[][] = new int[60][2];
 		int index = 0;
 		
-		int x,y;
-		
 		boolean cond = true;
 		// coups à l'horizontal partie droit
-		y = y1;
-		for(x = x1 + 1 ; x < 8 && cond; x++) {
-			if(tab[y][x] != null && !tab[y][x].occupied()) {
-				result[index][0] = x;
-				result[index][1] = y;
-				index++;
-			}
-			else {
-				cond = false;
-			}
-		}
+		index = possibilityDirection(x,y,HORIZONTAL_ALIGN,true,result,index);
 		
 		// coups en antislash partie basse
-		cond = true;
-		x = x1;
-		if(y1 % 2 == 0) {
-			x++;
-		}
-		for(y = y1 + 1; y < 8 && x < 8 && cond; y++) {
-			if(tab[y][x] != null && !tab[y][x].occupied()) {
-				result[index][0] = x;
-				result[index][1] = y;
-				index++;
-				}
-			else {
-				cond = false;
-			}
-			if(y % 2 == 0) {
-				x++;
-			}
-		}
+		index = possibilityDirection(x,y,ANTISLASH_ALIGN,true,result,index);
 		
 		// coups en slash partie basse
-		cond = true;
-		x = x1;
-		if(y1 % 2 == 1) {
-			x--;
-		}
-		for(y = y1 + 1; y < 8 && x >= 0 && cond; y++) {
-			if(tab[y][x] != null && !tab[y][x].occupied()) {
-				result[index][0] = x;
-				result[index][1] = y;
-				index++;
-				}
-			else {
-				cond = false;
-			}
-			if(y % 2 == 1) {
-				x--;
-			}
-		}
+		index = possibilityDirection(x,y,SLASH_ALIGN,true,result,index);
 		
 		// coups à l'horizontal partie gauche
-		cond = true;
-		y = y1;
-		for(x = x1 - 1 ; x >= 0  && cond; x--) {
-			if(tab[y][x] != null && !tab[y][x].occupied()) {
-				result[index][0] = x;
-				result[index][1] = y;
-				index++;
-			}
-			else {
-				cond = false;
-			}
-		}
+		index = possibilityDirection(x,y,HORIZONTAL_ALIGN,false,result,index);
 		
 		// coups en antislash partie haute
-		cond = true;
-		x = x1;
-		if(y1 % 2 == 1) {
-			x--;
-		}
-		for(y = y1 - 1; y >= 0 && x >= 0 && cond; y--) {
-			if(tab[y][x] != null && !tab[y][x].occupied()) {
-				result[index][0] = x;
-				result[index][1] = y;
-				index++;
-			}
-			else {
-				cond = false;
-			}
-			if(y % 2 == 1) {
-				x--;
-			}
-		}
+		index = possibilityDirection(x,y,ANTISLASH_ALIGN,false,result,index);
 		
 		// coups en slash partie haute
-		cond = true;
-		x = x1;
-		if(y1 % 2 == 0) {
-			x++;
-		}
-		for(y = y1 - 1; y >= 0 && x < 8 && cond; y--) {
-			if(tab[y][x] != null && !tab[y][x].occupied()) {
-				result[index][0] = x;
-				result[index][1] = y;
-				index++;
-			}
-			else {
-				cond = false;
-			}
-			if(y % 2 == 0) {
-				x++;
-			}
-		}
+		index = possibilityDirection(x,y,SLASH_ALIGN,false,result,index);
 		
 		for(int i = index ; i < 60 ; i++) {
 			result[i][0] = -1;
@@ -570,7 +578,7 @@ public class Board {
 		return result;
 	}
 	
-	public boolean test_movePossibility(boolean print) {
+	private boolean test_movePossibility(boolean print) {
 		shuffle();
 		boolean result = true;
 		
@@ -590,7 +598,7 @@ public class Board {
 		}
 		
 		int result_4_3[][] = {{5,3},{6,3},{7,3},{4,4},{5,5},{5,6},{6,7},{3,4},{3,5},{2,6},{2,7},{3,3},{2,3},{1,3},{0,3},{3,2},{3,1},{2,0},{4,2},{5,1},{5,0}};
-		result = result && runTestPossibility(result_4_3,4,3,print);
+		result = runTestPossibility(result_4_3,4,3,print) && result;
 		
 		
 		// test (2,6)
@@ -617,7 +625,7 @@ public class Board {
 		return result;
 	}
 	
-	public boolean runTest(int nbFonc, boolean print, int x1 , int y1 , int x2 , int y2 ,boolean boolWanted) {
+	private boolean runTest(int nbFonc, boolean print, int x1 , int y1 , int x2 , int y2 ,boolean boolWanted) {
 		boolean boolObtained = true;
 		String Fonc = "";
 		switch(nbFonc) {
@@ -641,13 +649,48 @@ public class Board {
 			printTest(nbFonc,x1,y1,x2,y2);
 		}
 		if(boolWanted != boolObtained) {
-			System.out.println(Fonc + "(" + x1 + "," + y1 + "," + x2 + "," + y2 + ") n'a pas eu le bon résultat" );
+			System.out.println(Fonc + "(" + x1 + "," + y1 + "," + x2 + "," + y2 + ") n'a pas eu le bon résultat, recu " + boolObtained + " alors qu'on voulait " + boolWanted );
 		}
 		return boolWanted == boolObtained;
 	}
 	
-	public boolean runTestPossibility(int wanted[][],int x, int y, boolean print) {
+	private boolean runTestNextTile(int wanted[], int way, boolean direction, int x, int y, boolean print) {
+		int obtained[] = nextTile(x,y,way,direction);
+		if(wanted != null && obtained != null) {
+			if(obtained[0] != wanted[0] && obtained[1] != wanted[1]) {
+				if(print) {
+					System.out.println("attendu x : " + wanted[0] + " y : " + wanted[1] + " ; recu x : " + obtained[0] + " y : " + obtained[1]);
+				}
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+		else {
+			if(obtained == null && wanted == null) {
+				return true;
+			}
+			else {
+				if(wanted == null) {
+					if(print) {
+						System.out.println("on attendait aucune tuile, or, une tuile a été recu x : " + x + ", y : " + y + ", direction : " + way + " , sens : " + direction);
+					}
+					return false;
+				}
+				else {
+					if(print) {
+						System.out.println("on attendait une tuile, or, aucune tuile n'a été recu x : " + x + ", y : " + y + ", direction : " + way + " , sens : " + direction);
+					}
+					return false;
+				}
+			}
+		}
+	}
+	
+	private boolean runTestPossibility(int wanted[][],int x, int y, boolean print) {
 		int obtained[][] = movePossibility(x,y);
+		
 		boolean not_end = true;
 		boolean equality = true;
 		int length = 60;
@@ -682,7 +725,7 @@ public class Board {
 	 * @param x2 coord x de la tuile 2
 	 * @param y2 coord x de la tuile 2
 	 */
-	public void printTest(int option, int x1, int y1 , int x2, int y2) {
+	private void printTest(int option, int x1, int y1 , int x2, int y2) {
 		char charac[][][] = {{{'1','1','1'},{'2','2','2'},{'.','.','.'}},{{'V','X','@'},{'V','X','@'},{'O','B','.'}},{{'V','X','@'},{'V','X','@'},{'O','B','.'}}};
 		for(int y = 0 ; y < 8 ; y++) {
 			if(y % 2 == 0) {
@@ -791,6 +834,19 @@ public class Board {
 			}
 			else {
 				result = test_movePossibility(false);
+				System.out.println(result);
+			}
+		}
+		
+		System.out.println("tester la recherche de la prochaine tuile dans une direction et un sens ?(1 ou 0)"); // vérifie la fonction qui cherche la prochaine tuile dans une certaine direction
+		if(s.nextInt() == 1){
+			System.out.println("afficher les tests ?(1 ou 0)");
+			if(s.nextInt() == 1){
+				result = test_nextTile(true);
+				System.out.println(result);
+			}
+			else {
+				result = test_nextTile(false);
 				System.out.println(result);
 			}
 		}
