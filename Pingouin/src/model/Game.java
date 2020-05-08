@@ -7,6 +7,7 @@ public class Game {
 	private int nbPlayer;
 	private Board gameBoard;
 	private int currentPlayerNumber;
+	private History history;
 	
 	/**
 	 * initialise le jeu
@@ -33,6 +34,7 @@ public class Game {
 			players[3] = p4;
 		}
 		gameBoard = new Board();
+		history = new History(gameBoard,players);
 	}
 	
 	/**
@@ -59,6 +61,8 @@ public class Game {
 				p.changeScore(t.getFishNumber());
 				p.addTile();
 				p.movePenguin(x1, y1, x2, y2);
+				Move m = new Move(x1, y1, x2, y2, currentPlayerNumber, t.getFishNumber());
+				history.addMove(m);
 				return true;
 			}
 			else {
