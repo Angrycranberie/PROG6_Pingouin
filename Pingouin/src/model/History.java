@@ -70,6 +70,7 @@ public class History {
 	private void addMovePast(Move m) {
 		resizing(true);
 		past[pastIndex] = m;
+		pastIndex++;
 	}
 	
 	/**
@@ -79,6 +80,7 @@ public class History {
 	private void addMoveFutur(Move m) {
 		resizing(false);
 		futur[futurIndex] = m;
+		futurIndex++;
 	}
 	
 	/**

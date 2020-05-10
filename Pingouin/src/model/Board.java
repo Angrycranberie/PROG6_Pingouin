@@ -551,7 +551,6 @@ public class Board {
 		int result[][] = new int[60][2];
 		int index = 0;
 		
-		boolean cond = true;
 		// coups à l'horizontal partie droit
 		index = possibilityDirection(x,y,HORIZONTAL_ALIGN,true,result,index);
 		
