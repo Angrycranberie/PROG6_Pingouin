@@ -96,16 +96,21 @@ public class ControlerMediator implements EventCollector {
 		if(p.getAmountPlaced() < p.getPenguinsNumber()){
 			Tile t = board.getTile(x, y);
 			if(!t.occupied()){
-				p.penguins()[p.getAmountPlaced()] = new Penguin(x, y);
-				board.occupyWithPenguin(x, y);
-				p.addAmount(1);
-				val = true;
-				game.nextPlayer();
+				if(t.getFishNumber() == 1){
+					p.penguins()[p.getAmountPlaced()] = new Penguin(x, y);
+					board.occupyWithPenguin(x, y);
+					p.addAmount(1);
+					val = true;
+					game.nextPlayer();
+				} else {
+					System.out.print("Les pingouins doivent être placés sur" +
+							" une case de valeur 1.");
+				}
 			} else {
-				System.out.println("La case est occupée.");
+				System.out.print("La case est occupée.");
 			}
 		} else {
-			System.out.println("Tous les pingouins sont déjà placés pour ce joueur.");
+			System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");
 			game.nextPlayer();
 		}
 		return val;

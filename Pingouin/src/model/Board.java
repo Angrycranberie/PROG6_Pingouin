@@ -750,6 +750,7 @@ public class Board {
 	/**
 	 * affiche le plateau de jeu
 	 * @param option 0 affiche les valeurs des tuiles, 1 affiche les cases occupées et vides
+	 * 2 affiche un plateau plus large fait pour être joué.
 	 */
 	public void printBoard(int option) {
 		for(int y = 0 ; y < 8 ; y++) {
@@ -776,6 +777,15 @@ public class Board {
 						System.out.print(". ");
 					}
 						
+				} else if (option == 2){
+					if(tab[y][x] == null){
+						System.out.print("0  ");
+					} else {
+						if(tab[y][x].occupied()){
+							System.out.print("B");
+						}
+						System.out.print(tab[y][x].getFishNumber() + " ");
+					}
 				}
 			}
 			System.out.println();

@@ -25,7 +25,7 @@ public class TextInterface {
 					return;
 				}
 			}
-			g.getBoard().printBoard(1);
+			g.getBoard().printBoard(2);
 			System.out.print("Commande > ");
 			try {
 				c.keyInput(s.nextInt());
