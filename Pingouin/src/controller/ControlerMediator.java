@@ -46,8 +46,9 @@ public class ControlerMediator implements EventCollector {
 	 * Lis une coordonnée entrée au clavier et l'interprête.
 	 * @param val Entier lu au clavier.
 	 * @return Vrai si le dernier mouvement est correct, Faux sinon.
+	 * @throws Exception
 	 */
-	public boolean keyInput(int val){
+	public boolean keyInput(int val) throws Exception{
 		boolean ret = false;
 		
 		if(val < 0){
@@ -57,14 +58,24 @@ public class ControlerMediator implements EventCollector {
 			else if (y1 < 0){
 				y1 = val;
 				if(getToPlace() > 0){
-					if(ret = placePinguin(x1, y1)) setToPlace(getToPlace() - 1);
-					x1 = y1 = -1;
+					try { 
+						if(ret = placePinguin(x1, y1)) setToPlace(getToPlace() - 1);
+					} catch (Exception e) {
+						throw(e);
+					} finally {
+						x1 = y1 = -1;
+					}
 				}
 			} else if (x2 < 0) x2 = val;
 			else {
 				y2 = val;
-				ret = move(x1, y1, x2, y2);
-				x1 = y1 = x2 = y2 = -1;
+				try { 
+					ret = move(x1, y1, x2, y2);
+				} catch(Exception e){
+					throw(e);
+				} finally {	//On s'assure de bien réinitialiser les coordonnées en cas d'erreur.
+					x1 = y1 = x2 = y2 = -1;
+				}
 			}
 			
 		}
@@ -78,7 +89,7 @@ public class ControlerMediator implements EventCollector {
 	 * @param x Coordonnée x où l'on souhaite placer le pingouin.
 	 * @param y Coorfonnée y où l'on souhaite placer le pingouin.
 	 */
-	/* à déplacer dans Game ?*/
+	/* à déplacer dans Game ou Player ?*/
 	public boolean placePinguin(int x, int y){
 		boolean val = false;
 		Player p = game.getCurrentPlayer();
