@@ -781,10 +781,12 @@ public class Board {
 					if(tab[y][x] == null){
 						System.out.print("0  ");
 					} else {
+						System.out.print(tab[y][x].getFishNumber());
 						if(tab[y][x].occupied()){
-							System.out.print("B");
+							System.out.print("B ");
+						} else {
+							System.out.print("  ");
 						}
-						System.out.print(tab[y][x].getFishNumber() + " ");
 					}
 				}
 			}
@@ -893,9 +895,23 @@ public class Board {
 		System.out.println();
 	}
 	
+	/**
+	 * Determine la liste de coups possible depuis la position donnée.
+	 * @param x1 Coordonnée x de la position de départ.
+	 * @param y1 Coordonnée y de la position de départ.
+	 * @return La liste de coups possibles. Cette liste a le format suivant :
+	 * 	res[i][0] : Coordonnée x de la destination du coup n°i.
+	 * 	res[j][1] : Coordonnée y de la destination du coup n°i.
+	 * 	Les coordonnées valent -1 si i n'est pas un coup.
+	 */
 	public int[][] movePossibility(int x1, int y1) {
 		// création du tableau à rendre
 		int result[][] = new int[60][2];
+		for(int i = 0 ; i < 60 ; i++){
+			for (int j = 0 ; j < 2 ; j++){
+				result[i][j] = -1;
+			}
+		}
 		int index = 0;
 		
 		int x,y;

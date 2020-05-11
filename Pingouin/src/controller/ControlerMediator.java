@@ -141,7 +141,7 @@ public class ControlerMediator implements EventCollector {
 	 */
 	private boolean stillPlaying(){
 		Player currPlayer = game.getCurrentPlayer();
-		if(game.canPlay(currPlayer)){
+		if(!game.canPlay(currPlayer)){
 			game.endPlayer(currPlayer);
 			return false;
 		} else {

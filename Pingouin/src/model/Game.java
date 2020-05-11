@@ -153,13 +153,14 @@ public class Game {
 	 * @param p Joueur à examiner.
 	 * @return Vrai s'il peut jouer, Faux sinon.
 	 */
+	/* à déplacer dans Player ? */
 	public boolean canPlay(Player p) {
 		boolean possibility = false;
 		int movePossibility[][];
 		Penguin penguins[] = p.penguins();
 		for(int i = 0 ; i < p.getPenguinsNumber() ; i++) {
 			movePossibility = legitMovePossibility(penguins[i]);
-			possibility = possibility || movePossibility[0][0] == -1;
+			possibility = possibility || (movePossibility[0][0] != -1);
 		}
 		return possibility;
 	}

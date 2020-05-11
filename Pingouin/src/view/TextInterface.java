@@ -26,15 +26,15 @@ public class TextInterface {
 				}
 			}
 			g.getBoard().printBoard(2);
-			System.out.print("Commande > ");
+			System.out.print("Commande (" + g.getCurrentPlayer().getName() + ") > ");
 			try {
 				c.keyInput(s.nextInt());
 			} catch(ArrayIndexOutOfBoundsException e){
-				System.out.println("Erreur : Coordonnées incorrecte. Rejouez.");
+				System.out.print("Erreur : Coordonnées incorrecte. Rejouez.");
 			} catch(NullPointerException e){
-				System.out.println("Erreur : Cette case est vide. Rejouez.");
+				System.out.print("Erreur : Cette case est vide. Rejouez.");
 			} catch(Exception e){
-				System.out.println("Erreur inconnue : " + e.getLocalizedMessage() + ". Rejouez.");
+				System.out.print("Erreur inconnue : " + e.getLocalizedMessage() + ". Rejouez.");
 			}
 			System.out.println();
 		}
