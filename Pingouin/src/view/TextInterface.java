@@ -18,13 +18,14 @@ public class TextInterface {
 		TextInterface vue = new TextInterface (g, c);
 		Scanner s = new Scanner(System.in);
 		while(true){
-			if(c.getToPlace() == 0){
+			if(g.getToPlace() == 0){
 				if(!c.startTurn()){
 					s.close();
 					g.endGame();
 					return;
 				}
 			}
+			
 			g.getBoard().printBoard(2);
 			System.out.print("Commande (" + g.getCurrentPlayer().getName() + ") > ");
 			try {

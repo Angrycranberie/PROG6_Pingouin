@@ -14,6 +14,7 @@ public class Game {
 	private int currentPlayerNumber;
 	private Board board;
 	private PropertyChangeSupport support;
+	private int toPlace;
 	
 	/**
 	 * initialise le jeu
@@ -36,6 +37,7 @@ public class Game {
 		currentPlayerNumber = 1;
 		board = new Board();
 		support = new PropertyChangeSupport(this);
+		setToPlace(getPlayerCount()*(getCurrentPlayer().getPenguinsNumber()));
 	}
 
 	/**
@@ -74,6 +76,31 @@ public class Game {
 		return playerCount;
 	}
 
+	public int getToPlace() {
+		return toPlace;
+	}
+
+	public void setToPlace(int toPlace) {
+		this.toPlace = toPlace;
+	}
+	
+	/**
+	 * Indique si l'on est en phase de placement de pingouins.
+	 * @return Vrai si la partie est en phase de placement, Faux sinon.
+	 */
+	public boolean placePhase(){
+		return toPlace != 0;
+	}
+	
+	/**
+	 * Indique si l'on est en phase de déplacement.
+	 * @return Vrai si la partie est en phase de déplacement, Faux sinon.
+	 * Ceci correspond à !placePhase().
+	 */
+	public boolean movePhase(){
+		return toPlace == 0;
+	}
+	
 	/**
 	 * Effectue le mouvement d'un pingouin d'une tuile à une autre.
 	 * @param x1 Coordonnée x de la tuile de départ.
@@ -147,6 +174,37 @@ public class Game {
 		return board.movePossibility(p.coord_x(),p.coord_y());
 	}	/**
 
+	/**
+	 * Place un pingouin du joueur courant aux coordonnées d'entrée.
+	 * Passe au tour suivant si réussi.
+	 * @return Vrai si le pingouin a bien été placé, faux sinon.
+	 * @param x Coordonnée x où l'on souhaite placer le pingouin.
+	 * @param y Coorfonnée y où l'on souhaite placer le pingouin.
+	 */
+	public boolean placePinguin(int x, int y){
+		boolean val = false;
+		Player p = getCurrentPlayer();
+		if(p.getAmountPlaced() < p.getPenguinsNumber()){
+			Tile t = board.getTile(x, y);
+			if(!t.occupied()){
+				if(t.getFishNumber() == 1){
+					p.penguins()[p.getAmountPlaced()] = new Penguin(x, y);
+					board.occupyWithPenguin(x, y);
+					p.addAmount(1);
+					val = true;
+				} else {
+					System.out.print("Les pingouins doivent être placés sur" +
+							" une case de valeur 1.");
+				}
+			} else {
+				System.out.print("La case est occupée.");
+			}
+		} else {
+			System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");
+			nextPlayer();
+		}
+		return val;
+	}
 	
 	/**
 	 * Détermine si le joueur p peut jouer un coup.

@@ -19,6 +19,7 @@ public class Player {
 	private int penguinsNumber; // Nombre de pingouins du joueur.
 	private Color color; // Couleur du joueur.
 	private boolean playing; // Si le joueur est toujours dans la partie ou non.
+	private boolean isAI;
 	
 	/**
 	 * Création du joueur.
@@ -146,6 +147,22 @@ public class Player {
 	 */
 	public void removeTile() {
 		tileScore--;
+	}
+	
+	/**
+	 * Indique si le joueur est un IA ou non.
+	 * @return Vrai si le joueur est une IA, Faux sinon.
+	 */
+	public boolean isAI() {
+		return isAI;
+	}
+	
+	/**
+	 * Fixe la valeur d'IA du joueur.
+	 * @param v Valeur d'IA du joueur (Vrai si c'en est une, Faux sinon).
+	 */
+	public void setAI(boolean v){
+		this.isAI = v;
 	}
 	
 	/**

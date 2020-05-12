@@ -2,8 +2,6 @@ package controller;
 
 import model.Board;
 import model.Game;
-import model.Penguin;
-import model.Tile;
 import view.EventCollector;
 import view.UserInterface;
 
@@ -18,13 +16,11 @@ public class ControlerMediator implements EventCollector {
 	Game game;
 	Board board;
 	int x1, y1, x2, y2;
-	private int toPlace;
 	
 	public ControlerMediator(Game g){
 		game = g;
 		board = g.getBoard();
 		x1 = y1 = x2 = y2 = -1;
-		setToPlace(game.getPlayerCount()*(game.getCurrentPlayer().getPenguinsNumber()));
 	}
 	
 	@Override
@@ -57,9 +53,12 @@ public class ControlerMediator implements EventCollector {
 			if(x1 < 0)x1 = val;
 			else if (y1 < 0){
 				y1 = val;
-				if(getToPlace() > 0){
+				if(game.placePhase()){
 					try { 
-						if(ret = placePinguin(x1, y1)) setToPlace(getToPlace() - 1);
+						if(ret = game.placePinguin(x1, y1)) { 
+							game.nextPlayer();
+							game.setToPlace(game.getToPlace() - 1);
+						}
 					} catch (Exception e) {
 						throw(e);
 					} finally {
@@ -81,41 +80,7 @@ public class ControlerMediator implements EventCollector {
 		}
 		return ret;
 	}
-	
-	/**
-	 * Place un pingouin du joueur courant aux coordonnées d'entrée.
-	 * Passe au tour suivant si réussi.
-	 * @return Vrai si le pingouin a bien été placé, faux sinon.
-	 * @param x Coordonnée x où l'on souhaite placer le pingouin.
-	 * @param y Coorfonnée y où l'on souhaite placer le pingouin.
-	 */
-	/* à déplacer dans Game ou Player ?*/
-	public boolean placePinguin(int x, int y){
-		boolean val = false;
-		Player p = game.getCurrentPlayer();
-		if(p.getAmountPlaced() < p.getPenguinsNumber()){
-			Tile t = board.getTile(x, y);
-			if(!t.occupied()){
-				if(t.getFishNumber() == 1){
-					p.penguins()[p.getAmountPlaced()] = new Penguin(x, y);
-					board.occupyWithPenguin(x, y);
-					p.addAmount(1);
-					val = true;
-					game.nextPlayer();
-				} else {
-					System.out.print("Les pingouins doivent être placés sur" +
-							" une case de valeur 1.");
-				}
-			} else {
-				System.out.print("La case est occupée.");
-			}
-		} else {
-			System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");
-			game.nextPlayer();
-		}
-		return val;
-	}
-	
+		
 	/**
 	 * Effectue le mouvement d'un pingouin d'une tuile à une autre.
 	 * Si réussi, passe au joueur suivant.
@@ -151,6 +116,7 @@ public class ControlerMediator implements EventCollector {
 	
 	/**
 	 * Commence le tour du joueur courant : vérifie s'il peut encore jouer.
+	 * Si oui, il peut jouer. Si le joueur est une IA, on lance son tour.
 	 * Si non, lui fait finir la partie, puis vérifie qu'il reste des joueurs.
 	 * @return Vrai s'il reste des joueurs, Faux sinon.
 	 */
@@ -160,14 +126,17 @@ public class ControlerMediator implements EventCollector {
 				return false;
 			}
 		}
+		if(game.getCurrentPlayer().isAI()){
+			startAITurn();
+			game.nextPlayer();
+		}
 		return true;
 	}
 
-	public int getToPlace() {
-		return toPlace;
-	}
-
-	public void setToPlace(int toPlace) {
-		this.toPlace = toPlace;
+	/**
+	 * Lance le tour de l'IA.
+	 */
+	private void startAITurn(){
+		game.getCurrentPlayer().play();
 	}
 }
