@@ -505,6 +505,7 @@ public class Board {
 	/**
 	 * affiche le plateau de jeu
 	 * @param option 0 affiche les valeurs des tuiles, 1 affiche les cases occupées et vides
+	 * 2 affiche un plateau plus large fait pour être joué.
 	 */
 	public void printBoard(int option) {
 		for(int y = 0 ; y < 8 ; y++) {
@@ -531,6 +532,17 @@ public class Board {
 						System.out.print(". ");
 					}
 						
+				} else if (option == 2){
+					if(tab[y][x] == null){
+						System.out.print("0  ");
+					} else {
+						System.out.print(tab[y][x].getFishNumber());
+						if(tab[y][x].occupied()){
+							System.out.print("B ");
+						} else {
+							System.out.print("  ");
+						}
+					}
 				}
 			}
 			System.out.println();
@@ -556,28 +568,42 @@ public class Board {
 		return index;
 	}
 	
-	public int[][] movePossibility(int x, int y) {
+	/**
+	 * Determine la liste de coups possible depuis la position donnée.
+	 * @param x1 Coordonnée x de la position de départ.
+	 * @param y1 Coordonnée y de la position de départ.
+	 * @return La liste de coups possibles. Cette liste a le format suivant :
+	 * 	res[i][0] : Coordonnée x de la destination du coup n°i.
+	 * 	res[j][1] : Coordonnée y de la destination du coup n°i.
+	 * 	Les coordonnées valent -1 si i n'est pas un coup.
+	 */
+	public int[][] movePossibility(int x1, int y1) {
 		// création du tableau à rendre
 		int result[][] = new int[60][2];
+		for(int i = 0 ; i < 60 ; i++){
+			for (int j = 0 ; j < 2 ; j++){
+				result[i][j] = -1;
+			}
+		}
 		int index = 0;
 		
 		// coups à l'horizontal partie droit
-		index = possibilityDirection(x,y,HORIZONTAL_ALIGN,true,result,index);
+		index = possibilityDirection(x1,y1,HORIZONTAL_ALIGN,true,result,index);
 		
 		// coups en antislash partie basse
-		index = possibilityDirection(x,y,ANTISLASH_ALIGN,true,result,index);
+		index = possibilityDirection(x1,y1,ANTISLASH_ALIGN,true,result,index);
 		
 		// coups en slash partie basse
-		index = possibilityDirection(x,y,SLASH_ALIGN,true,result,index);
+		index = possibilityDirection(x1,y1,SLASH_ALIGN,true,result,index);
 		
 		// coups à l'horizontal partie gauche
-		index = possibilityDirection(x,y,HORIZONTAL_ALIGN,false,result,index);
+		index = possibilityDirection(x1,y1,HORIZONTAL_ALIGN,false,result,index);
 		
 		// coups en antislash partie haute
-		index = possibilityDirection(x,y,ANTISLASH_ALIGN,false,result,index);
+		index = possibilityDirection(x1,y1,ANTISLASH_ALIGN,false,result,index);
 		
 		// coups en slash partie haute
-		index = possibilityDirection(x,y,SLASH_ALIGN,false,result,index);
+		index = possibilityDirection(x1,y1,SLASH_ALIGN,false,result,index);
 		
 		for(int i = index ; i < 60 ; i++) {
 			result[i][0] = -1;
