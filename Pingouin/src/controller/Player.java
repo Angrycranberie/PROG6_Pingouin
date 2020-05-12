@@ -14,24 +14,30 @@ public class Player {
 	private String name; // Nom du joueur.
 	private int fishScore; // Score associé au nombre de poissons obtenu.
 	private int tileScore; // Score associé au nombre de cases obtenues.
+	private int amountPlaced; // Nombre courant de pingouins placés.
 	private Penguin penguins[]; // Liste des pingouins du joueur.
 	private int penguinsNumber; // Nombre de pingouins du joueur.
 	private Color color; // Couleur du joueur.
 	private boolean playing; // Si le joueur est toujours dans la partie ou non.
+	private boolean isAI;
 	
 	/**
 	 * Création du joueur.
 	 * @param penguinsNumber Indique le nombre de pingouin du joueur
 	 * @param color Couleur du joueur.
 	 */
-	public Player(Game game, int penguinsNumber, Color color, String name) {
-		this.game = game;
-		this.fishScore = this.tileScore = 0;
+
+	public Player(int penguinsNumber, Color color, String name) {
+		this.fishScore = this.tileScore = this.amountPlaced = 0;
 		this.penguinsNumber = penguinsNumber;
 		this.color = color;
 		penguins = new Penguin[penguinsNumber];
 		this.name = name;
 		playing = true;
+	}
+	
+	public void setGame(Game g){
+		this.game = g;
 	}
 	
 	/**
@@ -56,6 +62,13 @@ public class Player {
 	 */
 	public boolean isPlaying() {
 		return playing;
+	}
+	
+	/**
+	 * Fixe la valeur playing à false.
+	 */
+	public void stopPlaying(){
+		playing = false;
 	}
 	
 	/**
@@ -91,6 +104,22 @@ public class Player {
 	}
 	
 	/**
+	 * Retourne le nombre de pingouins placés par le joueur.
+	 * @return Le nombre de pingouins placés par le joueur.
+	 */
+	public int getAmountPlaced() {
+		return amountPlaced;
+	}
+	
+	/**
+	 * Augmente le nombre de pingouins placés par le joueur de i.
+	 * @param i Valeur de l'augmentation.
+	 */
+	public void addAmount(int i) {
+		amountPlaced += i;
+	}
+	
+	/**
 	 * Retourne le nom du joueur.
 	 * @return Nom du joueur.
 	 */
@@ -121,6 +150,22 @@ public class Player {
 	}
 	
 	/**
+	 * Indique si le joueur est un IA ou non.
+	 * @return Vrai si le joueur est une IA, Faux sinon.
+	 */
+	public boolean isAI() {
+		return isAI;
+	}
+	
+	/**
+	 * Fixe la valeur d'IA du joueur.
+	 * @param v Valeur d'IA du joueur (Vrai si c'en est une, Faux sinon).
+	 */
+	public void setAI(boolean v){
+		this.isAI = v;
+	}
+	
+	/**
 	 * Bouge un pingouin d'une tuile vers une autre.
 	 * @param x1 Coordonnée x de la tuile de départ.
 	 * @param y1 Coordonnée y de la tuile de départ.
@@ -134,7 +179,6 @@ public class Player {
 			}
 		}
 	}
-	
 	// TODO
 	/**
 	 * Joue un coup

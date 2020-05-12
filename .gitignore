@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+bin/
 
 # Log file
 *.log
@@ -30,3 +31,4 @@ Pingouin/.gitignore
 # IntelliJ #
 .idea/
 *.iml
+out/

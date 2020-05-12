@@ -1,7 +1,5 @@
 package controller;
 
-import model.Game;
-
 import java.awt.Color;
 
 /**
@@ -10,10 +8,8 @@ import java.awt.Color;
  */
 public class PlayerHuman extends Player {
 
-	public PlayerHuman(Game game, int penguinsNumber, Color color, String name) {
-		super(game, penguinsNumber, color, name);
+	public PlayerHuman(int penguinsNumber, Color color, String name) {
+		super(penguinsNumber, color, name);
+		setAI(false);
 	}
-
-
-
 }
