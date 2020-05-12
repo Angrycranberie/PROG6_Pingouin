@@ -31,3 +31,4 @@ Pingouin/.gitignore
 # IntelliJ #
 .idea/
 *.iml
+out/
