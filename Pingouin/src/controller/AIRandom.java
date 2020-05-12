@@ -15,6 +15,7 @@ public class AIRandom extends Player {
 	
 	public AIRandom(int penguinsNumber, Color color, String name) {
 		super(penguinsNumber, color, name);
+		setAI(true);
 		r = new Random();
 	}
 
