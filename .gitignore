@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+bin/
 
 # Log file
 *.log
@@ -25,7 +26,9 @@ hs_err_pid*
 # Eclipse #
 Pingouin/.classpath
 Pingouin/.project
+Pingouin/.gitignore
 
 # IntelliJ #
 .idea/
 *.iml
+out/
