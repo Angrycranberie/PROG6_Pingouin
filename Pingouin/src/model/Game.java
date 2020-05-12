@@ -14,6 +14,7 @@ public class Game {
 	private int currentPlayerNumber;
 	private Board board;
 	private PropertyChangeSupport support;
+	private History history;
 	
 	/**
 	 * initialise le jeu
@@ -36,6 +37,7 @@ public class Game {
 		currentPlayerNumber = 1;
 		board = new Board();
 		support = new PropertyChangeSupport(this);
+		history = new History(board, players);
 	}
 
 	/**
@@ -84,6 +86,8 @@ public class Game {
 				p.addTile();
 				p.movePenguin(x1, y1, x2, y2);
 				support.firePropertyChange("game", oldGame, this);
+				Move m = new Move(x1, y1, x2, y2, currentPlayerNumber, t.getFishNumber());
+				history.addMove(m);
 				return true;
 			}
 			else {
