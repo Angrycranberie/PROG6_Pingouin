@@ -4,6 +4,7 @@ import model.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Interface graphique principale du jeu.
@@ -48,6 +49,7 @@ public class GraphicInterface implements Runnable, UserInterface {
         // Éléments de l'interface principale. - TODO
         frame = new JFrame("Hey, that's my fish !");
         gameView = new GameView(game);
+        gameView.setMinimumSize(frame.getSize());
 
         // Retransmission des événements au contrôleur. - TODO
         gameView.addMouseListener(new GameMouseAdapter(graphicGame, eventCollector));
@@ -55,10 +57,10 @@ public class GraphicInterface implements Runnable, UserInterface {
         Timer t = new Timer(TIMER_DELAY, new TimerAdapter(eventCollector));
 
         // Mise en place de l'interface principale. - TODO
-        frame.add(graphicGame); // On ajoute le jeu à l'interface.
+        frame.add(gameView); // On ajoute le jeu à l'interface.
         t.start(); // Début du timer.
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
-        frame.setSize(800, 500); // Définition de la taille de fenêtre par défaut.
+        frame.setMinimumSize(new Dimension(800, 500)); // Définition de la taille de fenêtre par défaut.
         frame.setVisible(true); // On rend la fenêtre visible.
     }
 
