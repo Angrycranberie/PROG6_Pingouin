@@ -20,29 +20,46 @@ public class AIRandom extends Player {
 	}
 
 	@Override
-	public void play() {
-		int tmp, x, y, index=0;
-		int move[][];
-		Penguin tabPen[] = penguins();
-		Penguin pen;
+	public boolean play() {
+		int x,y;
 		
-		/* choix du pingouin à jouer */
-		do {
-			tmp = r.nextInt(getPenguinsNumber());
-			pen = tabPen[tmp];
-			move = getGame().legitMovePossibility(pen);
+		// placement des pingouins
+		if(getGame().placePhase()) {
+			do {
+				/* TODO
+				 * Mettre à jour ces deux lignes en prenant les dimensions du tableau ! 
+				 */
+				x = r.nextInt(8);
+				y = r.nextInt(8);
+			} while(!getGame().placePenguin(x,y));
+		
+		} // jouer un coup
+		else {
+			int tmp, index=0;
+			int move[][];
+			Penguin tabPen[] = penguins();
+			Penguin pen;
 			
-			index = lengthMove(move);
+			/* choix du pingouin à jouer 
+			 * si le pingouin n'a pas de coup disponible, on en joue un autre */
+			do {
+				tmp = r.nextInt(getPenguinsNumber());
+				pen = tabPen[tmp];
+				move = getGame().legitMovePossibility(pen);
+				
+				// compte le nombre de coup disponible pour le pingouin
+				index = lengthMove(move);
+				
+			} while(index == 0); 
 			
-		} while(index == 0); 
-		
-		
-		do {
-			/* on choisit une case au hasard parmi les accessibles */
-			tmp = r.nextInt(index);
-			x = move[tmp][0];
-			y = move[tmp][1];
-		} while (!getGame().movePenguin(pen.coord_x(), pen.coord_y(), x, y));
+			do {
+				/* on choisit une case au hasard parmi les accessibles */
+				tmp = r.nextInt(index);
+				x = move[tmp][0];
+				y = move[tmp][1];
+			} while (!getGame().movePenguin(pen.coord_x(), pen.coord_y(), x, y));
+		}
+		return true;
 	}
 	
 	/**

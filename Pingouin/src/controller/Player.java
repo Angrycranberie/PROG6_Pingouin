@@ -182,8 +182,9 @@ public class Player {
 	// TODO
 	/**
 	 * Joue un coup
+	 * @return un booléen disant si le coup a bien été joué ou non
 	 */
-	void play() {
-		return ;
+	boolean play() {
+		return false;
 	}
 }
