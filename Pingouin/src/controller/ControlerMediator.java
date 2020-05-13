@@ -57,7 +57,6 @@ public class ControlerMediator implements EventCollector {
 					try { 
 						if(ret = game.placePinguin(x1, y1)) { 
 							game.nextPlayer();
-							game.setToPlace(game.getToPlace() - 1);
 						}
 					} catch (Exception e) {
 						throw(e);

@@ -195,6 +195,7 @@ public class Game {
 					p.penguins()[p.getAmountPlaced()] = new Penguin(x, y);
 					board.occupyWithPenguin(x, y);
 					p.addAmount(1);
+					setToPlace(getToPlace()-1);
 					val = true;
 				} else {
 					System.out.print("Les pingouins doivent être placés sur" +

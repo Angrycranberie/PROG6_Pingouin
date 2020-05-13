@@ -28,18 +28,17 @@ public class DecisionTree {
 	/* Construit un noeud de l'arbre associé au plateau courant game, 
 	 * et considérant que l'IA a le tour en cours.
 	 */
-	private int nodeSelf(int alpha, int beta){
+	private int nodeMove(int alpha, int beta, boolean ownTurn, int depth){
 		
-		int value = -100, x, y, j;
+		int value, x, y, j;
 		int moveList[][];
 		Penguin [] penguins = game.getCurrentPlayer().penguins();
 		
-		/*
-		if(game.end()){
-			elm.ModifWin(!win);
-			return root;
+		
+		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
+			return heuristicMove();
 		}
-		*/
+		
 		
 		/* On parcours tous les fils possibles de ce noeud et on regarde leur valeur */
 		for(int i = 0 ; i < penguins.length ; i++){
@@ -49,53 +48,74 @@ public class DecisionTree {
 			j = 0;
 			while(moveList[j][0] != -1){
 				if(game.movePenguin(x, y, moveList[j][0], moveList[j][1])) {
-					value = Math.max(value, nodeOppo(alpha, beta));
-					game.undo(1);	// Non implémenté.
-					if(value >= beta){
-						return value;	// coupure beta.
+					if(ownTurn) {
+						value = Math.max(value, nodeMove(alpha, beta, false, depth));
+						game.undo(1);	// Non implémenté.
+						if(value >= beta){
+							return value;	// coupure beta.
+						}
+						alpha = Math.max(alpha, value);
+						
+					} else {
+						value = Math.min(value, nodeMove(alpha, beta, true, depth));
+						game.undo(1);	// Non implémenté.
+						if(alpha >= value){
+							return value;	// coupure alpha.
+						}
+						beta = Math.min(beta, value);
 					}
-					alpha = Math.max(alpha, value);
+					
 				}
 				j++;
 			}
-		}	
+		}
 		return value;
 	}
 	
-	/* Construit un noeud de l'arbre associé au plateau courant game, 
-	 * et considérant que l'adversaire a le tour en cours.
-	 */
-	private int nodeOppo(int alpha, int beta){
+	private int nodePlace(int alpha, int beta, boolean ownTurn, int depth){
 		
-		int value = 100, x, y, j;
+		int value, x, y, j;
 		int moveList[][];
-		Penguin [] penguins = game.getCurrentPlayer().penguins();
 		
-		/*
-		if(game.end()){
-			elm.ModifWin(!win);
-			return root;
+		
+		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
+			return heuristicPlace();
 		}
-		*/
+		
 		
 		/* On parcours tous les fils possibles de ce noeud et on regarde leur valeur */
-		for(int i = 0 ; i < penguins.length ; i++){
-			x = penguins[i].coord_x();
-			y = penguins[i].coord_y();
-			moveList = board.movePossibility(x, y);
-			j = 0;
-			while(moveList[j][0] != -1){
-				if(game.movePenguin(x, y, moveList[j][0], moveList[j][1])) {
-					value = Math.min(value, nodeSelf(alpha, beta));
+		moveList = board.placePossibility();
+		j = 0;
+		while(moveList[j][0] != -1){
+			if(game.placePenguin(moveList[j][0], moveList[j][1])) {
+				if(ownTurn) {
+					if(game.movePhase()){
+						value = Math.max(value, nodeMove(alpha, beta, false, depth-1));
+					} else {
+						value = Math.max(value, nodePlace(alpha, beta, false, depth-1));
+					}
+						game.undo(1);	// Non implémenté.
+						if(value >= beta){
+							return value;	// coupure beta.
+						}
+						alpha = Math.max(alpha, value);
+				} else {
+					if(game.movePhase()){
+						value = Math.min(value, nodeMove(alpha, beta, true, depth-1));
+					} else {
+						value = Math.min(value, nodePlace(alpha, beta, true, depth-1));
+					}
 					game.undo(1);	// Non implémenté.
 					if(alpha >= value){
 						return value;	// coupure alpha.
 					}
 					beta = Math.min(beta, value);
 				}
-				j++;
+				
 			}
-		}	
+			j++;
+		}
 		return value;
 	}
+	
 }
