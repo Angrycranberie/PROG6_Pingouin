@@ -24,9 +24,13 @@ public class GameView extends GraphicGame {
         game = g;
         setLayout(new GroupLayout(this));
         g.addPropertyChangeListener(this);
+
+        // Chargement des textures des tuiles.
         tiles = new Image[4];
-        tiles[0] = loadImage("/img/game/tiles/Tile0.png"); // TEMPORAIRE
-        setBackground(new Color(127, 127, 255, 255));
+        for (int i = 0; i < 4; i++) tiles[i] = loadImage("/img/game/tiles/Tile"+i+".png");
+
+        setOpaque(true);
+        setBackground(new Color(72, 127, 255, 255));
         setVisible(true);
         generateBoard();
     }
@@ -34,23 +38,22 @@ public class GameView extends GraphicGame {
     @Override
     void generateBoard() {
         int w = 100, h = 100; // Largeur et hauteur des tuiles à afficher.
-        for (int i = 0; i < 8; i++){
-            for (int j = 0; j < 8; j++) {
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++) {
+                JButton b = new JButton();
+                Tile t = game.getBoard().getTile(j,i);
+                b.setName(j + "," + i);
+                b.setHorizontalTextPosition(SwingConstants.CENTER);
+                b.setSize(w,h);
+                b.setBorderPainted(false);
+                b.setBackground(new Color(0,0,0,0));
                 if (i %2 == 1 || j < 7) {
-                    JButton b = new JButton();
-                    Tile t = game.getBoard().getTile(j,i);
-                    b.setName(j + "," + i);
-                    b.setHorizontalTextPosition(SwingConstants.CENTER);
-                    b.setSize(w,h);
-                    b.setBorderPainted(false);
-                    b.setBackground(new Color(0,0,0,0));
-                    b.setRolloverEnabled(false);
-                    b.setIcon(new ImageIcon(tiles[0].getScaledInstance(w, h, Image.SCALE_SMOOTH)));
-                    b.setText(""+t.getFishNumber());
-                    if(i%2 == 0) b.setLocation((w/2) + w*j,h*i);
-                    else b.setLocation( w*j,h*i);
-                    add(b);
+                    b.setIcon(new ImageIcon(tiles[t.getFishNumber()].getScaledInstance(w, h, Image.SCALE_SMOOTH)));
                 }
+                else b.setEnabled(false);
+                if(i%2 == 0) b.setLocation((w/2) + w*j,h*i);
+                else b.setLocation( w*j,h*i);
+                add(b);
             }
         }
     }
