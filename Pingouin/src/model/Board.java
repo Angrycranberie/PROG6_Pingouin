@@ -568,6 +568,8 @@ public class Board {
 		return index;
 	}
 	
+	
+	
 	/**
 	 * Determine la liste de coups possible depuis la position donnée.
 	 * @param x1 Coordonnée x de la position de départ.
@@ -580,11 +582,7 @@ public class Board {
 	public int[][] movePossibility(int x1, int y1) {
 		// création du tableau à rendre
 		int result[][] = new int[60][2];
-		for(int i = 0 ; i < 60 ; i++){
-			for (int j = 0 ; j < 2 ; j++){
-				result[i][j] = -1;
-			}
-		}
+
 		int index = 0;
 		
 		// coups à l'horizontal partie droit

@@ -1,26 +1,26 @@
 package controller.ai;
 
-import ai.ConfigVector;
+import controller.ai.ConfigVector;
 
 public class ConfigNode {
-	private boolean win;
+	private int value;
 	private ConfigVector config;
 	
-	public ConfigNode(boolean win, ConfigVector config) {
-		this.win = win;
+	public ConfigNode(int val, ConfigVector config) {
+		this.value = val;
 		this.config = config;
 	}
 	
-	public boolean win() {
-		return win;
+	public int getValue() {
+		return value;
 	}
 	
-	public ConfigVector config() {
+	public ConfigVector getConfig() {
 		return config;
 	}
 	
-	public void ModifWin(boolean newWin){
-		win = newWin;		
+	public void setValue(int v){
+		value = v;
 	}
 	
 }
