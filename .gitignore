@@ -31,11 +31,4 @@ Pingouin/.gitignore
 # IntelliJ #
 .idea/
 *.iml
-<<<<<<< Updated upstream
 out/
-=======
-
-Pingouin/.settings/org.eclipse.core.resources.prefs
-
-Pingouin/.settings/org.eclipse.jdt.core.prefs
->>>>>>> Stashed changes

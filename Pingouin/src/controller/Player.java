@@ -10,11 +10,7 @@ import java.awt.*;
  * @author Charly
  */
 public class Player {
-<<<<<<< Updated upstream
 	private Game game;
-=======
-	public static final int NBMAXPENGUIN = 4;
->>>>>>> Stashed changes
 	private String name; // Nom du joueur.
 	private int fishScore; // Score associé au nombre de poissons obtenu.
 	private int tileScore; // Score associé au nombre de cases obtenues.
@@ -30,18 +26,12 @@ public class Player {
 	 * @param penguinsNumber Indique le nombre de pingouin du joueur
 	 * @param color Couleur du joueur.
 	 */
-<<<<<<< Updated upstream
 
 	public Player(int penguinsNumber, Color color, String name) {
 		this.fishScore = this.tileScore = this.amountPlaced = 0;
 		this.penguinsNumber = penguinsNumber;
-=======
-	public Player(int penguinsNumber,Color color, String name) {
-		this.fishScore = this.tileScore = 0;
-		this.penguinsNumber = 0;
->>>>>>> Stashed changes
 		this.color = color;
-		penguins = new Penguin[NBMAXPENGUIN];
+		penguins = new Penguin[penguinsNumber];
 		this.name = name;
 		playing = true;
 	}
@@ -189,18 +179,11 @@ public class Player {
 			}
 		}
 	}
-<<<<<<< Updated upstream
 	// TODO
 	/**
 	 * Joue un coup
 	 */
 	void play() {
 		return ;
-=======
-	
-	public void addPenguin(int x, int y) {
-		penguins[penguinsNumber] = new Penguin(x,y);
-		penguinsNumber++;
->>>>>>> Stashed changes
 	}
 }

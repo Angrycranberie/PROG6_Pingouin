@@ -4,7 +4,6 @@ import controller.Player;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-<<<<<<< Updated upstream
 /**
  * Classe Game. Gère une partie du jeu : ordre des tours, coups sur le plateau.
  * @author Charly
@@ -12,12 +11,6 @@ import java.beans.PropertyChangeSupport;
 public class Game {
 	private Player[] players;
 	private int playerCount;
-=======
-public class Game implements Cloneable{
-	private Player players[];
-	private int nbPlayer;
-	private Board gameBoard;
->>>>>>> Stashed changes
 	private int currentPlayerNumber;
 	private Board board;
 	private PropertyChangeSupport support;
@@ -234,7 +227,6 @@ public class Game implements Cloneable{
 		return possibility;
 	}
 	
-<<<<<<< Updated upstream
 	/**
 	 * Retire les pingouins du joueur p de la partie, lui attribue les tuiles
 	 * sous ces pingouins, puis retire le joueur de la partie.
@@ -299,14 +291,5 @@ public class Game implements Cloneable{
 			}
 		}
 		System.out.println(topPlayer.getName() + " gagne la partie !");
-=======
-	public void placePingouin(int x, int y){
-		
-	}
-	
-	public Game clone() {
-		
-		return null;
->>>>>>> Stashed changes
 	}
 }

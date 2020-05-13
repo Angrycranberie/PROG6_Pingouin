@@ -13,8 +13,6 @@ public class Board {
 	public static final int HORIZONTAL_ALIGN = 1;
 	public static final int SLASH_ALIGN = 2;
 	public static final int ANTISLASH_ALIGN = 3;
-	public static final int LENGTH = 8;
-	public static final int WIDTH = 8;
 
 	private Tile[][] tab; // Représentation du plateau sous forme de tableau.
 
@@ -22,7 +20,7 @@ public class Board {
 	 * On modélise ce dernier par un tableau de 8*8 cases puis on génère aléatoirement son contenu.
 	 */
 	public Board() {
-		tab = new Tile[LENGTH][WIDTH];
+		tab = new Tile[8][8];
 		shuffle();
 	}
 	
@@ -186,8 +184,8 @@ public class Board {
 		int draw, fishNumber;
 
 		Random r = new Random();
-		for (int y = 0 ; y < LENGTH ; y++) {
-			for (int x = 0 ; x < WIDTH ; x++) {
+		for (int y = 0 ; y < 8 ; y++) {
+			for (int x = 0 ; x < 8 ; x++) {
 				if (y % 2 != 0 || x != 7) {
 					draw = r.nextInt(threeFish + twoFish + oneFish) + 1;  // 1 <= draw <= oneFish + twoFish + threeFish.
 					if (draw <= oneFish) { // 1 <= draw <= oneFish ; une valeur possible.
@@ -215,8 +213,8 @@ public class Board {
 		shuffle();
 		int threeFish, twoFish, oneFish;
 		threeFish = twoFish = oneFish = 0;
-		for (int y = 0 ; y < LENGTH ; y++) {
-			for (int x = 0 ; x < WIDTH ; x++) {
+		for (int y = 0 ; y < 8 ; y++) {
+			for (int x = 0 ; x < 8 ; x++) {
 				if (tab[y][x] != null) {
 					switch (tab[y][x].getFishNumber()) {
 						case 1: oneFish++; break;
