@@ -1,5 +1,6 @@
 package controller.ai;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import model.Board;
@@ -8,6 +9,11 @@ import model.History;
 import model.Move;
 import model.Penguin;
 
+/**
+ * 
+ * @author yeauhant
+ *
+ */
 public class DecisionTree {
 
 	private Game game;
@@ -23,6 +29,14 @@ public class DecisionTree {
 		board = game.getBoard();
 		
 	}
+ 	
+ 	public ArrayList<Integer> moveDecision(){
+ 		ArrayList<Integer> res = new ArrayList<Integer>();
+ 		int maxH;
+ 		
+ 		return res;
+ 	}
+ 	
  	
 	
 	/* Construit un noeud de l'arbre associé au plateau courant game, 
