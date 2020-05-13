@@ -7,11 +7,10 @@ import java.awt.Color;
  * le plus de poissons.
  * @author Vincent
  */
-public class AISmart extends PlayerAI {
+public class AISmart extends Player {
 
 	public AISmart(int penguinsNumber, Color color, String name) {
 		super(penguinsNumber, color, name);
-		// TODO Auto-generated constructor stub
+		setAI(true);
 	}
-
 }
