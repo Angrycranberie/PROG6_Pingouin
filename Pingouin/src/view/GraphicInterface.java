@@ -57,7 +57,8 @@ public class GraphicInterface implements Runnable, UserInterface {
         Timer t = new Timer(TIMER_DELAY, new TimerAdapter(eventCollector));
 
         // Mise en place de l'interface principale. - TODO
-        frame.add(gameView); // On ajoute le jeu à l'interface.
+        //frame.add(gameView); // On ajoute le jeu à l'interface.
+        frame.setContentPane(gameView.panelMain);
         t.start(); // Début du timer.
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
         frame.setMinimumSize(new Dimension(800, 500)); // Définition de la taille de fenêtre par défaut.
