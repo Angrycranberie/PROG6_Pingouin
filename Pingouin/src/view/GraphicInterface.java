@@ -51,7 +51,11 @@ public class GraphicInterface implements Runnable, UserInterface {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
         frame.setMinimumSize(new Dimension(800, 500)); // Définition de la taille de fenêtre par défaut.
         gameView = new GameView(game);
-        gameView.setMinimumSize(frame.getMinimumSize());
+        gameView.setMinimumSize(frame.getSize());
+        // TEST
+        GameInterface testg = new GameInterface(game);
+
+
 
         // Retransmission des événements au contrôleur. - TODO
         gameView.addMouseListener(new GameMouseAdapter(graphicGame, eventCollector));
@@ -59,7 +63,7 @@ public class GraphicInterface implements Runnable, UserInterface {
         Timer t = new Timer(TIMER_DELAY, new TimerAdapter(eventCollector));
 
         // Mise en place de l'interface principale. - TODO
-        frame.setContentPane(gameView); // On ajoute le jeu à l'interface.
+        frame.setContentPane(testg.PanelMain); // On ajoute le jeu à l'interface.
         t.start(); // Début du timer.
         frame.setVisible(true); // On rend la fenêtre visible.
     }
