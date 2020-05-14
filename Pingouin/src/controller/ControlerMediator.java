@@ -137,6 +137,7 @@ public class ControlerMediator implements EventCollector {
 	 * Lance le tour de l'IA.
 	 */
 	private void startAITurn(){
-		game.getCurrentPlayer().play();
+		if(game.placePhase()) game.getCurrentPlayer().positionPenguin();
+		else game.getCurrentPlayer().play();
 	}
 }

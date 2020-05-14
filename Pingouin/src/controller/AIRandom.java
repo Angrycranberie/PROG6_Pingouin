@@ -22,18 +22,12 @@ public class AIRandom extends Player {
 
 	@Override
 	public boolean play() {
-		int x,y;
+		
 		
 		// placement des pingouins
-		if(getGame().placePhase()) {
-			do {
-				x = r.nextInt(Board.WIDTH);
-				y = r.nextInt(Board.LENGTH);
-			} while(!getGame().placePenguin(x,y));
-		
-		} // jouer un coup
+		if(getGame().placePhase()) return false;
 		else {
-			int tmp, index=0;
+			int tmp, x, y, index=0;
 			int move[][];
 			Penguin tabPen[] = penguins();
 			Penguin pen;
@@ -73,5 +67,15 @@ public class AIRandom extends Player {
 			else len++;
 		}
 		return len;
+	}
+	
+	@Override
+	public boolean positionPenguin() {
+		int x,y;
+		do {
+			x = r.nextInt(Board.WIDTH);
+			y = r.nextInt(Board.LENGTH);
+		} while(!getGame().placePenguin(x,y));
+		return true;
 	}
 }
