@@ -53,7 +53,7 @@ public class GraphicInterface implements Runnable, UserInterface {
         // Éléments de l'interface principale. - TODO
         frame = new JFrame("Hey, that's my fish !");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
-        frame.setMinimumSize(new Dimension(900, 800)); // Définition de la taille de fenêtre par défaut.
+        frame.setMinimumSize(new Dimension(900, 950)); // Définition de la taille de fenêtre par défaut.
         gameView = new GameView(game);
         gameView.setMinimumSize(frame.getSize());
         // TEST
