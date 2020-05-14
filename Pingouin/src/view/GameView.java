@@ -30,7 +30,6 @@ public class GameView extends GraphicGame {
         for (int i = 0; i < 4; i++) tiles[i] = loadImage("/img/game/tiles/Tile"+i+".png");
 
         setOpaque(true);
-        setBackground(new Color(72, 127, 255, 255));
         setVisible(true);
         generateBoard();
     }
@@ -38,15 +37,10 @@ public class GameView extends GraphicGame {
     @Override
     void generateBoard() {
         int w = 100, h = 100; // Largeur et hauteur des tuiles à afficher.
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++) {
-                JButton b = new JButton();
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++) {
                 Tile t = game.getBoard().getTile(j,i);
-                b.setName(j + "," + i);
-                b.setHorizontalTextPosition(SwingConstants.CENTER);
-                b.setSize(w,h);
-                b.setBorderPainted(false);
-                b.setBackground(new Color(0,0,0,0));
+                TileButton b = new TileButton(j+","+i, w, h);
                 if (i %2 == 1 || j < 7) {
                     b.setIcon(new ImageIcon(tiles[t.getFishNumber()].getScaledInstance(w, h, Image.SCALE_SMOOTH)));
                 }

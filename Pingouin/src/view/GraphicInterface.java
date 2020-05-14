@@ -48,6 +48,8 @@ public class GraphicInterface implements Runnable, UserInterface {
 
         // Éléments de l'interface principale. - TODO
         frame = new JFrame("Hey, that's my fish !");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
+        frame.setMinimumSize(new Dimension(800, 500)); // Définition de la taille de fenêtre par défaut.
         gameView = new GameView(game);
         gameView.setMinimumSize(frame.getSize());
         // TEST
@@ -63,8 +65,6 @@ public class GraphicInterface implements Runnable, UserInterface {
         // Mise en place de l'interface principale. - TODO
         frame.setContentPane(testg.PanelMain); // On ajoute le jeu à l'interface.
         t.start(); // Début du timer.
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
-        frame.setMinimumSize(new Dimension(900, 800)); // Définition de la taille de fenêtre par défaut.
         frame.setVisible(true); // On rend la fenêtre visible.
     }
 
