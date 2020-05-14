@@ -19,6 +19,7 @@ public class GameInterface {
 
     GameInterface(Game g){
         PanelMain = new JPanel();
+        InGameMenuInterface menu = new InGameMenuInterface();
         PanelMain.setSize(900,800);
         PanelMain.setLayout(new GroupLayout(PanelMain));
 
@@ -43,7 +44,8 @@ public class GameInterface {
         b_menu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+               // PanelMain.setVisible(false);
+                //PanelMain.getRootPane().setContentPane(menu.p_main);
             }
         });
 
