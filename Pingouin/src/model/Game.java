@@ -196,6 +196,7 @@ public class Game {
 					board.occupyWithPenguin(x, y);
 					p.addAmount(1);
 					val = true;
+					nextPlayer();
 				} else {
 					System.out.print("Les pingouins doivent être placés sur" +
 							" une case de valeur 1.");
