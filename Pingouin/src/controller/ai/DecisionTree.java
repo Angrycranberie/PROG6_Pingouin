@@ -30,29 +30,37 @@ public class DecisionTree {
 		
 	}
  	
- 	public ArrayList<Integer> moveDecision(){
- 		ArrayList<Integer> res = new ArrayList<Integer>();
- 		int maxH;
+ 	/**
+ 	 * Calcule la liste des meilleurs coups à jouer. Utilise l'heuristique définie.
+ 	 * Cette methode est recursive.
+ 	 * @param alpha Valeur de coupure Alpha. Dans un noeud Min, si l'heuristique
+ 	 * 	d'un fils lui est inférieure, on arrête le calcul. Est mise à jour par
+ 	 * 	les noeuds Max : Vaut le maximum d'un des fils déjà calculés.
+ 	 * 	Propagation descendante. A initiliaser à une très petite valeur.
+ 	 * @param beta Valeur de coupure Beta. Dans un noeud Max, si l'heuristique
+ 	 * 	d'un fils lui est supérieure, on arrête le calcul. Est mise à jour par
+ 	 * 	les noeuds Min : Vaut le minimum d'un des fils déjà calculé.
+ 	 * 	Propagation descendante. A initiliaser à une très grande valeur.
+ 	 * @param ownTurn Indique si le noeud est Max (Vrai) ou Min (Faux).
+ 	 * @param depth	Profondeur restante à explorer. Lorsqu'elle vaut zéro,
+ 	 * 	on évalue et renvoie l'heuristique associée au plateau courant.
+ 	 * @return Couple (Heuristique du meilleur coup ; liste des meilleurs coups).
+ 	 */
+ 	public Couple<Integer, ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>>> moveDecision(int alpha, int beta, boolean ownTurn, int depth){
+ 		ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>> resMove = 
+ 				new ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>>();
  		
- 		return res;
- 	}
- 	
- 	
-	
-	/* Construit un noeud de l'arbre associé au plateau courant game, 
-	 * et considérant que l'IA a le tour en cours.
-	 */
-	private int nodeMove(int alpha, int beta, boolean ownTurn, int depth){
-		
-		int value, x, y, j;
+		int value, x, y, j, tmp;
 		int moveList[][];
 		Penguin [] penguins = game.getCurrentPlayer().penguins();
 		
-		
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
-			return heuristicMove();
+			return new Couple(heuristicMove(), resMove);
 		}
 		
+		/* Initialisation de l'heuristique calculée */
+		if(ownTurn) value = -100000;
+		else value = 100000;
 		
 		/* On parcours tous les fils possibles de ce noeud et on regarde leur valeur */
 		for(int i = 0 ; i < penguins.length ; i++){
@@ -63,18 +71,44 @@ public class DecisionTree {
 			while(moveList[j][0] != -1){
 				if(game.movePenguin(x, y, moveList[j][0], moveList[j][1])) {
 					if(ownTurn) {
-						value = Math.max(value, nodeMove(alpha, beta, false, depth));
+						tmp = moveDecision(alpha, beta, false, depth-1).getFirst();
+						if(tmp >= value){
+							/* Le coup est acceptable. On l'ajoute à la liste de coups.
+							 * Si la nouvelle heuristique est meilleure, on vide d'abord la liste.
+							 */
+							if (tmp != value) resMove.clear();
+							
+							resMove.add(new Couple<Couple<Integer, Integer>, Couple<Integer, Integer>> 
+								(new Couple<Integer, Integer> (x, y),
+								 new Couple<Integer, Integer> (moveList[j][0], moveList[j][1])));
+							value = tmp;
+						} /* Sinon : le coup est moins bon. On ne change pas l'heuristique
+						   * ni la liste de coups mémorisés.
+						   */
+						
 						game.undo(1);	// Non implémenté.
 						if(value >= beta){
-							return value;	// coupure beta.
+							return new Couple(value, resMove);	// coupure beta.
 						}
 						alpha = Math.max(alpha, value);
 						
-					} else {
-						value = Math.min(value, nodeMove(alpha, beta, true, depth));
+					} else {						
+						tmp = moveDecision(alpha, beta, false, depth-1).getFirst();
+						if(tmp <= value){
+							/* Le coup est acceptable. On l'ajoute à la liste de coups.
+							 * Si la nouvelle heuristique est meilleure, on vide d'abord la liste.
+							 */
+							if (tmp != value) resMove.clear();
+							
+							resMove.add(new Couple<Couple<Integer, Integer>, Couple<Integer, Integer>> 
+								(new Couple<Integer, Integer> (x, y),
+								 new Couple<Integer, Integer> (moveList[j][0], moveList[j][1])));
+							value = tmp;
+						}
+						
 						game.undo(1);	// Non implémenté.
 						if(alpha >= value){
-							return value;	// coupure alpha.
+							return new Couple(value, resMove);	// coupure alpha.
 						}
 						beta = Math.min(beta, value);
 					}
@@ -83,8 +117,8 @@ public class DecisionTree {
 				j++;
 			}
 		}
-		return value;
-	}
+		return new Couple(value, resMove);
+ 	}
 	
 	private int nodePlace(int alpha, int beta, boolean ownTurn, int depth){
 		
