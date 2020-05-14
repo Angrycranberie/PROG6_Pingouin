@@ -1,5 +1,6 @@
 package controller;
 
+import model.Board;
 import model.Penguin;
 
 import java.awt.Color;
@@ -26,11 +27,8 @@ public class AIRandom extends Player {
 		// placement des pingouins
 		if(getGame().placePhase()) {
 			do {
-				/* TODO
-				 * Mettre à jour ces deux lignes en prenant les dimensions du tableau ! 
-				 */
-				x = r.nextInt(8);
-				y = r.nextInt(8);
+				x = r.nextInt(Board.WIDTH);
+				y = r.nextInt(Board.LENGTH);
 			} while(!getGame().placePenguin(x,y));
 		
 		} // jouer un coup
