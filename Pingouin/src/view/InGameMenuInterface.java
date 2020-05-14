@@ -11,9 +11,10 @@ public class InGameMenuInterface {
     private JButton b_save;
     private JButton b_newGame;
     private JButton b_backMainMenu;
-    private JPanel p_main;
+    public JPanel p_main;
 
     InGameMenuInterface(){
+        //GameInterface g = p_main.getRootPane().;
         ActionListener al_resume = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
