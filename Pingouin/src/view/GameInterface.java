@@ -20,13 +20,13 @@ public class GameInterface {
     GameInterface(Game g){
         PanelMain = new JPanel();
         InGameMenuInterface menu = new InGameMenuInterface();
-        PanelMain.setSize(900,800);
+        PanelMain.setSize(900,900);
         PanelMain.setLayout(new GroupLayout(PanelMain));
 
 
         gameView = new GameView(g);
         gameView.setLocation(50,40);
-        gameView.setSize(800,500);
+        gameView.setSize(800,800);
 
 
 
