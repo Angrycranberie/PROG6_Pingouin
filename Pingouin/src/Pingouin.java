@@ -29,8 +29,6 @@ public class Pingouin {
 		
 //		TextInterface.start(g, controller);
 		GraphicInterface.start(g, controller);
-		
-		
 	}
 
 }

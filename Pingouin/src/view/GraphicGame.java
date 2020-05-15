@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.FileInputStream;
 
 /**
  * Vue graphique préparée du jeu.
@@ -22,7 +23,7 @@ public abstract class GraphicGame extends JPanel implements PropertyChangeListen
     protected Image loadImage(String filename) {
         Image i = null;
         try {
-            i = ImageIO.read(getClass().getResource(filename));
+            i = ImageIO.read(new FileInputStream(filename));
         } catch (Exception e) {
             System.out.println("L'image '"+filename+"' n'a pas pu être chargée. ("+e.toString()+")");
         }

@@ -24,7 +24,7 @@ public class InGameMenuInterface {
         ActionListener al_save = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            	
             }
         };
 
@@ -42,6 +42,10 @@ public class InGameMenuInterface {
             }
         };
 
+        b_resume = new JButton();
+        b_backMainMenu = new JButton();
+        b_newGame = new JButton();
+        b_save = new JButton();
         b_resume.addActionListener(al_resume);
         b_backMainMenu.addActionListener(al_backMainMenu);
         b_newGame.addActionListener(al_newGame);
