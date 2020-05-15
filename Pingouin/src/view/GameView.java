@@ -15,6 +15,7 @@ import java.awt.*;
 public class GameView extends GraphicGame {
     Game game; // Jeu à afficher.
     Image[] tiles; // Tableau des images de tuiles.
+    String Path = "/img/game/tiles/Tile";
 
     /**
      * Constructeur de l'affichage du jeu.
@@ -27,8 +28,10 @@ public class GameView extends GraphicGame {
 
         // Chargement des textures des tuiles.
         tiles = new Image[4];
-        for (int i = 0; i < 4; i++) tiles[i] = loadImage("/img/game/tiles/Tile"+i+".png");
-
+        for (int i = 0; i < 4; i++)  {
+        	tiles[i] = loadImage(Path + i + ".png");
+        }
+        
         setOpaque(true);
         setVisible(true);
         generateBoard();
@@ -42,6 +45,7 @@ public class GameView extends GraphicGame {
                 Tile t = game.getBoard().getTile(j,i);
                 TileButton b = new TileButton(j+","+i, w, h);
                 if (i %2 == 1 || j < 7) {
+                	
                     b.setIcon(new ImageIcon(tiles[t.getFishNumber()].getScaledInstance(w, h, Image.SCALE_SMOOTH)));
                 }
                 else b.setEnabled(false);
