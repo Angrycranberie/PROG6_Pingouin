@@ -179,11 +179,43 @@ public class Player {
 			}
 		}
 	}
-	// TODO
+	
 	/**
-	 * Joue un coup
+	 * Place un pingouin au premier tour de jeu (pour joueur IA) 
+	 * @return
 	 */
-	void play() {
-		return ;
+	public boolean positionPenguin() {
+		return false;
+	}
+	
+	/**
+	 * Place un pingouin au premier tour de jeu en (x,y) (pour joueur Humain)
+	 * @param x coordonnées x de la case de départ
+	 * @param y coordonnées y de la case de départ
+	 * @return
+	 */
+	public boolean positionPenguin(int x, int y) {
+		return false;
+	}
+	
+	/**
+	 * Joue un coup (pour joueur IA)
+	 * @return un booléen disant si le coup a bien été joué ou non
+	 */
+	public boolean play() {
+		return false;
+	}
+	
+	/**
+	 * Joue un coup (pour joueur Humain)
+	 * Déplace le pingouin de coordonnées (x1,y1) en (x2,y2) si le coup est possible
+	 * @param x1 coordonnées x du pingouin
+	 * @param y1 coordonnées y du pingouin
+	 * @param x2 coordonnées x de la case d'arrivée
+	 * @param y2 coordonnées y de la case d'arrivée
+	 * @returnun booléen disant si le coup a été joué ou non
+	 */
+	public boolean play(int x1, int y1, int x2, int y2) {
+		return false;
 	}
 }

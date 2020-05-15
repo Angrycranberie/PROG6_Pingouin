@@ -185,7 +185,7 @@ public class Game {
 	 * @param x Coordonnée x où l'on souhaite placer le pingouin.
 	 * @param y Coorfonnée y où l'on souhaite placer le pingouin.
 	 */
-	public boolean placePinguin(int x, int y){
+	public boolean placePenguin(int x, int y){
 		boolean val = false;
 		Player p = getCurrentPlayer();
 		if(p.getAmountPlaced() < p.getPenguinsNumber()){
