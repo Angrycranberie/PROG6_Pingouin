@@ -23,7 +23,7 @@ public abstract class GraphicGame extends JPanel implements PropertyChangeListen
     protected Image loadImage(String filename) {
         Image i = null;
         try {
-            i = ImageIO.read(new FileInputStream(filename));
+            i = ImageIO.read(getClass().getResource(filename));
         } catch (Exception e) {
             System.out.println("L'image '"+filename+"' n'a pas pu être chargée. ("+e.toString()+")");
         }

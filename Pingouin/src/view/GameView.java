@@ -28,9 +28,7 @@ public class GameView extends GraphicGame {
 
         // Chargement des textures des tuiles.
         tiles = new Image[4];
-        for (int i = 0; i < 4; i++)  {
-        	tiles[i] = loadImage(Path + i + ".png");
-        }
+        for (int i = 0; i < 4; i++)	tiles[i] = loadImage(Path + i + ".png");
         
         setOpaque(true);
         setVisible(true);
