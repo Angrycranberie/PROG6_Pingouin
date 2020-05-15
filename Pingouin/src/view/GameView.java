@@ -15,7 +15,7 @@ import java.awt.*;
 public class GameView extends GraphicGame {
     Game game; // Jeu à afficher.
     Image[] tiles; // Tableau des images de tuiles.
-    String Path = "res/img/game/tiles/Tile";
+    String Path = "/img/game/tiles/Tile";
 
     /**
      * Constructeur de l'affichage du jeu.
