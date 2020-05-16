@@ -120,42 +120,74 @@ public class DecisionTree {
 		return new Couple(value, resMove);
  	}
 	
-	private int nodePlace(int alpha, int beta, boolean ownTurn, int depth){
+ 	public Couple<Integer, ArrayList<Couple<Integer, Integer>>>
+ 		placeDecision(int alpha, int beta, boolean ownTurn, int depth){
+ 		
+ 		ArrayList<Couple<Integer, Integer>> resList = new ArrayList<Couple<Integer, Integer>>();
+		int value, x, y, j, tmp;
+		int [][] moveList;
 		
-		int value, x, y, j;
-		int moveList[][];
-		
-		
+		// canPlay fonctionne ici ?
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
-			return heuristicPlace();
+			return new Couple(heuristicPlace(), resList);
 		}
 		
+		if(ownTurn) value = -100000;
+		else value = 100000;
 		
-		/* On parcours tous les fils possibles de ce noeud et on regarde leur valeur */
+		// Attention structure du retour.
 		moveList = board.placePossibility();
 		j = 0;
 		while(moveList[j][0] != -1){
-			if(game.placePenguin(moveList[j][0], moveList[j][1])) {
+			if(game.placePinguin(moveList[j][0], moveList[j][1])) {
 				if(ownTurn) {
 					if(game.movePhase()){
-						value = Math.max(value, nodeMove(alpha, beta, false, depth-1));
+						tmp = moveDecision(alpha, beta, false, depth-1).getFirst();
 					} else {
-						value = Math.max(value, nodePlace(alpha, beta, false, depth-1));
+						tmp = placeDecision(alpha, beta, false, depth-1).getFirst();
 					}
-						game.undo(1);	// Non implémenté.
-						if(value >= beta){
-							return value;	// coupure beta.
-						}
-						alpha = Math.max(alpha, value);
+					// val = max(tmp, val);
+					if(tmp >= value){
+						/* Le coup est acceptable. On l'ajoute à la liste de coups.
+						 * Si la nouvelle heuristique est meilleure, on vide d'abord la liste.
+						 */
+						if (tmp != value) resList.clear();
+						
+						resList.add(new Couple<Integer, Integer>(moveList[j][0], moveList[j][1]));
+						value = tmp;
+					} /* Sinon : le coup est moins bon. On ne change pas l'heuristique
+					   * ni la liste de coups mémorisés.
+					   */
+					
+					game.undo(1);	// Non implémenté.
+					if(value >= beta){
+						return new Couple(value, resList);	// coupure beta.
+					}
+					alpha = Math.max(alpha, value);
+						
 				} else {
 					if(game.movePhase()){
-						value = Math.min(value, nodeMove(alpha, beta, true, depth-1));
+						tmp = moveDecision(alpha, beta, true, depth-1).getFirst();
 					} else {
-						value = Math.min(value, nodePlace(alpha, beta, true, depth-1));
+						tmp = placeDecision(alpha, beta, true, depth-1).getFirst();
 					}
+					
+					// value = min(tmp, value)
+					if(tmp <= value){
+						/* Le coup est acceptable. On l'ajoute à la liste de coups.
+						 * Si la nouvelle heuristique est meilleure, on vide d'abord la liste.
+						 */
+						if (tmp != value) resList.clear();
+						
+						resList.add(new Couple<Integer, Integer>(moveList[j][0], moveList[j][1]));
+						value = tmp;
+					} /* Sinon : le coup est moins bon. On ne change pas l'heuristique
+					   * ni la liste de coups mémorisés.
+					   */
+					
 					game.undo(1);	// Non implémenté.
 					if(alpha >= value){
-						return value;	// coupure alpha.
+						return new Couple(value, resList);	// coupure alpha.
 					}
 					beta = Math.min(beta, value);
 				}
@@ -163,7 +195,8 @@ public class DecisionTree {
 			}
 			j++;
 		}
-		return value;
-	}
+ 		
+ 		return new Couple(value, resList);
+ 	}
 	
 }
