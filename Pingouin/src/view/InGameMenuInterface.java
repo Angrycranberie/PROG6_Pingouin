@@ -13,20 +13,26 @@ public class InGameMenuInterface {
     private JButton b_backMainMenu;
     public JPanel p_main;
 
-    InGameMenuInterface(){
+    private GameInterface game;
+
+    InGameMenuInterface(GameInterface g){
+
+        game = g;
+
         //GameInterface g = p_main.getRootPane().;
         ActionListener al_resume = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                p_main.getRootPane().setContentPane(game.p_main);
             }
         };
         ActionListener al_save = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                //SaveInterface si = new SaveInterface();
             }
         };
+
 
         ActionListener al_newGame = new ActionListener() {
             @Override

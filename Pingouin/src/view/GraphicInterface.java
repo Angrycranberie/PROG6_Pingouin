@@ -4,7 +4,6 @@ import model.Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 /**
  * Interface graphique principale du jeu.
@@ -57,7 +56,7 @@ public class GraphicInterface implements Runnable, UserInterface {
         gameView = new GameView(game);
         gameView.setMinimumSize(frame.getSize());
         // TEST
-
+        
 
 
         // Retransmission des événements au contrôleur. - TODO
@@ -66,7 +65,7 @@ public class GraphicInterface implements Runnable, UserInterface {
         Timer t = new Timer(TIMER_DELAY, new TimerAdapter(eventCollector));
 
         // Mise en place de l'interface principale. - TODO
-        frame.setContentPane(g.PanelMain); // On ajoute le jeu à l'interface.
+        frame.setContentPane(g.p_main); // On ajoute le jeu à l'interface.
         t.start(); // Début du timer.
         frame.setVisible(true); // On rend la fenêtre visible.
     }
