@@ -55,7 +55,7 @@ public class GameInterface {
         b_save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SaveInterface si = new SaveInterface(me);
+                SaveInterface si = new SaveInterface(me, "game");
                 p_main.getRootPane().setContentPane(si.p_main);
                 si.p_main.getRootPane().updateUI();
             }

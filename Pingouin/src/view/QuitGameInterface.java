@@ -41,7 +41,7 @@ public class QuitGameInterface {
         ActionListener al_save = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SaveInterface si = new SaveInterface(g);
+                SaveInterface si = new SaveInterface(g,s);
                 p_main.getRootPane().setContentPane(si.p_main);
                 si.p_main.getRootPane().updateUI();
             }
