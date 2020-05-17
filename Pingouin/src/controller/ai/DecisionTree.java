@@ -21,13 +21,14 @@ public class DecisionTree {
 	private History hist;
 	
 	
-	/* Construit l'arbre de decision associé à une IA.
-	 * start vaut true si cette IA commence la partie, false sinon.
+	/**
+	 * Associe une partie à l'arbre de décision.
+	 * Cette méthode doit être appelée avant chaque nouveau coup de l'IA.
+	 * @param g Partie à associer.
 	 */
  	public DecisionTree(Game g){
 		this.game = g.clone();
 		board = game.getBoard();
-		
 	}
  	
  	/**
@@ -120,6 +121,27 @@ public class DecisionTree {
 		return new Couple(value, resMove);
  	}
 	
+ 	/* Cette partie nécessite une factorisation,
+ 	 * mais les conditions variantes (nature d'un Coup, ownTurn ou non etc..)
+ 	 * rendent la chose pas si simple.
+ 	 */
+ 	
+ 	/**
+ 	 * Calcule la liste des meilleurs placements à jouer. Utilise l'heuristique définie.
+ 	 * Cette methode est recursive.
+ 	 * @param alpha Valeur de coupure Alpha. Dans un noeud Min, si l'heuristique
+ 	 * 	d'un fils lui est inférieure, on arrête le calcul. Est mise à jour par
+ 	 * 	les noeuds Max : Vaut le maximum d'un des fils déjà calculés.
+ 	 * 	Propagation descendante. A initiliaser à une très petite valeur.
+ 	 * @param beta Valeur de coupure Beta. Dans un noeud Max, si l'heuristique
+ 	 * 	d'un fils lui est supérieure, on arrête le calcul. Est mise à jour par
+ 	 * 	les noeuds Min : Vaut le minimum d'un des fils déjà calculé.
+ 	 * 	Propagation descendante. A initiliaser à une très grande valeur.
+ 	 * @param ownTurn Indique si le noeud est Max (Vrai) ou Min (Faux).
+ 	 * @param depth	Profondeur restante à explorer. Lorsqu'elle vaut zéro,
+ 	 * 	on évalue et renvoie l'heuristique associée au plateau courant.
+ 	 * @return Couple (Heuristique du meilleur coup ; liste des meilleurs coups).
+ 	 */
  	public Couple<Integer, ArrayList<Couple<Integer, Integer>>>
  		placeDecision(int alpha, int beta, boolean ownTurn, int depth){
  		

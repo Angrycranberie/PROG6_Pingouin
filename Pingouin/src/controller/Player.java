@@ -183,7 +183,7 @@ public class Player {
 	/**
 	 * Joue un coup
 	 */
-	void play() {
+	public void play() {
 		return ;
 	}
 }
