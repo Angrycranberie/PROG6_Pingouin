@@ -56,7 +56,7 @@ public class GraphicInterface implements Runnable, UserInterface {
         gameView = new GameView(game);
         gameView.setMinimumSize(frame.getSize());
         // TEST
-
+        
 
 
         // Retransmission des événements au contrôleur. - TODO
