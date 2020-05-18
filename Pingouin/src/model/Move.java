@@ -7,7 +7,7 @@ import controller.Player;
  * @author Charly
  *
  */
-public class Move {
+public class Move implements Cloneable{
 	int x1, y1, x2, y2; // Coordonnées de départ et d'arrivée du coup.
 	int player; // Numéro du joueur jouant le coup.
 	int fishNumber; // Nombre de poissons obtenu suite à ce coup.
@@ -53,5 +53,11 @@ public class Move {
 			p[player-1].changeScore(fishNumber);
 			p[player-1].addTile();
 		}
+	}
+	
+	@Override
+	protected Move clone() {
+		Move m = new Move(x1, y1, x2, y2,player,fishNumber);
+		return m;
 	}
 }

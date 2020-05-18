@@ -7,7 +7,7 @@ import java.util.Scanner;
  * @author Charly
  *
  */
-public class Board {
+public class Board implements Cloneable{
 	// Constantes d'alignement des tuiles.
 	public static final int NULL_ALIGN = 0;
 	public static final int HORIZONTAL_ALIGN = 1;
@@ -24,6 +24,11 @@ public class Board {
 	public Board() {
 		tab = new Tile[LENGTH][WIDTH];
 		shuffle();
+	}
+	
+	
+	private void changeTab(Tile[][] tab) {
+		this.tab = tab;
 	}
 	
 	/**
@@ -889,5 +894,23 @@ public class Board {
 		}
 		
 		s.close();
+	}
+	
+	@Override
+	protected Board clone() {
+		Tile t[][] = new Tile[LENGTH][WIDTH];
+		for(int i = 0; i < LENGTH ; i++) {
+			for(int j = 0; j < WIDTH ; j++) {
+				if(tab[i][j] != null) {
+					t[i][j] = tab[i][j].clone();
+				}
+				else {
+					t[i][j] = null;
+				}
+			}
+		}
+		Board b = new Board();
+		b.changeTab(t);
+		return b;
 	}
 }
