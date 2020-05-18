@@ -104,6 +104,14 @@ public class Game {
 	}
 	
 	/**
+	 * Renvoie la liste des joueurs.
+	 * @return Liste des joueurs.
+	 */
+	public Player[] getPlayers(){
+		return players;
+	}
+	
+	/**
 	 * Effectue le mouvement d'un pingouin d'une tuile à une autre.
 	 * @param x1 Coordonnée x de la tuile de départ.
 	 * @param y1 Coordonnée y de la tuile de départ.
