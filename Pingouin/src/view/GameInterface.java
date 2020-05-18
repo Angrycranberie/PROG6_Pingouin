@@ -28,14 +28,16 @@ public class GameInterface {
         p_main.setSize(900,900);
         p_main.setLayout(new GroupLayout(p_main));
 
+        gameView = new GameView(g);
+        gameView.setBounds(0, 50, p_main.getWidth(), 800);
+
         l_turnOrder = new JLabel();
         l_turnOrder.setText("La partie va commencer");
         l_turnOrder.setHorizontalAlignment(SwingConstants.CENTER);
         l_turnOrder.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_turnOrder.setBounds(0,0, p_main.getWidth(),50);
+        l_turnOrder.setBounds(0,gameView.getY()-10, p_main.getWidth(),50);
 
-        gameView = new GameView(g);
-        gameView.setBounds(0, l_turnOrder.getHeight(), p_main.getWidth(), 800);
+
 
 
         b_newGame= new JButton();
