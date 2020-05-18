@@ -15,18 +15,20 @@ public class AISmart extends Player {
 	Game game;
 	Random r;
 	DecisionTree decTree;
+	Heuristic heur;
 	
 	/* Crée une IA et son arbre associé.
 	 * Le booleen start indique si elle joue en premier (true) ou non (false)
 	 */
-	public AISmart(int penguinsNumber, Color color, String name) {
+	public AISmart(int penguinsNumber, Color color, String name, Heuristic h) {
 		super(penguinsNumber, color, name);
 		r = new Random();
+		heur = h;
 	}
 
 	@Override
 	public void play(){
-		decTree = new DecisionTree(game);
+		decTree = new DecisionTree(game, heur);
 		
 		if(game.placePhase()){
 			placeTurn();

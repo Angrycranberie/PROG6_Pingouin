@@ -19,16 +19,17 @@ public class DecisionTree {
 	private Game game;
 	private Board board;
 	private History hist;
-	
+	private Heuristic heur;
 	
 	/**
 	 * Associe une partie à l'arbre de décision.
 	 * Cette méthode doit être appelée avant chaque nouveau coup de l'IA.
 	 * @param g Partie à associer.
 	 */
- 	public DecisionTree(Game g){
+ 	public DecisionTree(Game g, Heuristic h){
 		this.game = g.clone();
 		board = game.getBoard();
+		this.heur = h;
 	}
  	
  	/**
@@ -47,7 +48,8 @@ public class DecisionTree {
  	 * 	on évalue et renvoie l'heuristique associée au plateau courant.
  	 * @return Couple (Heuristique du meilleur coup ; liste des meilleurs coups).
  	 */
- 	public Couple<Integer, ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>>> moveDecision(int alpha, int beta, boolean ownTurn, int depth){
+ 	public Couple<Integer, ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>>>
+ 	moveDecision(int alpha, int beta, boolean ownTurn, int depth){
  		ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>> resMove = 
  				new ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>>();
  		
@@ -56,7 +58,7 @@ public class DecisionTree {
 		Penguin [] penguins = game.getCurrentPlayer().penguins();
 		
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
-			return new Couple(heuristicMove(), resMove);
+			return new Couple(heur.heuristicMove(game), resMove);
 		}
 		
 		/* Initialisation de l'heuristique calculée */
@@ -151,7 +153,7 @@ public class DecisionTree {
 		
 		// canPlay fonctionne ici ?
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
-			return new Couple(heuristicPlace(), resList);
+			return new Couple(heur.heuristicPlace(game), resList);
 		}
 		
 		if(ownTurn) value = -100000;
