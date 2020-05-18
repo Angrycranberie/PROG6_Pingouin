@@ -11,6 +11,6 @@ public class AISmart extends Player {
 
 	public AISmart(int penguinsNumber, Color color, String name) {
 		super(penguinsNumber, color, name);
-		setAI(true);
+		setAI(2);
 	}
 }

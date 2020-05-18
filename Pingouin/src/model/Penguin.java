@@ -1,6 +1,6 @@
 package model;
 
-public class Penguin {
+public class Penguin implements Cloneable{
 	private int x;
 	private int y;
 	
@@ -38,5 +38,10 @@ public class Penguin {
 	public void changePosition(int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	@Override
+	public Penguin clone() {
+		return new Penguin(x,y);
 	}
 }

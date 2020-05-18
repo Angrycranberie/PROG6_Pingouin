@@ -10,7 +10,7 @@ public class PlayerHuman extends Player {
 
 	public PlayerHuman(int penguinsNumber, Color color, String name) {
 		super(penguinsNumber, color, name);
-		setAI(false);
+		setAI(0);
 	}
 	
 	@Override
