@@ -7,12 +7,14 @@ import java.util.Scanner;
  * @author Charly
  *
  */
-public class Board {
+public class Board implements Cloneable{
 	// Constantes d'alignement des tuiles.
 	public static final int NULL_ALIGN = 0;
 	public static final int HORIZONTAL_ALIGN = 1;
 	public static final int SLASH_ALIGN = 2;
 	public static final int ANTISLASH_ALIGN = 3;
+	public static final int LENGTH = 8;
+	public static final int WIDTH = 8;
 
 	private Tile[][] tab; // Représentation du plateau sous forme de tableau.
 
@@ -20,8 +22,13 @@ public class Board {
 	 * On modélise ce dernier par un tableau de 8*8 cases puis on génère aléatoirement son contenu.
 	 */
 	public Board() {
-		tab = new Tile[8][8];
+		tab = new Tile[LENGTH][WIDTH];
 		shuffle();
+	}
+	
+	
+	private void changeTab(Tile[][] tab) {
+		this.tab = tab;
 	}
 	
 	/**
@@ -122,7 +129,7 @@ public class Board {
 			break;
 		}
 		
-		if((next[0] < 8 && next[0] >= 0) && (next[1] < 8 && next[1] >= 0) && (next[1] % 2 == 1 || next[0] < 7)) {
+		if((next[0] < WIDTH && next[0] >= 0) && (next[1] < LENGTH && next[1] >= 0) && (next[1] % 2 == 1 || next[0] < WIDTH - 1)) {
 			return next;
 		}
 		else {
@@ -184,9 +191,9 @@ public class Board {
 		int draw, fishNumber;
 
 		Random r = new Random();
-		for (int y = 0 ; y < 8 ; y++) {
-			for (int x = 0 ; x < 8 ; x++) {
-				if (y % 2 != 0 || x != 7) {
+		for (int y = 0 ; y < LENGTH ; y++) {
+			for (int x = 0 ; x < WIDTH ; x++) {
+				if (y % 2 != 0 || x != WIDTH - 1) {
 					draw = r.nextInt(threeFish + twoFish + oneFish) + 1;  // 1 <= draw <= oneFish + twoFish + threeFish.
 					if (draw <= oneFish) { // 1 <= draw <= oneFish ; une valeur possible.
 						fishNumber = Tile.ONE_FISH;
@@ -213,8 +220,8 @@ public class Board {
 		shuffle();
 		int threeFish, twoFish, oneFish;
 		threeFish = twoFish = oneFish = 0;
-		for (int y = 0 ; y < 8 ; y++) {
-			for (int x = 0 ; x < 8 ; x++) {
+		for (int y = 0 ; y < LENGTH ; y++) {
+			for (int x = 0 ; x < WIDTH ; x++) {
 				if (tab[y][x] != null) {
 					switch (tab[y][x].getFishNumber()) {
 						case 1: oneFish++; break;
@@ -508,11 +515,11 @@ public class Board {
 	 * 2 affiche un plateau plus large fait pour être joué.
 	 */
 	public void printBoard(int option) {
-		for(int y = 0 ; y < 8 ; y++) {
+		for(int y = 0 ; y < LENGTH ; y++) {
 			if(y % 2 == 0) {
 				System.out.print(" ");
 			}
-			for(int x = 0 ; x < 8 ; x++) {
+			for(int x = 0 ; x < WIDTH ; x++) {
 				if(option == 0) {
 					if(tab[y][x] != null) {
 						System.out.print(tab[y][x].getFishNumber() + " ");
@@ -762,11 +769,11 @@ public class Board {
 	 */
 	private void printTest(int option, int x1, int y1 , int x2, int y2) {
 		char charac[][][] = {{{'1','1','1'},{'2','2','2'},{'.','.','.'}},{{'V','X','@'},{'V','X','@'},{'O','B','.'}},{{'V','X','@'},{'V','X','@'},{'O','B','.'}}};
-		for(int y = 0 ; y < 8 ; y++) {
+		for(int y = 0 ; y < LENGTH ; y++) {
 			if(y % 2 == 0) {
 				System.out.print(" ");
 			}
-			for(int x = 0 ; x < 8 ; x++) {
+			for(int x = 0 ; x < WIDTH ; x++) {
 				if(x == x1 && y == y1) {
 					if(tab[y][x] == null) {
 						System.out.print(charac[option][0][0]);
@@ -887,5 +894,23 @@ public class Board {
 		}
 		
 		s.close();
+	}
+	
+	@Override
+	protected Board clone() {
+		Tile t[][] = new Tile[LENGTH][WIDTH];
+		for(int i = 0; i < LENGTH ; i++) {
+			for(int j = 0; j < WIDTH ; j++) {
+				if(tab[i][j] != null) {
+					t[i][j] = tab[i][j].clone();
+				}
+				else {
+					t[i][j] = null;
+				}
+			}
+		}
+		Board b = new Board();
+		b.changeTab(t);
+		return b;
 	}
 }

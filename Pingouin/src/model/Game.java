@@ -8,12 +8,12 @@ import java.beans.PropertyChangeSupport;
  * Classe Game. Gère une partie du jeu : ordre des tours, coups sur le plateau.
  * @author Charly
  */
-public class Game {
+public class Game implements Cloneable{
 	private Player[] players;
 	private int playerCount;
 	private int currentPlayerNumber;
 	private Board board;
-	private PropertyChangeSupport support;
+	private PropertyChangeSupport supportCount;
 	private History history;
 	private int toPlace;
 	
@@ -27,32 +27,52 @@ public class Game {
 	 */
 	public Game(int playerCount, Player p1, Player p2, Player p3, Player p4) {
 		this.playerCount = playerCount;
-		players = new Player[playerCount];
-		if(playerCount >= 1) players[0] = p1;
-		if(playerCount >= 2) players[1] = p2;
-		if(playerCount >= 3) players[2] = p3;
-		if(playerCount >= 4) players[3] = p4;
+		players = new Player[4];
+		players[0] = p1;
+		players[1] = p2;
+		players[2] = p3;
+		players[3] = p4;
 		for(int i = 0 ; i < playerCount ; i++){
 			players[i].setGame(this);
 		}
 		currentPlayerNumber = 1;
 		board = new Board();
-		support = new PropertyChangeSupport(this);
-		history = new History(board, players);
+		supportCount = new PropertyChangeSupport(this);
+		history = new History();
 		setToPlace(getPlayerCount()*(getCurrentPlayer().getPenguinsNumber()));
 	}
-
+	
+	private void changeBoard(Board b) {
+		board = b;
+	}
+	
+	private void changeCurrentPlayerNumber(int i) {
+		currentPlayerNumber = i;
+	}
+	
+	private void changeHistory(History h) {
+		history = h;
+	}
+	
+	private void changeToPlace(int i) {
+		toPlace = i;
+	}
+	
+	private void changeSupportCount(PropertyChangeSupport s) {
+		supportCount = s;
+	}
+	
 	/**
 	 * Ajoute un observateur des changements du jeu.
 	 * @param pcl Observateur à ajouter.
 	 */
-	public void addPropertyChangeListener(PropertyChangeListener pcl) {	support.addPropertyChangeListener(pcl);	}
+	public void addPropertyChangeListener(PropertyChangeListener pcl) {	supportCount.addPropertyChangeListener(pcl);	}
 
 	/**
 	 * Retire un observateur des changements du jeu.
 	 * @param pcl Observateur à retirer.
 	 */
-	public void removePropertyChangeListener(PropertyChangeListener pcl) { support.removePropertyChangeListener(pcl); }
+	public void removePropertyChangeListener(PropertyChangeListener pcl) { supportCount.removePropertyChangeListener(pcl); }
 	
 	/**
 	 * retourne le numéro du joueur courant
@@ -120,7 +140,7 @@ public class Game {
 				p.changeScore(t.getFishNumber());
 				p.addTile();
 				p.movePenguin(x1, y1, x2, y2);
-				support.firePropertyChange("game", oldGame, this);
+				supportCount.firePropertyChange("game", oldGame, this);
 				Move m = new Move(x1, y1, x2, y2, currentPlayerNumber, t.getFishNumber());
 				history.addMove(m);
 				return true;
@@ -166,7 +186,7 @@ public class Game {
 		for(int i = 1 ; i <= playerCount ; i++) {
 			int loopPlayerNumber = (currentPlayerNumber - 1 + i) % playerCount;
 			if (players[loopPlayerNumber].isPlaying()) {
-				support.firePropertyChange("currentPlayerNumber", currentPlayerNumber, loopPlayerNumber+1);
+				supportCount.firePropertyChange("currentPlayerNumber", currentPlayerNumber, loopPlayerNumber+1);
 				currentPlayerNumber = loopPlayerNumber + 1;
 				return true;
 			}
@@ -185,7 +205,7 @@ public class Game {
 	 * @param x Coordonnée x où l'on souhaite placer le pingouin.
 	 * @param y Coorfonnée y où l'on souhaite placer le pingouin.
 	 */
-	public boolean placePinguin(int x, int y){
+	public boolean placePenguin(int x, int y){
 		boolean val = false;
 		Player p = getCurrentPlayer();
 		if(p.getAmountPlaced() < p.getPenguinsNumber()){
@@ -196,6 +216,7 @@ public class Game {
 					board.occupyWithPenguin(x, y);
 					p.addAmount(1);
 					val = true;
+					nextPlayer();
 				} else {
 					System.out.print("Les pingouins doivent être placés sur" +
 							" une case de valeur 1.");
@@ -291,5 +312,29 @@ public class Game {
 			}
 		}
 		System.out.println(topPlayer.getName() + " gagne la partie !");
+	}
+	
+	@Override
+	protected Game clone() {
+		Player p[] = new Player[4];
+		for(int i = 0 ; i < 4 ; i++) {
+			if(i < playerCount) {
+				p[i] = players[i].clone();
+			}
+			else {
+				p[i] = null;
+			}
+		}
+		Game c = new Game(playerCount,p[0],p[1],p[2],p[3]);
+		c.changeBoard(board.clone());
+		c.changeHistory(history.clone());
+		c.changeCurrentPlayerNumber(currentPlayerNumber);
+		c.changeToPlace(toPlace);
+		c.changeSupportCount(supportCount);
+		
+		for(int i = 0 ; i < playerCount ; i++) {
+			p[i].setGame(c);
+		}
+		return c;
 	}
 }
