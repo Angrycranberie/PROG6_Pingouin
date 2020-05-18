@@ -53,8 +53,7 @@ public class GameInterface implements PropertyChangeListener {
         gameView = new GameView(game);
         gameView.setBounds(0, l_title.getHeight()+l_turnOrder.getHeight(), p_main.getWidth(), (int) (p_main.getHeight()*0.8));
 
-        b_newGame= new JButton();
-        b_newGame.setText("Nouvelle Partie");
+        b_newGame= new GameButton("Nouvelle partie", GameButton.TYPE_INFO);
         b_newGame.setSize(150,30);
         b_newGame.setLocation(50, 5);
         b_newGame.addActionListener(new ActionListener() {
@@ -72,8 +71,7 @@ public class GameInterface implements PropertyChangeListener {
             }
         });
 
-        b_save= new JButton();
-        b_save.setText("Sauvegarder");
+        b_save= new GameButton("Sauvegarder", GameButton.TYPE_INFO);
         b_save.setSize(150,30);
         b_save.setLocation(b_newGame.getX()+b_newGame.getWidth()+10, 5);
         b_save.addActionListener(new ActionListener() {
@@ -85,8 +83,7 @@ public class GameInterface implements PropertyChangeListener {
             }
         });
 
-        b_backMainMenu= new JButton();
-        b_backMainMenu.setText("Retour au menu principal");
+        b_backMainMenu= new GameButton("Retour au menu principal", GameButton.TYPE_ALERT);
         b_backMainMenu.setSize(200,30);
         b_backMainMenu.setLocation(b_save.getX()+b_save.getWidth()+10, 5);
         b_backMainMenu.addActionListener(new ActionListener() {
@@ -106,8 +103,7 @@ public class GameInterface implements PropertyChangeListener {
             }
         });
 
-        b_undo= new JButton();
-        b_undo.setText("Annuler le coup");
+        b_undo= new GameButton("Annuler", GameButton.TYPE_DEFAULT);
         b_undo.setSize(150,50);
         b_undo.setLocation(50, gameView.getY() +gameView.getHeight() + 10);
         b_undo.addActionListener(new ActionListener() {
@@ -117,8 +113,7 @@ public class GameInterface implements PropertyChangeListener {
             }
         });
 
-        b_redo= new JButton();
-        b_redo.setText("Refaire le coup");
+        b_redo= new GameButton("Refaire", GameButton.TYPE_DEFAULT);
         b_redo.setSize(150,50);
         b_redo.setLocation(b_undo.getLocation().x+b_undo.getWidth()+10, gameView.getY() +gameView.getHeight() + 10);
         b_redo.addActionListener(new ActionListener() {

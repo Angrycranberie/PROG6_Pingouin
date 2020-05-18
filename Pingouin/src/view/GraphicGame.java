@@ -25,7 +25,7 @@ public abstract class GraphicGame extends JPanel {
         try {
             i = ImageIO.read(GraphicGame.class.getResource(filename));
         } catch (Exception e) {
-            System.out.println("L'image '"+filename+"' n'a pas pu être chargée. ("+e.toString()+")");
+            System.err.println(e.toString());
         }
         return i;
     }
