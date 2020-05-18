@@ -4,6 +4,8 @@ import model.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 /**
  * Interface graphique principale du jeu.
@@ -11,7 +13,7 @@ import java.awt.*;
  * @author Alexis
  * @author Mathias
  */
-public class GraphicInterface implements Runnable, UserInterface {
+public class GraphicInterface implements Runnable, UserInterface, ComponentListener {
 
     Game game; // Le jeu en lui-même.
     EventCollector eventCollector; // Collecteur d'événements pour garantir l'interaction avec le jeu.
@@ -19,7 +21,7 @@ public class GraphicInterface implements Runnable, UserInterface {
     GraphicGame graphicGame; // Plateau de jeu graphique.
     GameView gameView; // Vue graphique effective du jeu.
     boolean maximized; // Si la fenêtre est en pleine écran ou non.
-    public GameInterface g;
+    public GameInterface gameInterface;
 
     /**
      * Constructeur de l'interface graphique (fenêtre) du jeu.
@@ -29,10 +31,10 @@ public class GraphicInterface implements Runnable, UserInterface {
     GraphicInterface(Game g, EventCollector ec) {
         game = g;
         eventCollector = ec;
-        this.g = new GameInterface(game);
+        gameInterface = new GameInterface(game);
     }
     GameInterface getGameInterface(){
-        return g;
+        return gameInterface;
     }
     /**
      * Permet de démarrer l'affichage effectif du jeu en cours.
@@ -49,23 +51,25 @@ public class GraphicInterface implements Runnable, UserInterface {
     public void run() {
         final int TIMER_DELAY = 16; // Constante de délai du timer.
 
-        // Éléments de l'interface principale. - TODO
+        // Éléments de l'interface principale.
         frame = new JFrame("Hey, that's my fish !");
+        frame.addComponentListener(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
-        frame.setMinimumSize(new Dimension(900, 950)); // Définition de la taille de fenêtre par défaut.
+        frame.setMinimumSize(new Dimension(915, 950)); // Définition de la taille de fenêtre par défaut.
+
         gameView = new GameView(game);
-        gameView.setMinimumSize(frame.getSize());
-        // TEST
-        
+        gameView.setMinimumSize(new Dimension(
+                gameInterface.p_main.getMinimumSize().width,
+                (int) (gameInterface.p_main.getMinimumSize().height*0.8)
+        ));
 
-
-        // Retransmission des événements au contrôleur. - TODO
+        // Retransmission des événements au contrôleur.
         gameView.addMouseListener(new GameMouseAdapter(graphicGame, eventCollector));
         frame.addKeyListener(new GameKeyAdapter(eventCollector));
         Timer t = new Timer(TIMER_DELAY, new TimerAdapter(eventCollector));
 
-        // Mise en place de l'interface principale. - TODO
-        frame.setContentPane(g.p_main); // On ajoute le jeu à l'interface.
+        // Mise en place de l'interface principale.
+        frame.setContentPane(gameInterface.p_main); // On ajoute le jeu à l'interface.
         t.start(); // Début du timer.
         frame.setVisible(true); // On rend la fenêtre visible.
     }
@@ -81,5 +85,28 @@ public class GraphicInterface implements Runnable, UserInterface {
             dev.setFullScreenWindow(frame);
             maximized = true;
         }
+    }
+
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+        gameInterface.p_main.setSize(frame.getSize());
+        gameView.setSize(gameInterface.p_main.getWidth(), gameView.getHeight());
+        gameView.repaint();
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
     }
 }

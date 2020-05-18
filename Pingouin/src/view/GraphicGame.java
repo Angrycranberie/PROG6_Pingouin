@@ -12,7 +12,7 @@ import java.io.FileInputStream;
  * @author Alexis
  * @author Mathias
  */
-public abstract class GraphicGame extends JPanel implements PropertyChangeListener {
+public abstract class GraphicGame extends JPanel {
     Graphics2D drawable;
 
     /**
@@ -20,10 +20,10 @@ public abstract class GraphicGame extends JPanel implements PropertyChangeListen
      * @param filename Chemin du fichier d'image à charger.
      * @return Image chargée depuis le chemin spécifié.
      */
-    protected Image loadImage(String filename) {
+    public static Image loadImage(String filename) {
         Image i = null;
         try {
-            i = ImageIO.read(getClass().getResource(filename));
+            i = ImageIO.read(GraphicGame.class.getResource(filename));
         } catch (Exception e) {
             System.out.println("L'image '"+filename+"' n'a pas pu être chargée. ("+e.toString()+")");
         }
@@ -34,13 +34,9 @@ public abstract class GraphicGame extends JPanel implements PropertyChangeListen
         drawable.drawImage(i, x, y, w, h, null);
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        repaint();
-    }
-
     abstract void generateBoard();
 
+    @Override
     public void paintComponent(Graphics g) {
         drawable = (Graphics2D) g;
         drawable.clearRect(0, 0, getWidth(), getHeight());

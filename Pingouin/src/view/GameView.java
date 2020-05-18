@@ -17,9 +17,9 @@ import java.awt.event.MouseEvent;
 public class GameView extends GraphicGame {
     Game game; // Jeu à afficher.
 
-    Image[] tiles; // Tableau des images de tuiles.
-    String tilesPath = "/img/game/tiles/Tile"; // Chemin des fichiers images de tuiles.
-    String tilesExt = ".png"; // Extension des fichiers images des tuiles.
+    private Image[] tiles; // Tableau des images de tuiles.
+    private final String tilesPath = "/gfx/game/tiles/Tile"; // Chemin des fichiers images de tuiles.
+    private final String tilesExt = ".png"; // Extension des fichiers images des tuiles.
 
     /**
      * Constructeur de l'affichage du jeu.
@@ -28,7 +28,6 @@ public class GameView extends GraphicGame {
     GameView(Game g) {
         game = g;
         setLayout(new GroupLayout(this));
-        g.addPropertyChangeListener(this);
 
         // Chargement des textures des tuiles.
         tiles = new Image[4];
@@ -36,12 +35,6 @@ public class GameView extends GraphicGame {
         setOpaque(true);
         setVisible(true);
         repaint();
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        drawable = (Graphics2D) g;
-        paintComponent(drawable);
     }
 
     /**

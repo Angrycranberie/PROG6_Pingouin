@@ -3,42 +3,55 @@ package view;
 import model.Game;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class GameInterface {
+public class GameInterface implements PropertyChangeListener {
     public JPanel p_main;
     private JButton b_save;
     private JButton b_newGame;
     private JButton b_backMainMenu;
     private JButton b_undo;
     private JButton b_redo;
+    private JLabel l_title;
     private JLabel l_turnOrder;
     private JLabel l_scoreJ1;
     private JLabel l_scoreJ2;
-    private GameView gameView;
 
+    private Game game;
+    private GameView gameView;
     private boolean saved = false;
 
 
     GameInterface(Game g){
         final GameInterface me = this;
-        p_main = new JPanel();
         InGameMenuInterface menu = new InGameMenuInterface(this);
+        game = g;
+        game.addPropertyChangeListener(this);
+
+        p_main = new JPanel();
         p_main.setSize(900,900);
         p_main.setLayout(new GroupLayout(p_main));
 
-        gameView = new GameView(g);
-        gameView.setBounds(0, 50, p_main.getWidth(), 800);
+        Image logo = GraphicGame.loadImage("/gfx/ui/logo.png")
+                .getScaledInstance(1500/4, 500/4, Image.SCALE_SMOOTH);
+        l_title = new JLabel();
+        l_title.setBounds((p_main.getWidth()-1500/4)/2,0, 1500/4, 500/4);
+        l_title.setIcon(new ImageIcon(logo));
+        l_title.setOpaque(true);
+        l_title.setVisible(true);
 
         l_turnOrder = new JLabel();
         l_turnOrder.setText("La partie va commencer");
         l_turnOrder.setHorizontalAlignment(SwingConstants.CENTER);
         l_turnOrder.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_turnOrder.setBounds(0,gameView.getY()-10, p_main.getWidth(),50);
+        l_turnOrder.setBounds(0, l_title.getHeight(), p_main.getWidth(),50);
 
-
-
+        gameView = new GameView(game);
+        gameView.setBounds(0, l_title.getHeight()+l_turnOrder.getHeight(), p_main.getWidth(), (int) (p_main.getHeight()*0.8));
 
         b_newGame= new JButton();
         b_newGame.setText("Nouvelle Partie");
@@ -133,6 +146,7 @@ public class GameInterface {
         p_main.add(b_newGame);
         p_main.add(b_save);
         p_main.add(b_backMainMenu);
+        p_main.add(l_title);
         p_main.add(l_turnOrder);
         p_main.add(gameView);
         p_main.add(b_undo);
@@ -163,5 +177,10 @@ public class GameInterface {
 
     public void setL_scoreJ2(JLabel l_scoreJ2) {
         this.l_scoreJ2 = l_scoreJ2;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        gameView.repaint();
     }
 }
