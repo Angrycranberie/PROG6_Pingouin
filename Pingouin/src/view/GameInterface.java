@@ -3,12 +3,11 @@ package view;
 import model.Game;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameInterface {
-    public JPanel PanelMain;
+    public JPanel p_main;
     private JButton b_menu;
     private JButton b_undo;
     private JButton b_redo;
@@ -18,33 +17,28 @@ public class GameInterface {
     private GameView gameView;
 
     GameInterface(Game g){
-        PanelMain = new JPanel();
+        p_main = new JPanel();
         InGameMenuInterface menu = new InGameMenuInterface();
-        PanelMain.setSize(900,900);
-        PanelMain.setLayout(new GroupLayout(PanelMain));
-
-
-        gameView = new GameView(g);
-        gameView.setLocation(50,40);
-        gameView.setSize(800,800);
-
-
+        p_main.setSize(900,900);
+        p_main.setLayout(new GroupLayout(p_main));
 
         l_turnOrder = new JLabel();
         l_turnOrder.setText("La partie va commencer");
         l_turnOrder.setHorizontalAlignment(SwingConstants.CENTER);
         l_turnOrder.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_turnOrder.setSize(150,10);
-        l_turnOrder.setLocation(gameView.getWidth()/2+l_turnOrder.getWidth()/2, 20);
+        l_turnOrder.setBounds(0,0, p_main.getWidth(),50);
+
+        gameView = new GameView(g);
+        gameView.setBounds(0, l_turnOrder.getHeight(), p_main.getWidth(), 800);
 
         b_menu= new JButton();
         b_menu.setText("Menu");
         b_menu.setSize(100,50);
-        b_menu.setLocation(gameView.getWidth()-b_menu.getWidth()/2, gameView.getHeight()+b_menu.getHeight());
+        b_menu.setLocation(p_main.getWidth()-b_menu.getWidth()/2, gameView.getHeight()+b_menu.getHeight());
         b_menu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               // PanelMain.setVisible(false);
+                // PanelMain.setVisible(false);
                 //PanelMain.getRootPane().setContentPane(menu.p_main);
             }
         });
@@ -88,13 +82,12 @@ public class GameInterface {
 
 
 
-        PanelMain.add(l_turnOrder);
-        PanelMain.add(gameView);
-        PanelMain.add(b_menu);
-        PanelMain.add(b_undo);
-        PanelMain.add(b_redo);
-        PanelMain.add(l_scoreJ1);
-        PanelMain.add(l_scoreJ2);
+        p_main.add(l_turnOrder);
+        p_main.add(gameView);
+        p_main.add(b_menu);
+        p_main.add(b_undo);
+        p_main.add(b_redo);
+        p_main.add(l_scoreJ1);
+        p_main.add(l_scoreJ2);
     }
-
 }
