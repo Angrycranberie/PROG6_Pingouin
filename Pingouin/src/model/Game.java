@@ -19,7 +19,7 @@ public class Game implements Cloneable{
 	
 	/**
 	 * initialise le jeu
-	 * @param nbPlayer nombre de joueur
+	 * @param playerCount nombre de joueur
 	 * @param p1 joueur 1
 	 * @param p2 joueur 2
 	 * @param p3 joueur 3
@@ -177,6 +177,26 @@ public class Game implements Cloneable{
 	 * @return joueur courant
 	 */
 	public Player getCurrentPlayer() { return players[currentPlayerNumber - 1]; }
+
+	/**
+	 * Retourne les joueurs de la partie.
+	 * @return Tableau de joueurs.
+	 */
+	public Player[] getPlayers() { return players; }
+
+	/**
+	 * Retourne le joueur dont le numéro est passé en argument.
+	 * @param n Numéro du joueur (à partir de 0).
+	 * @return Joueur.
+	 */
+	public Player getPlayer(int n) {
+		try {
+			return players[n];
+		} catch (Exception e) {
+			System.err.println(e.toString());
+			return null;
+		}
+	}
 	
 	/**
 	 * Passe au joueur suivant, s'il existe.
