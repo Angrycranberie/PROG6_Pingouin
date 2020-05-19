@@ -51,7 +51,7 @@ public class DecisionTree {
  		
 		int value, x, y, j, tmp;
 		int moveList[][];
-		Penguin [] penguins = game.getCurrentPlayer().penguins();
+		Penguin [] penguins = game.getCurrentPlayer().getPenguins();
 		
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
 			game.prevPlayer();
@@ -66,8 +66,8 @@ public class DecisionTree {
 		
 		/* On parcours tous les fils possibles de ce noeud et on regarde leur valeur */
 		for(int i = 0 ; i < penguins.length ; i++){
-			x = penguins[i].coord_x();
-			y = penguins[i].coord_y();
+			x = penguins[i].getX();
+			y = penguins[i].getY();
 			moveList = board.movePossibility(x, y);
 			j = 0;
 			while(moveList[j][0] != -1){

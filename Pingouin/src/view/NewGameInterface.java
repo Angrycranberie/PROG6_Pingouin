@@ -38,6 +38,7 @@ public class NewGameInterface {
                 Game g = new Game(2, new Player(4, Color.red,tf_joueur1.getText()), new Player(4, Color.green,tf_joueur2.getText()),null,null);
                 GameInterface gi = new GameInterface(g, null); // TODO : "null" À CHANGER, URGENT !
                 p_main.getRootPane().setContentPane(gi.p_main);
+                gi.p_main.getRootPane().getJMenuBar().setVisible(true);
                 gi.p_main.getRootPane().updateUI();
             }
         };

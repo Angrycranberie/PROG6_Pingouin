@@ -30,11 +30,11 @@ public class HeurSomme extends Heuristic{
 		
 		for(Player currPlayer : g.getPlayers()){
 			if(currPlayer != null) {
-				for(Penguin selec : currPlayer.penguins()){
+				for(Penguin selec : currPlayer.getPenguins()){
 					if(selec != null){
 						if(currPlayer.isPlaying()){
 					
-						curr = g.getBoard().getTile(selec.coord_x(), selec.coord_y()).getFishNumber();
+						curr = g.getBoard().getTile(selec.getX(), selec.getY()).getFishNumber();
 						if(currPlayer == selfPlayer) somme += curr;
 						else somme -= curr;
 						}

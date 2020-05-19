@@ -1,6 +1,7 @@
 import java.awt.Color;
 
 import view.GraphicInterface;
+import view.TextInterface;
 
 import controller.AIRandom;
 import controller.ControllerMediator;
