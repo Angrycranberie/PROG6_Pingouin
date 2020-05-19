@@ -12,13 +12,14 @@ public class QuitGameInterface {
     private JButton b_quit;
     public JPanel p_main;
 
-    QuitGameInterface(final GameInterface g, final String s){
+    QuitGameInterface(final JPanel g, final String s){
 
         ActionListener al_resume = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p_main.getRootPane().setContentPane(g.p_main);
-                g.p_main.getRootPane().updateUI();
+                p_main.getRootPane().setContentPane(g);
+                g.getRootPane().getJMenuBar().setVisible(true);
+                g.getRootPane().updateUI();
             }
         };
 

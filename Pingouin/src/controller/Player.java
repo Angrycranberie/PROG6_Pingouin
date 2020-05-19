@@ -9,34 +9,36 @@ import java.awt.*;
  * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
  * @author Charly
  */
-public class Player implements Cloneable{
+public class Player implements Cloneable {
 	private Game game;
 	private String name; // Nom du joueur.
 	private int fishScore; // Score associé au nombre de poissons obtenu.
 	private int tileScore; // Score associé au nombre de cases obtenues.
 	private int amountPlaced; // Nombre courant de pingouins placés.
 	private Penguin penguins[]; // Liste des pingouins du joueur.
-	private int penguinsNumber; // Nombre de pingouins du joueur.
+	private int penguinsCount; // Nombre de pingouins du joueur.
 	private Color color; // Couleur du joueur.
 	private boolean playing; // Si le joueur est toujours dans la partie ou non.
 	private int isAI;
 	
 	/**
 	 * Création du joueur.
-	 * @param penguinsNumber Indique le nombre de pingouin du joueur
+	 * @param penguinsCount Indique le nombre de pingouin du joueur
 	 * @param color Couleur du joueur.
 	 */
 
-	public Player(int penguinsNumber, Color color, String name) {
+	public Player(int penguinsCount, Color color, String name) {
 		this.fishScore = this.tileScore = this.amountPlaced = 0;
-		this.penguinsNumber = penguinsNumber;
+		this.penguinsCount = penguinsCount;
 		this.color = color;
-		penguins = new Penguin[penguinsNumber];
+		penguins = new Penguin[penguinsCount];
 		this.name = name;
 		playing = true;
 		
 	}
-	
+
+	// SETTERS
+
 	private void changeTileScore(int i) {
 		tileScore = i;
 	}
@@ -49,20 +51,12 @@ public class Player implements Cloneable{
 		amountPlaced = i;
 	}
 	
-	private void changePenguins(Penguin p[]) {
-		penguins = p;;
-	}
+	private void changePenguins(Penguin[] p) { penguins = p; }
 	
-	private void changePlaying(boolean b) {
-		playing = b;
-	}
+	private void changePlaying(boolean b) {	playing = b; }
 	
-	public void setGame(Game g){
-		this.game = g;
-	}
-	
-	
-	
+	public void setGame(Game g){ game = g; }
+
 	/**
 	 * Retourne le jeu.
 	 * @return Le Jeu.
@@ -114,16 +108,30 @@ public class Player implements Cloneable{
 	 * Retourne les coordonnées des pingouins du joueur.
 	 * @return Tableau des coordonnées des pingouins du joueur.
 	 */
-	public Penguin[] penguins(){
+	public Penguin[] getPenguins(){
 		return penguins;
+	}
+
+	/**
+	 * Retourne le pingouin dont le numéro est passé en argument.
+	 * @param n Numéro du pingouin à retourner (à partir de 0).
+	 * @return Pingouin.
+	 */
+	public Penguin getPenguin(int n) {
+		try {
+			return penguins[n];
+		} catch (Exception e) {
+			System.err.println(e.toString());
+			return null;
+		}
 	}
 	
 	/**
 	 * Retourne le nombre de pingouins du joueur.
 	 * @return Nombre de pingouins du joueur.
 	 */
-	public int getPenguinsNumber() {
-		return penguinsNumber;
+	public int getPenguinsCount() {
+		return penguinsCount;
 	}
 	
 	/**
@@ -196,8 +204,8 @@ public class Player implements Cloneable{
 	 * @param y2 Coordonnée y de la tuile d'arrivée.
 	 */
 	public void movePenguin(int x1, int y1, int x2, int y2) {
-		for (int i = 0; i < penguinsNumber; i++) {
-			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
+		for (int i = 0; i < penguinsCount; i++) {
+			if(penguins[i].getX() == x1 && penguins[i].getY() == y1) {
 				penguins[i].changePosition(x2,y2);
 			}
 		}
@@ -246,18 +254,18 @@ public class Player implements Cloneable{
 	public Player clone() {
 		Player p = null;
 		if(!isAI()) {
-			p = new Player(penguinsNumber, color, name);
+			p = new Player(penguinsCount, color, name);
 		}
 		else {
 			switch(isAI) {
 			case 1:
-				p = new AIRandom(penguinsNumber, color, name);
+				p = new AIRandom(penguinsCount, color, name);
 				break;
 			case 2:
-				p = new AISmart(penguinsNumber, color, name);
+				p = new AISmart(penguinsCount, color, name);
 				break;
 			case 3:
-				p = new AITrap(penguinsNumber, color, name);
+				p = new AITrap(penguinsCount, color, name);
 				break;
 			default:
 				break;
@@ -268,8 +276,8 @@ public class Player implements Cloneable{
 		p.changeAmountPlaced(amountPlaced);
 		p.changePlaying(playing);
 		
-		Penguin pe[] = new Penguin[penguinsNumber];
-		for(int i = 0 ; i < penguinsNumber ; i++) {
+		Penguin pe[] = new Penguin[penguinsCount];
+		for(int i = 0; i < penguinsCount; i++) {
 			pe[i] = penguins[i].clone();
 		}
 		p.changePenguins(pe);
