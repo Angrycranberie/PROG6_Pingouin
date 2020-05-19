@@ -17,9 +17,13 @@ import java.awt.event.MouseEvent;
 public class GameView extends GraphicGame {
     Game game; // Jeu à afficher.
 
-    private Image[] tiles; // Tableau des images de tuiles.
-    private final String tilesPath = "/gfx/game/tiles/Tile"; // Chemin des fichiers images de tuiles.
-    private final String tilesExt = ".png"; // Extension des fichiers images des tuiles.
+    private final String TILES_PATH = "/gfx/game/tiles/"; // Chemin des fichiers images de tuiles.
+    private final String PENGUINS_PATH = "/gfx/game/penguins/"; // Chemin des fichiers images des pingouins.
+    private final String PNG_EXT = ".png"; // Extension des fichiers images des tuiles.
+
+    private Image[] tilesImg; // Tableau des images de tuiles.
+    private Image[][] penguinsImg; // Tableau des images de pingouins.
+
 
     /**
      * Constructeur de l'affichage du jeu.
@@ -30,8 +34,15 @@ public class GameView extends GraphicGame {
         setLayout(new GroupLayout(this));
 
         // Chargement des textures des tuiles.
-        tiles = new Image[4];
-        for (int i = 0; i < 4; i++)	tiles[i] = loadImage(tilesPath + i + tilesExt);
+        tilesImg = new Image[4];
+        for (int i = 0; i < 4; i++)	tilesImg[i] = loadImage(TILES_PATH + "Tile" + i + PNG_EXT);
+
+        // Chargement des textures des pingouins.
+        penguinsImg = new Image[4][4];
+        for (int j = 0; j < 4; j++)
+            for (int k = 0; k < 4; k++)
+                penguinsImg[j][k] = loadImage(PENGUINS_PATH + j + "_" + k + PNG_EXT);
+
         setOpaque(true);
         setVisible(true);
         repaint();
@@ -60,7 +71,7 @@ public class GameView extends GraphicGame {
                     int y = (h - h/4 + g) * i + cy;
                     Tile t = game.getBoard().getTile(j,i); // Récupération de la case du jeu.
                     // Récupération de l'image de la tuile avec le bon nombre de poissons.
-                    Image img = tiles[t.getFishNumber()].getScaledInstance(w, h, Image.SCALE_SMOOTH);
+                    Image img = tilesImg[t.getFishNumber()].getScaledInstance(w, h, Image.SCALE_SMOOTH);
 
                     JLabel l = new JLabel(); // Label cliquable associé à l'image.
                     l.setBounds(x, y + ((h / 4 + g) / 4), w, h - ((h / 4 + g) / 2));
