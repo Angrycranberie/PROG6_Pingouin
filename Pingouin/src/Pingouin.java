@@ -28,8 +28,8 @@ public class Pingouin {
 		
 		ControllerMediator controller = new ControllerMediator(g);
 		
-		TextInterface.start(g, controller);
-//		GraphicInterface.start(g, controller);
+//		TextInterface.start(g, controller);
+		GraphicInterface.start(g, controller);
 	}
 
 }
