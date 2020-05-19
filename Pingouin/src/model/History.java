@@ -108,7 +108,7 @@ public class History implements Cloneable{
 	 * @param index indice du coup
 	 */
 	public void backInPast(int index,Board boardGame, Player p[]) {
-		while(pastIndex >= index) {
+		while(pastIndex > index) {
 			removeMoveFromPast(boardGame,p);
 		}
 	}

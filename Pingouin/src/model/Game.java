@@ -251,6 +251,7 @@ public class Game implements Cloneable{
 	 */
 	/* à déplacer dans Player ? */
 	public boolean canPlay(Player p) {
+		if(placePhase()) return true;
 		boolean possibility = false;
 		int movePossibility[][];
 		Penguin penguins[] = p.penguins();

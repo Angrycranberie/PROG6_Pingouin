@@ -22,10 +22,15 @@ public class AISmart extends Player {
 	 */
 	public AISmart(int penguinsNumber, Color color, String name, Heuristic h) {
 		super(penguinsNumber, color, name);
+		setAI(2);
 		r = new Random();
 		heur = h;
 	}
 
+	public void setGame(Game g){
+		game = g;
+	}
+	
 	@Override
 	public boolean play(){
 		decTree = new DecisionTree(game, heur);

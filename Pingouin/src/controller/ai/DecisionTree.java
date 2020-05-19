@@ -23,7 +23,7 @@ public class DecisionTree {
 	 * @param g Partie à associer.
 	 */
  	public DecisionTree(Game g, Heuristic h){
-		this.game = g.clone();
+ 		this.game = g.clone();
 		board = game.getBoard();
 		this.heur = h;
 	}

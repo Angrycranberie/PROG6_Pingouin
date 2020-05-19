@@ -22,10 +22,14 @@ public class HeurSomme extends Heuristic{
 		Player selfPlayer = g.getCurrentPlayer();
 		
 		for(Player currPlayer : g.getPlayers()){
-			for(Penguin selec : currPlayer.penguins()){
-				curr = g.getBoard().getTile(selec.coord_x(), selec.coord_y()).getFishNumber();
-				if(currPlayer == selfPlayer) somme += curr;
-				else somme -= curr;
+			if(currPlayer != null) {
+				for(Penguin selec : currPlayer.penguins()){
+					if(selec != null){
+						curr = g.getBoard().getTile(selec.coord_x(), selec.coord_y()).getFishNumber();
+						if(currPlayer == selfPlayer) somme += curr;
+						else somme -= curr;
+					}
+				}
 			}
 		}
 		
