@@ -23,7 +23,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     boolean maximized; // Si la fenêtre est en pleine écran ou non.
     public GameInterface gameInterface;
 
-    // La bar de menu
+    // La barre de menu
     JMenuBar mb = new JMenuBar();
     JMenu menu = new JMenu("Menu");
     JMenuItem save = new JMenuItem("Sauvegarder");
@@ -65,7 +65,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
         frame.setMinimumSize(new Dimension(915, 950)); // Définition de la taille de fenêtre par défaut.
 
-        //La bar de menu
+        //La barre de menu
         save.addActionListener(this);
         ng.addActionListener(this);
         mm.addActionListener(this);
