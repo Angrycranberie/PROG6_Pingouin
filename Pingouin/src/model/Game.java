@@ -162,11 +162,11 @@ public class Game implements Cloneable{
 			}
 			else {
 				switch(board.error) {
-				case board.PENGUIN_IN_TRAVEL:
+				case 1: // board.PENGUIN_IN_TRAVEL
 					error = PENGUIN_IN_TRAVEL;
-				case board.HOLE_IN_TRAVEL:
+				case 2: // board.HOLE_IN_TRAVEL
 					error = HOLE_IN_TRAVEL;
-				case board.TRAVEL_NOT_ALIGNED:
+				case 3: // board.TRAVEL_NOT_ALIGNED
 					error = TRAVEL_NOT_ALIGNED;
 				default:
 				}
