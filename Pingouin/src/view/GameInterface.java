@@ -3,98 +3,59 @@ package view;
 import model.Game;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class GameInterface {
+public class GameInterface implements PropertyChangeListener {
     public JPanel p_main;
     private JButton b_save;
     private JButton b_newGame;
     private JButton b_backMainMenu;
     private JButton b_undo;
     private JButton b_redo;
-    private JLabel l_turnOrder;
+    private JLabel l_title;
+    private JLabel l_feedback;
     private JLabel l_scoreJ1;
     private JLabel l_scoreJ2;
-    private GameView gameView;
 
-    private boolean saved = false;
+    public Game game;
+    public GameView gameView;
+    public EventCollector eventCollector;
+    public final static boolean saved = false;
 
 
-    GameInterface(Game g){
+    GameInterface(Game g, EventCollector ec){
         final GameInterface me = this;
+        game = g;
+        game.addPropertyChangeListener(this);
+        eventCollector = ec;
+
         p_main = new JPanel();
-        InGameMenuInterface menu = new InGameMenuInterface(this);
         p_main.setSize(900,900);
         p_main.setLayout(new GroupLayout(p_main));
 
-        gameView = new GameView(g);
-        gameView.setBounds(0, 50, p_main.getWidth(), 800);
+        int logoHeight = (int) (p_main.getHeight()*0.1);
+        Image logo = GraphicGame.loadImage("/gfx/ui/logo.png")
+                .getScaledInstance(logoHeight*3, logoHeight, Image.SCALE_SMOOTH);
+        l_title = new JLabel();
+        l_title.setBounds(10,10, logoHeight*3, logoHeight);
+        l_title.setIcon(new ImageIcon(logo));
+        l_title.setOpaque(true);
+        l_title.setVisible(true);
 
-        l_turnOrder = new JLabel();
-        l_turnOrder.setText("La partie va commencer");
-        l_turnOrder.setHorizontalAlignment(SwingConstants.CENTER);
-        l_turnOrder.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_turnOrder.setBounds(0,gameView.getY()-10, p_main.getWidth(),50);
+        l_feedback = new JLabel();
+        l_feedback.setText("La partie va commencer");
+        l_feedback.setHorizontalAlignment(SwingConstants.CENTER);
+        l_feedback.setHorizontalTextPosition(SwingConstants.CENTER);
+        l_feedback.setBounds(l_title.getWidth()+10, 10, p_main.getWidth()-l_title.getWidth()-2*10, l_title.getHeight());
 
+        gameView = new GameView(game, eventCollector);
+        gameView.setBounds(0, l_title.getHeight()+2*10, p_main.getWidth(), (int) (p_main.getHeight()*0.8));
 
-
-
-        b_newGame= new JButton();
-        b_newGame.setText("Nouvelle Partie");
-        b_newGame.setSize(150,30);
-        b_newGame.setLocation(50, 5);
-        b_newGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(saved){
-                    NewGameInterface ng = new NewGameInterface();
-                    p_main.getRootPane().setContentPane(ng.p_main);
-                    ng.p_main.getRootPane().updateUI();
-                } else {
-                    QuitGameInterface qg = new QuitGameInterface(me, "ng");
-                    p_main.getRootPane().setContentPane(qg.p_main);
-                    qg.p_main.getRootPane().updateUI();
-                }
-            }
-        });
-
-        b_save= new JButton();
-        b_save.setText("Sauvegarder");
-        b_save.setSize(150,30);
-        b_save.setLocation(b_newGame.getX()+b_newGame.getWidth()+10, 5);
-        b_save.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SaveInterface si = new SaveInterface(me, "game");
-                p_main.getRootPane().setContentPane(si.p_main);
-                si.p_main.getRootPane().updateUI();
-            }
-        });
-
-        b_backMainMenu= new JButton();
-        b_backMainMenu.setText("Retour au menu principal");
-        b_backMainMenu.setSize(200,30);
-        b_backMainMenu.setLocation(b_save.getX()+b_save.getWidth()+10, 5);
-        b_backMainMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(saved){
-                    MainMenuInterface mm = new MainMenuInterface();
-                    p_main.getRootPane().setContentPane(mm.p_main);
-                    mm.p_main.getRootPane().updateUI();
-
-                } else {
-                    QuitGameInterface qg = new QuitGameInterface(me, "mm");
-                    p_main.getRootPane().setContentPane(qg.p_main);
-                    qg.p_main.getRootPane().updateUI();
-                }
-
-            }
-        });
-
-        b_undo= new JButton();
-        b_undo.setText("Annuler le coup");
+        b_undo= new GameButton("Annuler", GameButton.TYPE_DEFAULT);
         b_undo.setSize(150,50);
         b_undo.setLocation(50, gameView.getY() +gameView.getHeight() + 10);
         b_undo.addActionListener(new ActionListener() {
@@ -104,8 +65,7 @@ public class GameInterface {
             }
         });
 
-        b_redo= new JButton();
-        b_redo.setText("Refaire le coup");
+        b_redo= new GameButton("Refaire", GameButton.TYPE_DEFAULT);
         b_redo.setSize(150,50);
         b_redo.setLocation(b_undo.getLocation().x+b_undo.getWidth()+10, gameView.getY() +gameView.getHeight() + 10);
         b_redo.addActionListener(new ActionListener() {
@@ -114,7 +74,6 @@ public class GameInterface {
 
             }
         });
-
 
         l_scoreJ1 = new JLabel();
         l_scoreJ1.setText("Score joueur 1 : ");
@@ -130,10 +89,8 @@ public class GameInterface {
         l_scoreJ2.setSize(150,10);
         l_scoreJ2.setLocation(l_scoreJ1.getLocation().x+l_scoreJ1.getWidth()+10, gameView.getY() +gameView.getHeight() + 10);
 
-        p_main.add(b_newGame);
-        p_main.add(b_save);
-        p_main.add(b_backMainMenu);
-        p_main.add(l_turnOrder);
+        p_main.add(l_title);
+        p_main.add(l_feedback);
         p_main.add(gameView);
         p_main.add(b_undo);
         p_main.add(b_redo);
@@ -141,8 +98,8 @@ public class GameInterface {
         p_main.add(l_scoreJ2);
     }
 
-    public JLabel getL_turnOrder() {
-        return l_turnOrder;
+    public JLabel getL_feedback() {
+        return l_feedback;
     }
 
     public JLabel getL_scoreJ1() {
@@ -153,8 +110,8 @@ public class GameInterface {
         return l_scoreJ2;
     }
 
-    public void setL_turnOrder(JLabel l_turnOrder) {
-        this.l_turnOrder = l_turnOrder;
+    public void setL_feedback(JLabel l_feedback) {
+        this.l_feedback = l_feedback;
     }
 
     public void setL_scoreJ1(JLabel l_scoreJ1) {
@@ -163,5 +120,10 @@ public class GameInterface {
 
     public void setL_scoreJ2(JLabel l_scoreJ2) {
         this.l_scoreJ2 = l_scoreJ2;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        gameView.repaint();
     }
 }

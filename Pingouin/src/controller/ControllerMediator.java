@@ -11,13 +11,13 @@ import view.UserInterface;
  * @author Vincent
  * @author Yoann
  */
-public class ControlerMediator implements EventCollector {
+public class ControllerMediator implements EventCollector {
 
 	Game game;
 	Board board;
 	int x1, y1, x2, y2;
 	
-	public ControlerMediator(Game g){
+	public ControllerMediator(Game g){
 		game = g;
 		board = g.getBoard();
 		x1 = y1 = x2 = y2 = -1;
@@ -49,7 +49,7 @@ public class ControlerMediator implements EventCollector {
 					x1 = y1 = -1;
 				}
 			} else {
-				/* Sinon, on selectionne la case : on vérifie qu'il y a un pingouin
+				/* Sinon, on sélectionne la case : on vérifie qu'il y a un pingouin
 				 * du joueur courant
 				 */
 				if(!game.hasPenguinGoodOwning(game.getCurrentPlayer(), x1, y1)){

@@ -2,19 +2,19 @@ package view;
 
 import java.util.Scanner;
 
-import controller.ControlerMediator;
+import controller.ControllerMediator;
 import model.Game;
 
 public class TextInterface {
 	Game game;
-	ControlerMediator controler;
+	ControllerMediator controler;
 	
-	TextInterface(Game g, ControlerMediator c){
+	TextInterface(Game g, ControllerMediator c){
 		game = g;
 		controler = c;
 	}
 	
-	public static void start(Game g, ControlerMediator c){
+	public static void start(Game g, ControllerMediator c){
 		TextInterface vue = new TextInterface (g, c);
 		Scanner s = new Scanner(System.in);
 		while(true){
