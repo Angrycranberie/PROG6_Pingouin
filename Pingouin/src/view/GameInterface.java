@@ -38,10 +38,11 @@ public class GameInterface implements PropertyChangeListener {
         p_main.setSize(900,900);
         p_main.setLayout(new GroupLayout(p_main));
 
+        int logoHeight = (int) (p_main.getHeight()*0.1);
         Image logo = GraphicGame.loadImage("/gfx/ui/logo.png")
-                .getScaledInstance(1500/4, 500/4, Image.SCALE_SMOOTH);
+                .getScaledInstance(logoHeight*3, logoHeight, Image.SCALE_SMOOTH);
         l_title = new JLabel();
-        l_title.setBounds((p_main.getWidth()-1500/4)/2,0, 1500/4, 500/4);
+        l_title.setBounds(10,10, logoHeight*3, logoHeight);
         l_title.setIcon(new ImageIcon(logo));
         l_title.setOpaque(true);
         l_title.setVisible(true);
@@ -50,39 +51,11 @@ public class GameInterface implements PropertyChangeListener {
         l_feedback.setText("La partie va commencer");
         l_feedback.setHorizontalAlignment(SwingConstants.CENTER);
         l_feedback.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_feedback.setBounds(0, l_title.getHeight(), p_main.getWidth(),50);
+        l_feedback.setBounds(l_title.getWidth()+10, 10, p_main.getWidth()-l_title.getWidth()-2*10, l_title.getHeight());
 
         gameView = new GameView(game, eventCollector);
-        gameView.setBounds(0, l_title.getHeight()+ l_feedback.getHeight(), p_main.getWidth(), (int) (p_main.getHeight()*0.8));
-        /*
-        b_newGame= new GameButton("Nouvelle partie", GameButton.TYPE_INFO);
-        b_newGame.setSize(150,30);
-        b_newGame.setLocation(50, 5);
-        b_newGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        gameView.setBounds(0, l_title.getHeight()+2*10, p_main.getWidth(), (int) (p_main.getHeight()*0.8));
 
-            }
-        });
-
-        b_save= new GameButton("Sauvegarder", GameButton.TYPE_INFO);
-        b_save.setSize(150,30);
-        b_save.setLocation(b_newGame.getX()+b_newGame.getWidth()+10, 5);
-        b_save.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        b_backMainMenu= new GameButton("Retour au menu principal", GameButton.TYPE_ALERT);
-        b_backMainMenu.setSize(200,30);
-        b_backMainMenu.setLocation(b_save.getX()+b_save.getWidth()+10, 5);
-        b_backMainMenu.addActionListener(new ActionListener() {
-            @Override
-
-        });
-        */
         b_undo= new GameButton("Annuler", GameButton.TYPE_DEFAULT);
         b_undo.setSize(150,50);
         b_undo.setLocation(50, gameView.getY() +gameView.getHeight() + 10);
@@ -102,7 +75,6 @@ public class GameInterface implements PropertyChangeListener {
 
             }
         });
-
 
         l_scoreJ1 = new JLabel();
         l_scoreJ1.setText("Score joueur 1 : ");
