@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
  */
 public class GameView extends GraphicGame {
     Game game; // Jeu à afficher.
+    EventCollector eventCollector;
 
     private final String TILES_PATH = "/gfx/game/tiles/"; // Chemin des fichiers images de tuiles.
     private final String PENGUINS_PATH = "/gfx/game/penguins/"; // Chemin des fichiers images des pingouins.
@@ -29,9 +30,9 @@ public class GameView extends GraphicGame {
      * Constructeur de l'affichage du jeu.
      * @param g Jeu à afficher.
      */
-    GameView(Game g) {
+    GameView(Game g, EventCollector ec) {
         game = g;
-        setLayout(new GroupLayout(this));
+        eventCollector = ec;
 
         // Chargement des textures des tuiles.
         tilesImg = new Image[4];
@@ -43,6 +44,7 @@ public class GameView extends GraphicGame {
             for (int k = 0; k < 4; k++)
                 penguinsImg[j][k] = loadImage(PENGUINS_PATH + j + "_" + k + PNG_EXT);
 
+        setLayout(new GroupLayout(this));
         setOpaque(true);
         setVisible(true);
         repaint();
@@ -74,6 +76,7 @@ public class GameView extends GraphicGame {
                     Image img = tilesImg[t.getFishNumber()].getScaledInstance(w, h, Image.SCALE_SMOOTH);
 
                     JLabel l = new JLabel(); // Label cliquable associé à l'image.
+                    l.setName(j+":"+i); // Nom de la tuile : "colonne:ligne".
                     l.setBounds(x, y + ((h / 4 + g) / 4), w, h - ((h / 4 + g) / 2));
                     l.setVisible(true); // Le label est "visible" (cliquable)...
                     l.setOpaque(false); // ... mais pas opaque (invisible par dessus les images de tuiles).
@@ -84,16 +87,15 @@ public class GameView extends GraphicGame {
                     } else {
                         l.setCursor(new Cursor(Cursor.MOVE_CURSOR));
                     }
-                    
-                    l.addMouseListener(new MouseAdapter() { //
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            System.out.println(fj +","+ fi);
-                        }
-                    });
+                    l.addMouseListener(new GameMouseAdapter(this, eventCollector));
                     add(l);
                 }
             }
         }
+    }
+
+    @Override
+    void placePenguins() {
+
     }
 }

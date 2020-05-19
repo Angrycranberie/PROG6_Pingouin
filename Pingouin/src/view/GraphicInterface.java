@@ -18,8 +18,6 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     Game game; // Le jeu en lui-même.
     EventCollector eventCollector; // Collecteur d'événements pour garantir l'interaction avec le jeu.
     JFrame frame; // Composant de la fenêtre de jeu.
-    GraphicGame graphicGame; // Plateau de jeu graphique.
-    GameView gameView; // Vue graphique effective du jeu.
     boolean maximized; // Si la fenêtre est en pleine écran ou non.
     public GameInterface gameInterface;
 
@@ -31,7 +29,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     GraphicInterface(Game g, EventCollector ec) {
         game = g;
         eventCollector = ec;
-        gameInterface = new GameInterface(game);
+        gameInterface = new GameInterface(game, eventCollector);
     }
     GameInterface getGameInterface(){
         return gameInterface;
@@ -57,14 +55,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
         frame.setMinimumSize(new Dimension(915, 950)); // Définition de la taille de fenêtre par défaut.
 
-        gameView = new GameView(game);
-        gameView.setMinimumSize(new Dimension(
-                gameInterface.p_main.getMinimumSize().width,
-                (int) (gameInterface.p_main.getMinimumSize().height*0.8)
-        ));
-
         // Retransmission des événements au contrôleur.
-        gameView.addMouseListener(new GameMouseAdapter(graphicGame, eventCollector));
         frame.addKeyListener(new GameKeyAdapter(eventCollector));
         Timer t = new Timer(TIMER_DELAY, new TimerAdapter(eventCollector));
 
@@ -91,8 +82,8 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     @Override
     public void componentResized(ComponentEvent e) {
         gameInterface.p_main.setSize(frame.getSize());
-        gameView.setSize(gameInterface.p_main.getWidth(), gameView.getHeight());
-        gameView.repaint();
+        gameInterface.gameView.setSize(gameInterface.p_main.getWidth(), gameInterface.gameView.getHeight());
+        gameInterface.gameView.repaint();
     }
 
     @Override

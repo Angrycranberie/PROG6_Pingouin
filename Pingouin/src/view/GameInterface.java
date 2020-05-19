@@ -17,20 +17,22 @@ public class GameInterface implements PropertyChangeListener {
     private JButton b_undo;
     private JButton b_redo;
     private JLabel l_title;
-    private JLabel l_turnOrder;
+    private JLabel l_feedback;
     private JLabel l_scoreJ1;
     private JLabel l_scoreJ2;
 
-    private Game game;
-    private GameView gameView;
+    public Game game;
+    public GameView gameView;
+    public EventCollector eventCollector;
     private boolean saved = false;
 
 
-    GameInterface(Game g){
+    GameInterface(Game g, EventCollector ec){
         final GameInterface me = this;
         InGameMenuInterface menu = new InGameMenuInterface(this);
         game = g;
         game.addPropertyChangeListener(this);
+        eventCollector = ec;
 
         p_main = new JPanel();
         p_main.setSize(900,900);
@@ -44,14 +46,14 @@ public class GameInterface implements PropertyChangeListener {
         l_title.setOpaque(true);
         l_title.setVisible(true);
 
-        l_turnOrder = new JLabel();
-        l_turnOrder.setText("La partie va commencer");
-        l_turnOrder.setHorizontalAlignment(SwingConstants.CENTER);
-        l_turnOrder.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_turnOrder.setBounds(0, l_title.getHeight(), p_main.getWidth(),50);
+        l_feedback = new JLabel();
+        l_feedback.setText("La partie va commencer");
+        l_feedback.setHorizontalAlignment(SwingConstants.CENTER);
+        l_feedback.setHorizontalTextPosition(SwingConstants.CENTER);
+        l_feedback.setBounds(0, l_title.getHeight(), p_main.getWidth(),50);
 
-        gameView = new GameView(game);
-        gameView.setBounds(0, l_title.getHeight()+l_turnOrder.getHeight(), p_main.getWidth(), (int) (p_main.getHeight()*0.8));
+        gameView = new GameView(game, eventCollector);
+        gameView.setBounds(0, l_title.getHeight()+ l_feedback.getHeight(), p_main.getWidth(), (int) (p_main.getHeight()*0.8));
 
         b_newGame= new GameButton("Nouvelle partie", GameButton.TYPE_INFO);
         b_newGame.setSize(150,30);
@@ -142,7 +144,7 @@ public class GameInterface implements PropertyChangeListener {
         p_main.add(b_save);
         p_main.add(b_backMainMenu);
         p_main.add(l_title);
-        p_main.add(l_turnOrder);
+        p_main.add(l_feedback);
         p_main.add(gameView);
         p_main.add(b_undo);
         p_main.add(b_redo);
@@ -150,8 +152,8 @@ public class GameInterface implements PropertyChangeListener {
         p_main.add(l_scoreJ2);
     }
 
-    public JLabel getL_turnOrder() {
-        return l_turnOrder;
+    public JLabel getL_feedback() {
+        return l_feedback;
     }
 
     public JLabel getL_scoreJ1() {
@@ -162,8 +164,8 @@ public class GameInterface implements PropertyChangeListener {
         return l_scoreJ2;
     }
 
-    public void setL_turnOrder(JLabel l_turnOrder) {
-        this.l_turnOrder = l_turnOrder;
+    public void setL_feedback(JLabel l_feedback) {
+        this.l_feedback = l_feedback;
     }
 
     public void setL_scoreJ1(JLabel l_scoreJ1) {

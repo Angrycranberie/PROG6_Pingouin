@@ -36,6 +36,8 @@ public abstract class GraphicGame extends JPanel {
 
     abstract void generateBoard();
 
+    abstract void placePenguins();
+
     @Override
     public void paintComponent(Graphics g) {
         drawable = (Graphics2D) g;
