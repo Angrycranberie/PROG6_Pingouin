@@ -205,7 +205,7 @@ public class Player implements Cloneable {
 	 */
 	public void movePenguin(int x1, int y1, int x2, int y2) {
 		for (int i = 0; i < penguinsCount; i++) {
-			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
+			if(penguins[i].getX() == x1 && penguins[i].getY() == y1) {
 				penguins[i].changePosition(x2,y2);
 			}
 		}

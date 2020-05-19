@@ -165,7 +165,7 @@ public class Game implements Cloneable{
 		Penguin[] penguins = p.getPenguins();
 		int nbPenguins = p.getPenguinsCount();
 		for(int i = 0; i < nbPenguins ; i++) {
-			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
+			if(penguins[i].getX() == x1 && penguins[i].getY() == y1) {
 				return true;
 			}
 		}
@@ -215,7 +215,7 @@ public class Game implements Cloneable{
 	}
 	
 	public int[][] legitMovePossibility(Penguin p){
-		return board.movePossibility(p.coord_x(),p.coord_y());
+		return board.movePossibility(p.getX(),p.getY());
 	}	/**
 
 	/**
@@ -280,7 +280,7 @@ public class Game implements Cloneable{
 		Tile rmTile;
 		for(int i = 0; i < p.getPenguinsCount() ; i++){
 			curr = listPenguin[i];
-			rmTile = board.removeTile(curr.coord_x(), curr.coord_y());
+			rmTile = board.removeTile(curr.getX(), curr.getY());
 			p.changeScore(rmTile.getFishNumber());
 			p.addTile();
 		}

@@ -49,7 +49,7 @@ public class AIRandom extends Player {
 				tmp = r.nextInt(index);
 				x = move[tmp][0];
 				y = move[tmp][1];
-			} while (!getGame().movePenguin(pen.coord_x(), pen.coord_y(), x, y));
+			} while (!getGame().movePenguin(pen.getX(), pen.getY(), x, y));
 		}
 		return true;
 	}
