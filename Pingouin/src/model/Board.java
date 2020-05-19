@@ -15,8 +15,16 @@ public class Board implements Cloneable{
 	public static final int ANTISLASH_ALIGN = 3;
 	public static final int LENGTH = 8;
 	public static final int WIDTH = 8;
+	
+	public static final int GOOD_TRAVEL = 0;
+	public static final int PENGUIN_IN_TRAVEL = 1;
+	public static final int HOLE_IN_TRAVEL = 2;
+	public static final int TRAVEL_NOT_ALIGNED = 3;
+	
+	
 
 	private Tile[][] tab; // Représentation du plateau sous forme de tableau.
+	public int error;
 
 	/** Constructeur du plateau.
 	 * On modélise ce dernier par un tableau de 8*8 cases puis on génère aléatoirement son contenu.
@@ -341,6 +349,20 @@ public class Board implements Cloneable{
 		return res;
 	}
 	
+	private boolean isTileAvailable(int x1,int y1) {
+		if (tab[y1][x1] == null) {
+			error = HOLE_IN_TRAVEL;
+			return false;
+		}
+		else if (tab[y1][x1].occupied()) {
+			error = PENGUIN_IN_TRAVEL;
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	/**
 	 * Indique si un déplacement entre deux tuiles est valide ou non.
 	 * @param x1 Coordonnée x de la tuile de départ.
@@ -356,25 +378,23 @@ public class Board implements Cloneable{
 			case Board.HORIZONTAL_ALIGN:
 				while(coord[0] != x2 || coord[1] != y2) {
 					coord = nextTile(coord[0],coord[1],HORIZONTAL_ALIGN,x2 > x1);
-					if (tab[coord[1]][coord[0]] == null || tab[coord[1]][coord[0]].occupied()) 
-						return false;
+					if(!isTileAvailable(coord[0],coord[1])) return false;
 				}
 				return true;
 			case Board.SLASH_ALIGN:
 				while(coord[0] != x2 || coord[1] != y2) {
 					coord = nextTile(coord[0],coord[1],SLASH_ALIGN,y2 > y1);
-					if (tab[coord[1]][coord[0]] == null || tab[coord[1]][coord[0]].occupied()) 
-						return false;
+					if(!isTileAvailable(coord[0],coord[1])) return false;
 				}
 				return true;
 			case Board.ANTISLASH_ALIGN:
 				while(coord[0] != x2 || coord[1] != y2) {
 					coord = nextTile(coord[0],coord[1],ANTISLASH_ALIGN,y2 > y1);
-					if (tab[coord[1]][coord[0]] == null || tab[coord[1]][coord[0]].occupied()) 
-						return false;
+					if(!isTileAvailable(coord[0],coord[1])) return false;
 				}
 				return true;
 			default:
+				error = TRAVEL_NOT_ALIGNED;
 				return false;
 		}
 	}
