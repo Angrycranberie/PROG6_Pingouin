@@ -39,7 +39,7 @@ public class Game implements Cloneable{
 		board = new Board();
 		supportCount = new PropertyChangeSupport(this);
 		history = new History();
-		setToPlace(getPlayerCount()*(getCurrentPlayer().getPenguinsNumber()));
+		setToPlace(getPlayerCount()*(getCurrentPlayer().getPenguinsCount()));
 	}
 	
 	private void changeBoard(Board b) {
@@ -162,8 +162,8 @@ public class Game implements Cloneable{
 	 * @return true le pingouin appartient au joueur courant false sinon
 	 */
 	public boolean hasPenguinGoodOwning(Player p, int x1, int y1) {
-		Penguin penguins[] = p.penguins();
-		int nbPenguins = p.getPenguinsNumber();
+		Penguin[] penguins = p.getPenguins();
+		int nbPenguins = p.getPenguinsCount();
 		for(int i = 0; i < nbPenguins ; i++) {
 			if(penguins[i].coord_x() == x1 && penguins[i].coord_y() == y1) {
 				return true;
@@ -228,11 +228,11 @@ public class Game implements Cloneable{
 	public boolean placePenguin(int x, int y){
 		boolean val = false;
 		Player p = getCurrentPlayer();
-		if(p.getAmountPlaced() < p.getPenguinsNumber()){
+		if(p.getAmountPlaced() < p.getPenguinsCount()){
 			Tile t = board.getTile(x, y);
 			if(!t.occupied()){
 				if(t.getFishNumber() == 1){
-					p.penguins()[p.getAmountPlaced()] = new Penguin(x, y);
+					p.getPenguins()[p.getAmountPlaced()] = new Penguin(x, y);
 					board.occupyWithPenguin(x, y);
 					p.addAmount(1);
 					val = true;
@@ -259,9 +259,9 @@ public class Game implements Cloneable{
 	/* à déplacer dans Player ? */
 	public boolean canPlay(Player p) {
 		boolean possibility = false;
-		int movePossibility[][];
-		Penguin penguins[] = p.penguins();
-		for(int i = 0 ; i < p.getPenguinsNumber() ; i++) {
+		int[][] movePossibility;
+		Penguin[] penguins = p.getPenguins();
+		for(int i = 0; i < p.getPenguinsCount() ; i++) {
 			movePossibility = legitMovePossibility(penguins[i]);
 			possibility = possibility || (movePossibility[0][0] != -1);
 		}
@@ -275,10 +275,10 @@ public class Game implements Cloneable{
 	 */
 	/* A déplacer dans Player ? */
 	public void endPlayer(Player p){
-		Penguin [] listPenguin = p.penguins();
+		Penguin[] listPenguin = p.getPenguins();
 		Penguin curr;
 		Tile rmTile;
-		for(int i = 0 ; i < p.getPenguinsNumber() ; i++){
+		for(int i = 0; i < p.getPenguinsCount() ; i++){
 			curr = listPenguin[i];
 			rmTile = board.removeTile(curr.coord_x(), curr.coord_y());
 			p.changeScore(rmTile.getFishNumber());
