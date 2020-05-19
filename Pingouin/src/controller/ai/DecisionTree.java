@@ -149,7 +149,7 @@ public class DecisionTree {
  		
  		ArrayList<Couple<Integer, Integer>> resList = new ArrayList<Couple<Integer, Integer>>();
 		int value, x, y, j, tmp;
-		int [][] moveList;
+		ArrayList<Couple<Integer, Integer>> moveList;
 		
 		// canPlay fonctionne ici ?
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
@@ -160,10 +160,10 @@ public class DecisionTree {
 		else value = 100000;
 		
 		// Attention structure du retour.
-		moveList = board.placePossibility();
+		moveList = board.placePossiblity();
 		j = 0;
-		while(moveList[j][0] != -1){
-			if(game.placePinguin(moveList[j][0], moveList[j][1])) {
+		for(Couple<Integer, Integer> curr : moveList){
+			if(game.placePenguin(curr.getFirst(), curr.getSecond())) {
 				if(ownTurn) {
 					if(game.movePhase()){
 						tmp = moveDecision(alpha, beta, false, depth-1).getFirst();
@@ -177,7 +177,7 @@ public class DecisionTree {
 						 */
 						if (tmp != value) resList.clear();
 						
-						resList.add(new Couple<Integer, Integer>(moveList[j][0], moveList[j][1]));
+						resList.add(curr.clone());
 						value = tmp;
 					} /* Sinon : le coup est moins bon. On ne change pas l'heuristique
 					   * ni la liste de coups mémorisés.
@@ -203,7 +203,7 @@ public class DecisionTree {
 						 */
 						if (tmp != value) resList.clear();
 						
-						resList.add(new Couple<Integer, Integer>(moveList[j][0], moveList[j][1]));
+						resList.add(curr.clone());
 						value = tmp;
 					} /* Sinon : le coup est moins bon. On ne change pas l'heuristique
 					   * ni la liste de coups mémorisés.

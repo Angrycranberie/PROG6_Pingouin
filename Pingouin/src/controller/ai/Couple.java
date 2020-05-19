@@ -1,6 +1,6 @@
 package controller.ai;
 
-public class Couple<T1, T2> {
+public class Couple<T1, T2> implements Cloneable{
 	
 	T1 first;
 	T2 second;
@@ -25,5 +25,11 @@ public class Couple<T1, T2> {
 	public void setSecond(T2 v){
 		second = v;
 	}
+	
+	public Couple<T1, T2> clone(){
+		Couple<T1, T2> res = new Couple<T1, T2>(this.getFirst(), this.getSecond());
+		return res;
+	}
+	
 	
 }

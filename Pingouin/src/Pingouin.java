@@ -1,6 +1,7 @@
 import java.awt.Color;
 
 import view.EventCollector;
+import view.GraphicInterface;
 import view.TextInterface;
 
 import controller.AIRandom;
@@ -24,12 +25,10 @@ public class Pingouin {
 		Player p2 = new AIRandom(4, new Color(46, 240, 0), "Joueur 2");
 		Game g = new Game(2, p1, p2, null, null);
 		
-		ControlerMediator controler = new ControlerMediator(g);
+		ControlerMediator controller = new ControlerMediator(g);
 		
-		TextInterface.start(g, controler);
-		
-		
-		
+//		TextInterface.start(g, controller);
+		GraphicInterface.start(g, controller);
 	}
 
 }

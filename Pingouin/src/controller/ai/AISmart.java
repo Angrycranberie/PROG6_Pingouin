@@ -27,13 +27,13 @@ public class AISmart extends Player {
 	}
 
 	@Override
-	public void play(){
+	public boolean play(){
 		decTree = new DecisionTree(game, heur);
 		
 		if(game.placePhase()){
-			placeTurn();
+			return placeTurn();
 		} else {
-			moveTurn();
+			return moveTurn();
 		}
 	}
 	
@@ -42,7 +42,7 @@ public class AISmart extends Player {
 				decTree.placeDecision(-10000, 10000, true, 4).getSecond();
 		
 		Couple<Integer, Integer> move = resList.get(r.nextInt(resList.size()));
-		return game.placePinguin(move.getFirst(), move.getSecond());
+		return game.placePenguin(move.getFirst(), move.getSecond());
 	}
 	
 	private boolean moveTurn(){

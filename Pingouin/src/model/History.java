@@ -7,26 +7,46 @@ import controller.Player;
  * @author Charly
  *
  */
-public class History {
-	Move past[];
-	int pastIndex;
-	Move futur[];
-	int futurIndex;
-	Board boardGame;
-	Player p[];
+public class History implements Cloneable{
+	private Move past[];
+	private int pastIndex;
+	private Move futur[];
+	private int futurIndex;
 	
 	/**
 	 * créé l'objet History qui représente un historique des coups effectué lors d'une partie
 	 * @param boardGame plateau du jeu
 	 * @param p ensemble des joueurs
 	 */
-	public History(Board boardGame,Player p[]) {
-		this.boardGame = boardGame;
+	public History() {
 		past = new Move[10];
 		futur = new Move[10];
 		pastIndex = 0;
 		futurIndex = 0;
-		this.p = p;
+	}
+	
+	private void changePast(Move p[]) {
+		past = p;
+	}
+	
+	private void changeFutur(Move f[]) {
+		futur = f;
+	}
+	
+	private void changePastIndex(int i) {
+		pastIndex = i;
+	}
+	
+	private void changeFuturIndex(int i) {
+		futurIndex = i;
+	}
+	
+	public int getPastIndex(){
+		return pastIndex;
+	}
+	
+	public int getFuturIndex(){
+		return futurIndex;
 	}
 	
 	/**
@@ -87,9 +107,9 @@ public class History {
 	 * permet de revenir avant un certain coup
 	 * @param index indice du coup
 	 */
-	public void backInPast(int index) {
+	public void backInPast(int index,Board boardGame, Player p[]) {
 		while(pastIndex >= index) {
-			removeMoveFromPast();
+			removeMoveFromPast(boardGame,p);
 		}
 	}
 	
@@ -97,27 +117,49 @@ public class History {
 	 * permet de revenir après un certain coup qui a été annulé
 	 * @param index indice du coup
 	 */
-	public void backInFutur(int index) {
+	public void backInFutur(int index,Board boardGame, Player p[]) {
 		while(futurIndex >= index) {
-			removeMoveFromFutur();
+			removeMoveFromFutur(boardGame,p);
 		}
 	}
 	
 	/**
 	 * permet de revenir d'un coup dans la partie
 	 */
-	private void removeMoveFromPast() {
+	private void removeMoveFromPast(Board boardGame, Player p[]) {
+		pastIndex--;
 		addMoveFutur(past[pastIndex]);
 		past[pastIndex].undo(boardGame, p);
-		pastIndex--;
+		
 	}
 	
 	/**
 	 * permet d'avancer d'un coup dans la partie (coup précédement annulé)
 	 */
-	private void removeMoveFromFutur() {
+	private void removeMoveFromFutur(Board boardGame, Player p[]) {
+		futurIndex--;
 		addMovePast(futur[futurIndex]);
 		futur[futurIndex].redo(boardGame, p);
-		futurIndex--;
+		
+	}
+	
+	@Override
+	protected History clone() {
+		History h = new History();
+		
+		Move p[] = new Move[past.length];
+		for(int i = 0; i < pastIndex; i++) {
+			p[i] = past[i].clone();
+		}
+		h.changePast(p);
+		
+		Move f[] = new Move[futur.length];
+		for(int i = 0; i < futurIndex; i++) {
+			p[i] = futur[i].clone();
+		}
+		h.changeFutur(f);
+		h.changePastIndex(pastIndex);
+		h.changeFuturIndex(futurIndex);
+		return h;
 	}
 }

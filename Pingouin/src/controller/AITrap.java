@@ -10,6 +10,6 @@ public class AITrap extends Player {
 
 	public AITrap(int penguinsNumber, Color color, String name) {
 		super(penguinsNumber, color, name);
-		setAI(true);
+		setAI(3);
 	}
 }

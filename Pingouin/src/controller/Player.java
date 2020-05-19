@@ -9,7 +9,7 @@ import java.awt.*;
  * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
  * @author Charly
  */
-public class Player {
+public class Player implements Cloneable{
 	private Game game;
 	private String name; // Nom du joueur.
 	private int fishScore; // Score associé au nombre de poissons obtenu.
@@ -19,7 +19,7 @@ public class Player {
 	private int penguinsNumber; // Nombre de pingouins du joueur.
 	private Color color; // Couleur du joueur.
 	private boolean playing; // Si le joueur est toujours dans la partie ou non.
-	private boolean isAI;
+	private int isAI;
 	
 	/**
 	 * Création du joueur.
@@ -34,11 +34,34 @@ public class Player {
 		penguins = new Penguin[penguinsNumber];
 		this.name = name;
 		playing = true;
+		
+	}
+	
+	private void changeTileScore(int i) {
+		tileScore = i;
+	}
+	
+	private void changeFishScore(int i) {
+		fishScore = i;
+	}
+	
+	private void changeAmountPlaced(int i) {
+		amountPlaced = i;
+	}
+	
+	private void changePenguins(Penguin p[]) {
+		penguins = p;;
+	}
+	
+	private void changePlaying(boolean b) {
+		playing = b;
 	}
 	
 	public void setGame(Game g){
 		this.game = g;
 	}
+	
+	
 	
 	/**
 	 * Retourne le jeu.
@@ -154,15 +177,15 @@ public class Player {
 	 * @return Vrai si le joueur est une IA, Faux sinon.
 	 */
 	public boolean isAI() {
-		return isAI;
+		return isAI != 0;
 	}
 	
 	/**
 	 * Fixe la valeur d'IA du joueur.
 	 * @param v Valeur d'IA du joueur (Vrai si c'en est une, Faux sinon).
 	 */
-	public void setAI(boolean v){
-		this.isAI = v;
+	public void setAI(int AI){
+		this.isAI = AI;
 	}
 	
 	/**
@@ -179,11 +202,77 @@ public class Player {
 			}
 		}
 	}
-	// TODO
+	
 	/**
-	 * Joue un coup
+	 * Place un pingouin au premier tour de jeu (pour joueur IA) 
+	 * @return
 	 */
-	public void play() {
-		return ;
+	public boolean positionPenguin() {
+		return false;
+	}
+	
+	/**
+	 * Place un pingouin au premier tour de jeu en (x,y) (pour joueur Humain)
+	 * @param x coordonnées x de la case de départ
+	 * @param y coordonnées y de la case de départ
+	 * @return
+	 */
+	public boolean positionPenguin(int x, int y) {
+		return false;
+	}
+	
+	/**
+	 * Joue un coup (pour joueur IA)
+	 * @return un booléen disant si le coup a bien été joué ou non
+	 */
+	public boolean play() {
+		return false;
+	}
+	
+	/**
+	 * Joue un coup (pour joueur Humain)
+	 * Déplace le pingouin de coordonnées (x1,y1) en (x2,y2) si le coup est possible
+	 * @param x1 coordonnées x du pingouin
+	 * @param y1 coordonnées y du pingouin
+	 * @param x2 coordonnées x de la case d'arrivée
+	 * @param y2 coordonnées y de la case d'arrivée
+	 * @returnun booléen disant si le coup a été joué ou non
+	 */
+	public boolean play(int x1, int y1, int x2, int y2) {
+		return false;
+	}
+	
+	@Override
+	public Player clone() {
+		Player p = null;
+		if(!isAI()) {
+			p = new Player(penguinsNumber, color, name);
+		}
+		else {
+			switch(isAI) {
+			case 1:
+				p = new AIRandom(penguinsNumber, color, name);
+				break;
+			case 2:
+				p = new AISmart(penguinsNumber, color, name);
+				break;
+			case 3:
+				p = new AITrap(penguinsNumber, color, name);
+				break;
+			default:
+				break;
+			}
+		}
+		p.changeTileScore(tileScore);
+		p.changeFishScore(fishScore);
+		p.changeAmountPlaced(amountPlaced);
+		p.changePlaying(playing);
+		
+		Penguin pe[] = new Penguin[penguinsNumber];
+		for(int i = 0 ; i < penguinsNumber ; i++) {
+			pe[i] = penguins[i].clone();
+		}
+		p.changePenguins(pe);
+		return p;
 	}
 }
