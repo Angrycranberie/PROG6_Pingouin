@@ -67,7 +67,6 @@ public class GameView extends GraphicGame {
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++) {
                 if (i %2 == 1 || j < 7) {
-		    final int fi = i, fj = j; // Valeurs fixées de i et j.
                     // Coordonnées x et y pour positionner l'image et son label.
                     int x =  ((i % 2 == 0) ? ((w + g) / 2) + ((w + g) * j) : (w + g) * j) + cx;
                     int y = (h - h/4 + g) * i + cy;

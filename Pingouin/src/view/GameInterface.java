@@ -29,7 +29,6 @@ public class GameInterface implements PropertyChangeListener {
 
     GameInterface(Game g, EventCollector ec){
         final GameInterface me = this;
-        InGameMenuInterface menu = new InGameMenuInterface(this);
         game = g;
         game.addPropertyChangeListener(this);
         eventCollector = ec;
