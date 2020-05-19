@@ -2,6 +2,7 @@ package controller.ai;
 
 import model.Game;
 import model.Penguin;
+import model.Tile;
 import controller.Player;
 
 /**
@@ -19,13 +20,28 @@ public class HeurSomme extends Heuristic{
 	public int heuristicMove(Game g){
 		int somme = 0;
 		int curr;
+		
+		/* Détails */
+		int x, y;
+		Tile currT;
+		/* Fin */
+		
 		Player selfPlayer = g.getCurrentPlayer();
 		
 		for(Player currPlayer : g.getPlayers()){
 			if(currPlayer != null) {
 				for(Penguin selec : currPlayer.penguins()){
 					if(selec != null){
-						curr = g.getBoard().getTile(selec.coord_x(), selec.coord_y()).getFishNumber();
+						
+						/* Debut */
+						x = selec.coord_x();
+						y = selec.coord_y();
+						currT = g.getBoard().getTile(x, y);
+						System.out.println(currT);
+						curr = currT.getFishNumber();
+						/* Fin */
+						
+						//curr = g.getBoard().getTile(selec.coord_x(), selec.coord_y()).getFishNumber();
 						if(currPlayer == selfPlayer) somme += curr;
 						else somme -= curr;
 					}

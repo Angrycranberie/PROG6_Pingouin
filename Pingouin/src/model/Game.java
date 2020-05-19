@@ -363,4 +363,15 @@ public class Game implements Cloneable{
 		}
 		return c;
 	}
+
+	public void prevPlayer() {
+		for(int i = 1 ; i <= playerCount ; i++) {
+			int loopPlayerNumber = (currentPlayerNumber - 1 + i) % playerCount;
+			if (players[loopPlayerNumber].isPlaying()) {
+				supportCount.firePropertyChange("currentPlayerNumber", currentPlayerNumber, loopPlayerNumber+1);
+				currentPlayerNumber = loopPlayerNumber + 1;
+
+			}
+		}
+	}
 }

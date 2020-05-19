@@ -69,6 +69,7 @@ public class DecisionTree {
 			j = 0;
 			while(moveList[j][0] != -1){
 				if(game.movePenguin(x, y, moveList[j][0], moveList[j][1])) {
+					game.nextPlayer();
 					if(ownTurn) {
 						tmp = moveDecision(alpha, beta, false, depth-1).getFirst();
 						if(tmp >= value){
@@ -85,7 +86,8 @@ public class DecisionTree {
 						   * ni la liste de coups mémorisés.
 						   */
 						
-						game.undo(1);	// Non implémenté.
+						game.undo(1);
+						game.prevPlayer();
 						if(value >= beta){
 							return new Couple<>(value, resMove);	// coupure beta.
 						}
@@ -105,7 +107,8 @@ public class DecisionTree {
 							value = tmp;
 						}
 						
-						game.undo(1);	// Non implémenté.
+						game.undo(1);
+						game.prevPlayer();
 						if(alpha >= value){
 							return new Couple<>(value, resMove);	// coupure alpha.
 						}
@@ -155,10 +158,10 @@ public class DecisionTree {
 		if(ownTurn) value = -100000;
 		else value = 100000;
 		
-		// Attention structure du retour.
 		moveList = board.placePossiblity();
 		for(Couple<Integer, Integer> curr : moveList){
 			if(game.placePenguin(curr.getFirst(), curr.getSecond())) {
+				game.nextPlayer();
 				if(ownTurn) {
 					if(game.movePhase()){
 						tmp = moveDecision(alpha, beta, false, depth-1).getFirst();
@@ -178,7 +181,8 @@ public class DecisionTree {
 					   * ni la liste de coups mémorisés.
 					   */
 					
-					game.undo(1);	// Non implémenté.
+					game.undo(1);	// Fonctionne avec placement ?
+					game.prevPlayer();
 					if(value >= beta){
 						return new Couple<>(value, resList);	// coupure beta.
 					}
@@ -204,7 +208,8 @@ public class DecisionTree {
 					   * ni la liste de coups mémorisés.
 					   */
 					
-					game.undo(1);	// Non implémenté.
+					game.undo(1);
+					game.prevPlayer();
 					if(alpha >= value){
 						return new Couple<>(value, resList);	// coupure alpha.
 					}

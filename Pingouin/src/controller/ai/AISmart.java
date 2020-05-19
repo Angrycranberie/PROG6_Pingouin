@@ -44,7 +44,7 @@ public class AISmart extends Player {
 	
 	private boolean placeTurn(){
 		ArrayList<Couple<Integer, Integer>> resList = 
-				decTree.placeDecision(-10000, 10000, true, 4).getSecond();
+				decTree.placeDecision(-10000, 10000, true, 1).getSecond();
 		
 		Couple<Integer, Integer> move = resList.get(r.nextInt(resList.size()));
 		return game.placePenguin(move.getFirst(), move.getSecond());
@@ -53,7 +53,7 @@ public class AISmart extends Player {
 	private boolean moveTurn(){
 		
 		ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>> resList =
-				decTree.moveDecision(-10000, 10000, true, 4).getSecond();
+				decTree.moveDecision(-10000, 10000, true, 1).getSecond();
 		
 		Couple<Couple<Integer, Integer>, Couple<Integer, Integer>> move
 			= resList.get(r.nextInt(resList.size()));
