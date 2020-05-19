@@ -3,7 +3,6 @@ package view;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.chrono.JapaneseChronology;
 
 public class SaveInterface {
     private JTextField tf_saveName;

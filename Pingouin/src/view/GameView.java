@@ -8,7 +8,6 @@ import model.Tile;
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
  * Vue effective du jeu en cours.
  * @author Alexis
