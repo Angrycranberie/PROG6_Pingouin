@@ -1,6 +1,8 @@
 package controller.ai;
 
+import controller.Player;
 import model.Game;
+import model.Penguin;
 
 /**
  * Classe d'heuristique qui favorise les positions ayant accès à
@@ -38,8 +40,14 @@ public class HeurAcces extends Heuristic {
 	 */
 	public int heuristicPlace(Game g){
 		int somme = 0;
-		
-
+		Player p = g.getCurrentPlayer();
+		Penguin[] tabP = p.penguins();
+		Penguin currP;
+		for(int i = 0 ; i < p.getAmountPlaced() ; i++){
+			currP = tabP[i];
+			
+			// Calcul..
+		}
 		
 		return somme;
 	}
