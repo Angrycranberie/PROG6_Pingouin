@@ -48,7 +48,7 @@ public class Board implements Cloneable{
 	/**
 	 * Renvoie la tuile de coordonnées x, y.
 	 * @param x Coordonnée x de la tuile cherchée.
-	 * @param y Coordonnée x de la tuile cherchée.
+	 * @param y Coordonnée y de la tuile cherchée.
 	 * @return La tuile cherchée.
 	 */
 	public Tile getTile(int x, int y){
@@ -69,10 +69,10 @@ public class Board implements Cloneable{
 	
 	/**
 	 * retourne la prochaine tuile dans une direction et un sens donné en partant d'une tuile, retourne null si la tuile est hors plateau
-	 * @param x coord x de la tuile de départ
-	 * @param y coord y de la tuile de départ
+	 * @param x Coordonnée x de la tuile de départ
+	 * @param y Coordonnée y de la tuile de départ
 	 * @param way direction 
-	 * @param direction sens (0 haut-gauche , 1 bas-droite)
+	 * @param direction Sens (0 haut-gauche , 1 bas-droite)
 	 * @return tuile dans la direction et sens demandé
 	 */
 	public int[] nextTile(int x, int y, int way, boolean direction) {

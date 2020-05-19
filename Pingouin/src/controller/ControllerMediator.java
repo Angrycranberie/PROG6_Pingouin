@@ -11,21 +11,65 @@ import view.UserInterface;
  * @author Vincent
  * @author Yoann
  */
-public class ControlerMediator implements EventCollector {
+public class ControllerMediator implements EventCollector {
 
 	Game game;
 	Board board;
 	int x1, y1, x2, y2;
 	
-	public ControlerMediator(Game g){
+	public ControllerMediator(Game g){
 		game = g;
 		board = g.getBoard();
 		x1 = y1 = x2 = y2 = -1;
 	}
 	
+	/**
+	 * Interprète un clic de souris sur un case du plateau :
+	 * 	- En phase de placement, le joueur courant place un pinguoin.
+	 * 	- En phase de déplacement, si aucun pingouin n'est sélectionné, on essaye
+	 * 		de le selectionner
+	 * 	- En phase de déplacement, si un pingouin est déjà sélectionné, on essaye
+	 * 		de faire le déplacement.
+	 */
 	@Override
-	public void mouseClick(int l, int c) {
+	public void mouseClick(int l, int c){
+		boolean ret;
 		
+		if(x1 < 0){ /* Choix de la 1è case.. */
+			x1 = c;
+			y1 = l;
+			if(game.placePhase()){ /* Si on est en placement, c'est la seule qu'on veut */
+				try {
+					if(ret = game.placePenguin(x1, y1)){
+						game.setToPlace(game.getToPlace()-1);
+					}
+				} catch(Exception e){
+					// A compléter.
+				} finally {
+					x1 = y1 = -1;
+				}
+			} else {
+				/* Sinon, on sélectionne la case : on vérifie qu'il y a un pingouin
+				 * du joueur courant
+				 */
+				if(!game.hasPenguinGoodOwning(game.getCurrentPlayer(), x1, y1)){
+					x1 = y1 = -1;	/* Il n'y a pas de pingouin du joueur courant
+										sur cette case. */
+				}
+			}
+		} else { /* Choix de la case cible */
+			x2 = c;
+			y2 = l;
+			try {
+				if(ret = game.movePenguin(x1, y1, x2, y2)){
+					
+				}
+			} catch(Exception e) {
+				
+			} finally {
+				x1 = y1 = x2 = y2 = -1;
+			}
+		}
 	}
 
 	@Override
@@ -55,8 +99,7 @@ public class ControlerMediator implements EventCollector {
 				y1 = val;
 				if(game.placePhase()){
 					try { 
-						if(ret = game.placePinguin(x1, y1)) { 
-							game.nextPlayer();
+						if(ret = game.placePenguin(x1, y1)) { 
 							game.setToPlace(game.getToPlace() - 1);
 						}
 					} catch (Exception e) {
@@ -137,6 +180,7 @@ public class ControlerMediator implements EventCollector {
 	 * Lance le tour de l'IA.
 	 */
 	private void startAITurn(){
-		game.getCurrentPlayer().play();
+		if(game.placePhase()) game.getCurrentPlayer().positionPenguin();
+		else game.getCurrentPlayer().play();
 	}
 }

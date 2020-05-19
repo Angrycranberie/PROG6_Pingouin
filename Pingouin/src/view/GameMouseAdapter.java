@@ -9,16 +9,16 @@ import java.awt.event.MouseEvent;
  * @author Mathias
  */
 public class GameMouseAdapter extends MouseAdapter {
-    GraphicGame graphicGame; // Vue du jeu.
+    GameView gameView; // Vue du jeu.
     EventCollector eventCollector; // Collecteur d'événements de la fenêtre.
 
     /**
      * Constructeur de l'adapteur de souris.
-     * @param gg Vue du jeu à associer à l'adapteur.
+     * @param gv Vue du jeu à associer à l'adapteur.
      * @param ec Collecteur d'événements à associer à l'adapteur.
      */
-    GameMouseAdapter(GraphicGame gg, EventCollector ec) {
-        graphicGame = gg;
+    GameMouseAdapter(GameView gv, EventCollector ec) {
+        gameView = gv;
         eventCollector = ec;
     }
 
@@ -29,6 +29,10 @@ public class GameMouseAdapter extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO
+        String[] p = e.getComponent().getName().split(":");
+        int c = Integer.parseInt(p[0]);
+        int r = Integer.parseInt(p[1]);
+        System.out.println("Row : "+r+ " ; Col : "+c);
+        // eventCollector.mouseClick(r, c);
     }
 }
