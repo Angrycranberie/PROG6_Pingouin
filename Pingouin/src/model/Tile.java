@@ -6,7 +6,7 @@ package model;
  * @author Charly
  *
  */
-public class Tile {
+public class Tile implements Cloneable {
 	// Constantes du nombre de poissons par tuile.
 	public static final int ONE_FISH = 1;
 	public static final int TWO_FISH = 2;
@@ -58,4 +58,16 @@ public class Tile {
 	public boolean occupied() {
 		return this.occupied;
 	}	
+	
+	@Override
+	protected Tile clone() {
+		Tile t = new Tile(fishNumber);
+		if(occupied) {
+			t.occupy();
+		}
+		else {
+			t.free();
+		}
+		return t;
+	}
 }
