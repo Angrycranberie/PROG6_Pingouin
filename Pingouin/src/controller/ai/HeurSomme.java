@@ -32,18 +32,12 @@ public class HeurSomme extends Heuristic{
 			if(currPlayer != null) {
 				for(Penguin selec : currPlayer.penguins()){
 					if(selec != null){
-						
-						/* Debut */
-						x = selec.coord_x();
-						y = selec.coord_y();
-						currT = g.getBoard().getTile(x, y);
-						System.out.println(currT);
-						curr = currT.getFishNumber();
-						/* Fin */
-						
-						//curr = g.getBoard().getTile(selec.coord_x(), selec.coord_y()).getFishNumber();
+						if(currPlayer.isPlaying()){
+					
+						curr = g.getBoard().getTile(selec.coord_x(), selec.coord_y()).getFishNumber();
 						if(currPlayer == selfPlayer) somme += curr;
 						else somme -= curr;
+						}
 					}
 				}
 			}

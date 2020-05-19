@@ -54,7 +54,10 @@ public class DecisionTree {
 		Penguin [] penguins = game.getCurrentPlayer().penguins();
 		
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
-			return new Couple<>(heur.heuristicMove(game), resMove);
+			game.prevPlayer();
+			Couple<Integer, ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>>>res = new Couple<>(heur.heuristicMove(game), resMove);
+			game.nextPlayer();
+			return res;
 		}
 		
 		/* Initialisation de l'heuristique calculée */
@@ -152,7 +155,10 @@ public class DecisionTree {
 		
 		// canPlay fonctionne ici ?
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
-			return new Couple<>(heur.heuristicPlace(game), resList);
+			game.prevPlayer();
+			Couple<Integer, ArrayList<Couple<Integer, Integer>>>res = new Couple<>(heur.heuristicPlace(game), resList);
+			game.nextPlayer();
+			return res;
 		}
 		
 		if(ownTurn) value = -100000;
