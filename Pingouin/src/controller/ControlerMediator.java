@@ -166,6 +166,7 @@ public class ControlerMediator implements EventCollector {
 			if(!game.nextPlayer()){
 				return false;
 			}
+			return startTurn();	// On teste aussi le joueur suivant.
 		}
 		if(game.getCurrentPlayer().isAI()){
 			startAITurn();
@@ -177,8 +178,7 @@ public class ControlerMediator implements EventCollector {
 	/**
 	 * Lance le tour de l'IA.
 	 */
-	private void startAITurn(){
-		if(game.placePhase()) game.getCurrentPlayer().positionPenguin();
-		else game.getCurrentPlayer().play();
+	public void startAITurn(){
+		game.getCurrentPlayer().play();
 	}
 }

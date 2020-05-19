@@ -1,12 +1,9 @@
 package controller.ai;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 import model.Board;
 import model.Game;
-import model.History;
-import model.Move;
 import model.Penguin;
 
 /**
@@ -18,7 +15,6 @@ public class DecisionTree {
 
 	private Game game;
 	private Board board;
-	private History hist;
 	private Heuristic heur;
 	
 	/**
@@ -58,7 +54,7 @@ public class DecisionTree {
 		Penguin [] penguins = game.getCurrentPlayer().penguins();
 		
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
-			return new Couple(heur.heuristicMove(game), resMove);
+			return new Couple<>(heur.heuristicMove(game), resMove);
 		}
 		
 		/* Initialisation de l'heuristique calculée */
@@ -91,7 +87,7 @@ public class DecisionTree {
 						
 						game.undo(1);	// Non implémenté.
 						if(value >= beta){
-							return new Couple(value, resMove);	// coupure beta.
+							return new Couple<>(value, resMove);	// coupure beta.
 						}
 						alpha = Math.max(alpha, value);
 						
@@ -111,7 +107,7 @@ public class DecisionTree {
 						
 						game.undo(1);	// Non implémenté.
 						if(alpha >= value){
-							return new Couple(value, resMove);	// coupure alpha.
+							return new Couple<>(value, resMove);	// coupure alpha.
 						}
 						beta = Math.min(beta, value);
 					}
@@ -120,7 +116,7 @@ public class DecisionTree {
 				j++;
 			}
 		}
-		return new Couple(value, resMove);
+		return new Couple<>(value, resMove);
  	}
 	
  	/* Cette partie nécessite une factorisation,
@@ -148,12 +144,12 @@ public class DecisionTree {
  		placeDecision(int alpha, int beta, boolean ownTurn, int depth){
  		
  		ArrayList<Couple<Integer, Integer>> resList = new ArrayList<Couple<Integer, Integer>>();
-		int value, x, y, j, tmp;
+		int value, tmp;
 		ArrayList<Couple<Integer, Integer>> moveList;
 		
 		// canPlay fonctionne ici ?
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
-			return new Couple(heur.heuristicPlace(game), resList);
+			return new Couple<>(heur.heuristicPlace(game), resList);
 		}
 		
 		if(ownTurn) value = -100000;
@@ -161,7 +157,6 @@ public class DecisionTree {
 		
 		// Attention structure du retour.
 		moveList = board.placePossiblity();
-		j = 0;
 		for(Couple<Integer, Integer> curr : moveList){
 			if(game.placePenguin(curr.getFirst(), curr.getSecond())) {
 				if(ownTurn) {
@@ -185,7 +180,7 @@ public class DecisionTree {
 					
 					game.undo(1);	// Non implémenté.
 					if(value >= beta){
-						return new Couple(value, resList);	// coupure beta.
+						return new Couple<>(value, resList);	// coupure beta.
 					}
 					alpha = Math.max(alpha, value);
 						
@@ -211,16 +206,15 @@ public class DecisionTree {
 					
 					game.undo(1);	// Non implémenté.
 					if(alpha >= value){
-						return new Couple(value, resList);	// coupure alpha.
+						return new Couple<>(value, resList);	// coupure alpha.
 					}
 					beta = Math.min(beta, value);
 				}
 				
 			}
-			j++;
 		}
  		
- 		return new Couple(value, resList);
+ 		return new Couple<>(value, resList);
  	}
 	
 }

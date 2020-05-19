@@ -21,14 +21,14 @@ public class Pingouin {
 	 * @param args Aucun argument n'est attendu.
 	 */
 	public static void main(String[] args) {
-		Player p1 = new Player(4, new Color(240, 46, 0), "Joueur 1");
+		Player p1 = new AIRandom(4, new Color(240, 46, 0), "Joueur 1");
 		Player p2 = new AIRandom(4, new Color(46, 240, 0), "Joueur 2");
 		Game g = new Game(2, p1, p2, null, null);
 		
 		ControlerMediator controller = new ControlerMediator(g);
 		
-//		TextInterface.start(g, controller);
-		GraphicInterface.start(g, controller);
+		TextInterface.start(g, controller);
+//		GraphicInterface.start(g, controller);
 	}
 
 }

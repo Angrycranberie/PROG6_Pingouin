@@ -218,6 +218,10 @@ public class Game implements Cloneable{
 		Player p = getCurrentPlayer();
 		if(p.getAmountPlaced() < p.getPenguinsNumber()){
 			Tile t = board.getTile(x, y);
+			if(t == null) {
+				System.out.println("La case est vide.");
+				return false;
+			}
 			if(!t.occupied()){
 				if(t.getFishNumber() == 1){
 					p.penguins()[p.getAmountPlaced()] = new Penguin(x, y);
