@@ -28,6 +28,7 @@ public class TextInterface {
 			} else {
 				if(g.getCurrentPlayer().isAI()){
 					c.startAITurn();
+					System.out.println();
 				}
 			}
 			g.getBoard().printBoard(2);
