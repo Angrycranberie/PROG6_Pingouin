@@ -230,11 +230,16 @@ public class Game implements Cloneable{
 		Player p = getCurrentPlayer();
 		if(p.getAmountPlaced() < p.getPenguinsCount()){
 			Tile t = board.getTile(x, y);
+			if(t == null) {
+				System.out.println("La case est vide.");
+				return false;
+			}
 			if(!t.occupied()){
 				if(t.getFishNumber() == 1){
 					p.getPenguins()[p.getAmountPlaced()] = new Penguin(x, y);
 					board.occupyWithPenguin(x, y);
 					p.addAmount(1);
+					setToPlace(getToPlace()-1);
 					val = true;
 					nextPlayer();
 				} else {
@@ -258,6 +263,7 @@ public class Game implements Cloneable{
 	 */
 	/* à déplacer dans Player ? */
 	public boolean canPlay(Player p) {
+		if(placePhase()) return true;
 		boolean possibility = false;
 		int[][] movePossibility;
 		Penguin[] penguins = p.getPenguins();
@@ -334,8 +340,20 @@ public class Game implements Cloneable{
 		System.out.println(topPlayer.getName() + " gagne la partie !");
 	}
 	
+	/**
+	 * Annule n coups dans la partie
+	 * @param n Nombre de coups à annuler.
+	 */
+	public void undo(int n){
+		try{
+			history.backInPast(history.getPastIndex()-n, board, players);
+		} catch (ArrayIndexOutOfBoundsException e){
+			// Il faudrait prévenir l'appelant d'une erreur.
+		}
+	}
+	
 	@Override
-	protected Game clone() {
+	public Game clone() {
 		Player p[] = new Player[4];
 		for(int i = 0 ; i < 4 ; i++) {
 			if(i < playerCount) {
@@ -356,5 +374,17 @@ public class Game implements Cloneable{
 			p[i].setGame(c);
 		}
 		return c;
+	}
+
+	public void prevPlayer() {
+		for(int i = 1 ; i <= playerCount ; i++) {
+			int loopPlayerNumber = (currentPlayerNumber - i);
+			if (loopPlayerNumber <= 0) loopPlayerNumber += playerCount;
+			if (players[loopPlayerNumber-1].isPlaying()) {
+				supportCount.firePropertyChange("currentPlayerNumber", currentPlayerNumber, loopPlayerNumber + 1);
+				currentPlayerNumber = loopPlayerNumber;
+
+			}
+		}
 	}
 }

@@ -277,8 +277,9 @@ public class Player implements Cloneable {
 		p.changePlaying(playing);
 		
 		Penguin pe[] = new Penguin[penguinsCount];
-		for(int i = 0; i < penguinsCount; i++) {
-			pe[i] = penguins[i].clone();
+		for(int i = 0 ; i < penguinsCount ; i++) {
+			if(penguins[i] == null) pe[i] = null;
+			else pe[i] = penguins[i].clone();
 		}
 		p.changePenguins(pe);
 		return p;

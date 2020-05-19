@@ -25,7 +25,7 @@ public class AIRandom extends Player {
 		
 		
 		// placement des pingouins
-		if(getGame().placePhase()) return false;
+		if(getGame().placePhase()) return positionPenguin();
 		else {
 			int tmp, x, y, index=0;
 			int[][] move;
