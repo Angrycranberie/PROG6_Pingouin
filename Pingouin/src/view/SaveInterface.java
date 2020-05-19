@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.chrono.JapaneseChronology;
 
 public class SaveInterface {
     private JTextField tf_saveName;
@@ -13,7 +14,7 @@ public class SaveInterface {
     public JPanel p_main;
 
 
-    SaveInterface(final GameInterface g, final String s){
+    SaveInterface(final JPanel g, final String s){
 
 
         ActionListener al_save = new ActionListener() {
@@ -21,34 +22,43 @@ public class SaveInterface {
             public void actionPerformed(ActionEvent e) {
                 JPopupMenu confirm = new JPopupMenu();
 
-                if(s == "game"){
-                    p_main.getRootPane().setContentPane(g.p_main);
-                    g.p_main.getRootPane().updateUI();
-                } else if (s == "ng"){
-                    NewGameInterface ng = new NewGameInterface();
-                    p_main.getRootPane().setContentPane(ng.p_main);
-                    ng.p_main.getRootPane().updateUI();
-                } else if (s == "mm") {
-                    MainMenuInterface mm = new MainMenuInterface();
-                    p_main.getRootPane().setContentPane(mm.p_main);
-                    mm.p_main.getRootPane().updateUI();
+                switch (s) {
+                    case "game":
+                        p_main.getRootPane().setContentPane(g);
+                        g.getRootPane().updateUI();
+                        break;
+                    case "ng":
+                        NewGameInterface ng = new NewGameInterface();
+                        p_main.getRootPane().setContentPane(ng.p_main);
+                        ng.p_main.getRootPane().updateUI();
+                        break;
+                    case "mm":
+                        MainMenuInterface mm = new MainMenuInterface();
+                        p_main.getRootPane().setContentPane(mm.p_main);
+                        mm.p_main.getRootPane().updateUI();
+                        break;
                 }
             }
         };
         ActionListener al_cancel = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(s == "game"){
-                    p_main.getRootPane().setContentPane(g.p_main);
-                    g.p_main.getRootPane().updateUI();
-                } else if (s == "ng"){
-                    NewGameInterface ng = new NewGameInterface();
-                    p_main.getRootPane().setContentPane(ng.p_main);
-                    ng.p_main.getRootPane().updateUI();
-                } else if (s == "mm") {
-                    MainMenuInterface mm = new MainMenuInterface();
-                    p_main.getRootPane().setContentPane(mm.p_main);
-                    mm.p_main.getRootPane().updateUI();
+                switch (s) {
+                    case "game":
+                        p_main.getRootPane().setContentPane(g);
+                        g.getRootPane().getJMenuBar().setVisible(true);
+                        g.getRootPane().updateUI();
+                        break;
+                    case "ng":
+                        NewGameInterface ng = new NewGameInterface();
+                        p_main.getRootPane().setContentPane(ng.p_main);
+                        ng.p_main.getRootPane().updateUI();
+                        break;
+                    case "mm":
+                        MainMenuInterface mm = new MainMenuInterface();
+                        p_main.getRootPane().setContentPane(mm.p_main);
+                        mm.p_main.getRootPane().updateUI();
+                        break;
                 }
 
             }

@@ -24,7 +24,7 @@ public class GameInterface implements PropertyChangeListener {
     public Game game;
     public GameView gameView;
     public EventCollector eventCollector;
-    private boolean saved = false;
+    public final static boolean saved = false;
 
 
     GameInterface(Game g, EventCollector ec){
@@ -54,22 +54,14 @@ public class GameInterface implements PropertyChangeListener {
 
         gameView = new GameView(game, eventCollector);
         gameView.setBounds(0, l_title.getHeight()+ l_feedback.getHeight(), p_main.getWidth(), (int) (p_main.getHeight()*0.8));
-
+        /*
         b_newGame= new GameButton("Nouvelle partie", GameButton.TYPE_INFO);
         b_newGame.setSize(150,30);
         b_newGame.setLocation(50, 5);
         b_newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(saved){
-                    NewGameInterface ng = new NewGameInterface();
-                    p_main.getRootPane().setContentPane(ng.p_main);
-                    ng.p_main.getRootPane().updateUI();
-                } else {
-                    QuitGameInterface qg = new QuitGameInterface(me, "ng");
-                    p_main.getRootPane().setContentPane(qg.p_main);
-                    qg.p_main.getRootPane().updateUI();
-                }
+
             }
         });
 
@@ -79,9 +71,7 @@ public class GameInterface implements PropertyChangeListener {
         b_save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SaveInterface si = new SaveInterface(me, "game");
-                p_main.getRootPane().setContentPane(si.p_main);
-                si.p_main.getRootPane().updateUI();
+
             }
         });
 
@@ -90,21 +80,9 @@ public class GameInterface implements PropertyChangeListener {
         b_backMainMenu.setLocation(b_save.getX()+b_save.getWidth()+10, 5);
         b_backMainMenu.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                if(saved){
-                    MainMenuInterface mm = new MainMenuInterface();
-                    p_main.getRootPane().setContentPane(mm.p_main);
-                    mm.p_main.getRootPane().updateUI();
 
-                } else {
-                    QuitGameInterface qg = new QuitGameInterface(me, "mm");
-                    p_main.getRootPane().setContentPane(qg.p_main);
-                    qg.p_main.getRootPane().updateUI();
-                }
-
-            }
         });
-
+        */
         b_undo= new GameButton("Annuler", GameButton.TYPE_DEFAULT);
         b_undo.setSize(150,50);
         b_undo.setLocation(50, gameView.getY() +gameView.getHeight() + 10);
@@ -140,9 +118,6 @@ public class GameInterface implements PropertyChangeListener {
         l_scoreJ2.setSize(150,10);
         l_scoreJ2.setLocation(l_scoreJ1.getLocation().x+l_scoreJ1.getWidth()+10, gameView.getY() +gameView.getHeight() + 10);
 
-        p_main.add(b_newGame);
-        p_main.add(b_save);
-        p_main.add(b_backMainMenu);
         p_main.add(l_title);
         p_main.add(l_feedback);
         p_main.add(gameView);
