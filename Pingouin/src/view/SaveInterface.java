@@ -14,7 +14,7 @@ public class SaveInterface {
     public JPanel p_main;
 
 
-    SaveInterface(final JPanel g, final String s){
+    SaveInterface(final JPanel g, final String s, GraphicInterface gra){
 
 
         ActionListener al_save = new ActionListener() {
@@ -28,12 +28,12 @@ public class SaveInterface {
                         g.getRootPane().updateUI();
                         break;
                     case "ng":
-                        NewGameInterface ng = new NewGameInterface();
+                        NewGameInterface ng = new NewGameInterface(gra);
                         p_main.getRootPane().setContentPane(ng.p_main);
                         ng.p_main.getRootPane().updateUI();
                         break;
                     case "mm":
-                        MainMenuInterface mm = new MainMenuInterface();
+                        MainMenuInterface mm = new MainMenuInterface(gra);
                         p_main.getRootPane().setContentPane(mm.p_main);
                         mm.p_main.getRootPane().updateUI();
                         break;
@@ -50,12 +50,12 @@ public class SaveInterface {
                         g.getRootPane().updateUI();
                         break;
                     case "ng":
-                        NewGameInterface ng = new NewGameInterface();
+                        NewGameInterface ng = new NewGameInterface(gra);
                         p_main.getRootPane().setContentPane(ng.p_main);
                         ng.p_main.getRootPane().updateUI();
                         break;
                     case "mm":
-                        MainMenuInterface mm = new MainMenuInterface();
+                        MainMenuInterface mm = new MainMenuInterface(gra);
                         p_main.getRootPane().setContentPane(mm.p_main);
                         mm.p_main.getRootPane().updateUI();
                         break;

@@ -15,14 +15,14 @@ public class MainMenuInterface {
     private JButton b_settings;
 
 
-    MainMenuInterface(){
+    MainMenuInterface(GraphicInterface gra){
 
         final MainMenuInterface me = this;
 
         ActionListener al_loadGame = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoadGameInterface lg = new LoadGameInterface(me);
+                LoadGameInterface lg = new LoadGameInterface(me,gra);
                 p_main.getRootPane().setContentPane(lg.p_main);
                 lg.p_main.getRootPane().updateUI();
             }
@@ -30,13 +30,13 @@ public class MainMenuInterface {
         ActionListener al_quit = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                return;
             }
         };
         ActionListener al_newGame = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NewGameInterface ng = new NewGameInterface();
+                NewGameInterface ng = new NewGameInterface(gra);
                 p_main.getRootPane().setContentPane(ng.p_main);
                 ng.p_main.getRootPane().updateUI();
             }

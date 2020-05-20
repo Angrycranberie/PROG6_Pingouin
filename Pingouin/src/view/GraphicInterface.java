@@ -1,5 +1,6 @@
 package view;
 
+import com.sun.tools.javac.Main;
 import model.Game;
 
 import javax.swing.*;
@@ -22,6 +23,8 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     JFrame frame; // Composant de la fenêtre de jeu.
     boolean maximized; // Si la fenêtre est en pleine écran ou non.
     public GameInterface gameInterface;
+    public MainMenuInterface mainMenu;
+    GraphicInterface me = this;
 
     // La barre de menu
     JMenuBar mb = new JMenuBar();
@@ -39,7 +42,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     GraphicInterface(Game g, EventCollector ec) {
         game = g;
         eventCollector = ec;
-        gameInterface = new GameInterface(game, eventCollector);
+
     }
     GameInterface getGameInterface(){
         return gameInterface;
@@ -64,6 +67,9 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         frame.addComponentListener(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
         frame.setMinimumSize(new Dimension(915, 950)); // Définition de la taille de fenêtre par défaut.
+
+        mainMenu = new MainMenuInterface(this);
+        gameInterface = new GameInterface(game, eventCollector,this);
 
         //La barre de menu
         save.addActionListener(this);
@@ -103,9 +109,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
 
     @Override
     public void componentResized(ComponentEvent e) {
-        gameInterface.p_main.setSize(frame.getSize());
-        gameInterface.gameView.setSize(gameInterface.p_main.getWidth(), gameInterface.gameView.getHeight());
-        gameInterface.gameView.repaint();
+        gameInterface.redimensionnement();
     }
 
     @Override
@@ -125,31 +129,38 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     public void actionPerformed(ActionEvent e){
         frame.getJMenuBar().setVisible(false);
         if(e.getSource()==save){
-            SaveInterface si = new SaveInterface( (JPanel) frame.getContentPane(), "game");
+            SaveInterface si = new SaveInterface( (JPanel) frame.getContentPane(), "game",me);
             frame.getRootPane().setContentPane(si.p_main);
             si.p_main.getRootPane().updateUI();
         } else if (e.getSource()==ng){
             if(GameInterface.saved){
-                NewGameInterface ng = new NewGameInterface();
+                NewGameInterface ng = new NewGameInterface(this);
                 frame.getRootPane().setContentPane(ng.p_main);
                 ng.p_main.getRootPane().updateUI();
             } else {
-                QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "ng");
+                QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "ng",me);
                 frame.getRootPane().setContentPane(qg.p_main);
                 qg.p_main.getRootPane().updateUI();
             }
         } else if (e.getSource()==mm){
                 if(GameInterface.saved){
-                    MainMenuInterface mm = new MainMenuInterface();
+                    MainMenuInterface mm = new MainMenuInterface(this);
                     frame.getRootPane().setContentPane(mm.p_main);
                     mm.p_main.getRootPane().updateUI();
 
                 } else {
-                    QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "mm");
+                    QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "mm",me);
                     frame.getRootPane().setContentPane(qg.p_main);
                     qg.p_main.getRootPane().updateUI();
                 }
 
             }
     }
+
+    public void updateGIUI(){
+        frame.getContentPane().setSize(frame.getSize());
+        frame.getJMenuBar().setVisible(true);
+        frame.getRootPane().updateUI();
+    }
+
 }
