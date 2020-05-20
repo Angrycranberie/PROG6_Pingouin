@@ -14,8 +14,7 @@ public class SaveInterface {
 
     EventCollector eventCollector;
 
-
-    SaveInterface(final JPanel g, final String s, EventCollector ec){
+    SaveInterface(final JPanel g, final String s, EventCollector ec, GraphicInterface gra){
         eventCollector = ec;
 
         ActionListener al_save = new ActionListener() {
@@ -29,12 +28,12 @@ public class SaveInterface {
                         g.getRootPane().updateUI();
                         break;
                     case "ng":
-                        NewGameInterface ng = new NewGameInterface(eventCollector);
+                        NewGameInterface ng = new NewGameInterface(eventCollector, gra);
                         p_main.getRootPane().setContentPane(ng.p_main);
                         ng.p_main.getRootPane().updateUI();
                         break;
                     case "mm":
-                        MainMenuInterface mm = new MainMenuInterface(eventCollector);
+                        MainMenuInterface mm = new MainMenuInterface(eventCollector, gra);
                         p_main.getRootPane().setContentPane(mm.p_main);
                         mm.p_main.getRootPane().updateUI();
                         break;
@@ -51,12 +50,12 @@ public class SaveInterface {
                         g.getRootPane().updateUI();
                         break;
                     case "ng":
-                        NewGameInterface ng = new NewGameInterface(eventCollector);
+                        NewGameInterface ng = new NewGameInterface(eventCollector, gra);
                         p_main.getRootPane().setContentPane(ng.p_main);
                         ng.p_main.getRootPane().updateUI();
                         break;
                     case "mm":
-                        MainMenuInterface mm = new MainMenuInterface(eventCollector);
+                        MainMenuInterface mm = new MainMenuInterface(eventCollector, gra);
                         p_main.getRootPane().setContentPane(mm.p_main);
                         mm.p_main.getRootPane().updateUI();
                         break;

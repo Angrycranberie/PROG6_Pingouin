@@ -12,10 +12,11 @@ public class QuitGameInterface {
     private JButton b_resume;
     private JButton b_quit;
     public JPanel p_main;
-
     EventCollector eventCollector;
 
-    QuitGameInterface(final JPanel g, final String s, final EventCollector ec){
+    QuitGameInterface(final JPanel g, final String s, EventCollector ec ,GraphicInterface gra){
+
+
         eventCollector = ec;
 
         ActionListener al_resume = new ActionListener() {
@@ -31,11 +32,11 @@ public class QuitGameInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(s.equals("mm")){
-                    MainMenuInterface mm = new MainMenuInterface(ec);
+                    MainMenuInterface mm = new MainMenuInterface(ec,gra);
                     p_main.getRootPane().setContentPane(mm.p_main);
                     mm.p_main.getRootPane().updateUI();
                 } else if(s.equals("ng")){
-                    NewGameInterface ng = new NewGameInterface(ec);
+                    NewGameInterface ng = new NewGameInterface(ec, gra);
                     p_main.getRootPane().setContentPane(ng.p_main);
                     ng.p_main.getRootPane().updateUI();
                 }
@@ -46,7 +47,7 @@ public class QuitGameInterface {
         ActionListener al_save = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SaveInterface si = new SaveInterface(g, s, ec);
+                SaveInterface si = new SaveInterface(g,s,ec,gra);
                 p_main.getRootPane().setContentPane(si.p_main);
                 si.p_main.getRootPane().updateUI();
             }
