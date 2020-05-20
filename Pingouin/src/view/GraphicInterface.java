@@ -1,6 +1,5 @@
 package view;
 
-import com.sun.tools.javac.Main;
 import model.Game;
 
 import javax.swing.*;
