@@ -36,8 +36,7 @@ public class MainMenuInterface {
         ActionListener al_newGame = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NewGameInterface ng = new NewGameInterface(gra);
-                NewGameInterface ng = new NewGameInterface(ec);
+                NewGameInterface ng = new NewGameInterface(eventCollector,gra);
                 p_main.getRootPane().setContentPane(ng.p_main);
                 ng.p_main.getRootPane().updateUI();
             }

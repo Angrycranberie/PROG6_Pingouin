@@ -135,8 +135,8 @@ public class GameInterface implements PropertyChangeListener {
     public void redimensionnement(){
         p_main.setSize(gra.frame.getSize());
         gameView.setSize(p_main.getWidth(), gameView.getHeight());
-        l_title.setLocation((p_main.getWidth()-1500/4)/2,0);
-        l_feedback.setBounds(0, l_title.getHeight(), p_main.getWidth(),50);
+        //l_title.setLocation((p_main.getWidth()-1500/4)/2,0);
+        l_feedback.setBounds(l_title.getWidth()+10, 10, p_main.getWidth()-l_title.getWidth()-2*10, l_title.getHeight());
         l_scoreJ2.setLocation(p_main.getWidth()/2 - (l_scoreJ2.getWidth()), gameView.getY() +gameView.getHeight() + 10);
         l_scoreJ1.setLocation(p_main.getWidth()/2 + (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
 

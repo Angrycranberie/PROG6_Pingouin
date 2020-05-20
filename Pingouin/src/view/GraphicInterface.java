@@ -80,7 +80,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
         frame.setMinimumSize(new Dimension(915, 950)); // Définition de la taille de fenêtre par défaut.
 
-        mainMenu = new MainMenuInterface(this);
+        mainMenu = new MainMenuInterface(eventCollector, this);
         gameInterface = new GameInterface(game, eventCollector,this);
 
         //La barre de menu
@@ -141,27 +141,27 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     public void actionPerformed(ActionEvent e){
         frame.getJMenuBar().setVisible(false);
         if(e.getSource()==save){
-            SaveInterface si = new SaveInterface( (JPanel) frame.getContentPane(), "game",me);
+            SaveInterface si = new SaveInterface( (JPanel) frame.getContentPane(), "game", eventCollector, me);
             frame.getRootPane().setContentPane(si.p_main);
             si.p_main.getRootPane().updateUI();
         } else if (e.getSource()==ng){
             if(GameInterface.saved){
-                NewGameInterface ng = new NewGameInterface(this);
+                NewGameInterface ng = new NewGameInterface(eventCollector, me);
                 frame.getRootPane().setContentPane(ng.p_main);
                 ng.p_main.getRootPane().updateUI();
             } else {
-                QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "ng",me);
+                QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "ng",eventCollector ,me);
                 frame.getRootPane().setContentPane(qg.p_main);
                 qg.p_main.getRootPane().updateUI();
             }
         } else if (e.getSource()==mm){
                 if(GameInterface.saved){
-                    MainMenuInterface mm = new MainMenuInterface(this);
+                    MainMenuInterface mm = new MainMenuInterface(eventCollector, me);
                     frame.getRootPane().setContentPane(mm.p_main);
                     mm.p_main.getRootPane().updateUI();
 
                 } else {
-                    QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "mm",me);
+                    QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "mm", eventCollector, me);
                     frame.getRootPane().setContentPane(qg.p_main);
                     qg.p_main.getRootPane().updateUI();
                 }
