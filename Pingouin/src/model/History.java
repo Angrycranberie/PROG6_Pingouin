@@ -41,8 +41,16 @@ public class History implements Cloneable{
 		futurIndex = i;
 	}
 	
+	public Move[] getPast(){
+		return past;
+	}
+	
 	public int getPastIndex(){
 		return pastIndex;
+	}
+	
+	public Move[] getFutur(){
+		return futur;
 	}
 	
 	public int getFuturIndex(){

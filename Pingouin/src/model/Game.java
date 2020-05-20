@@ -1,8 +1,10 @@
 package model;
 
 import controller.Player;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.PrintWriter;
 
 /**
  * Classe Game. Gère une partie du jeu : ordre des tours, coups sur le plateau.
@@ -251,7 +253,7 @@ public class Game implements Cloneable{
 	
 	public int[][] legitMovePossibility(Penguin p){
 		return board.movePossibility(p.getX(),p.getY());
-	}	/**
+	}
 
 	/**
 	 * Place un pingouin du joueur courant aux coordonnées d'entrée.
@@ -443,6 +445,7 @@ public class Game implements Cloneable{
 		return res;
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Indique si la case donnée en argument est nulle ou non.
 	 * @param x1 Coordonnée x de la case à tester.
@@ -454,5 +457,106 @@ public class Game implements Cloneable{
 		if(res) error = HAS_TILE;
 		else error = NO_TILE;
 		return res;
+=======
+	public boolean save(String fileName) {
+		
+		PrintWriter saveBot;
+		
+		try {
+			saveBot = new PrintWriter(fileName, "UTF-8") ;
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			return false;
+		} 
+		
+		saveBot.flush(); // on vide le fichier si jamais il a déjà été utilisé
+		
+		// Sauvegarde du nombre de joueur
+		saveBot.println("# Nombre de joueur");
+		saveBot.println(playerCount);
+		System.out.println("playerCount saved");
+		
+		// Sauvegarde des joueurs
+		for(int  i = 0; i < playerCount; i++) {
+			saveBot.println("# Joueur "+i);
+			// Sauvegarde des informations du joueur 
+			players[i].toString();
+			// Sauvegarde de ses pingouins
+			for(int j = 0; j < players[i].getPenguinsCount() ; j++) {
+				players[i].getPenguins()[j].toString();
+			}
+			
+			System.out.println("Player "+i+" saved");
+		}
+		
+		// Sauvegarde du joueur courant
+		saveBot.println("# Numéro du joueur courant");
+		saveBot.println(currentPlayerNumber);
+		System.out.println("currentPlayerNumber saved");
+		
+		// Sauvegarde du plateau
+		saveBot.println("# Board");
+		for(int i = 0; i < Board.LENGTH; i++) {
+			for(int j = 0; j < Board.WIDTH; j++) {
+				try {
+					saveBot.println(board.getTile(j, i).toString());
+				} catch (NullPointerException e) {
+					// Soit on est arrivé sur une tuile null (plus en jeu), soit on est au bout du tableau
+					saveBot.println();
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+					return false;
+				}
+			}
+		}
+		System.out.println("board saved");
+		
+		// Sais pas si doit être sauvegardé
+		//PropertyChangeSupport supportCount;
+		
+		// Sauvegarde de l'historique
+		saveBot.println("# Historique");
+		
+		for(int i = 0; i < history.getPast().length; i++) {
+			try {
+				saveBot.println(history.getPast()[i].toString());
+			} catch (NullPointerException e) {
+				// On est arrivé au bout du tableau
+				// Si le tableau est vide
+				if(i==0) saveBot.println();
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				return false;
+			}
+		}
+		saveBot.println(history.getPastIndex());
+		for(int i = 0; i < history.getFutur().length; i++) {
+			try {
+				saveBot.println(history.getFutur()[i].toString());
+			} catch (NullPointerException e) {
+				// On est arrivé au bout du tableau
+				// Si le tableau est vide
+				if(i==0) saveBot.println();
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				return false;
+			}
+		}
+		saveBot.println(history.getFuturIndex());
+		System.out.println("history saved");
+		
+		// Sauvegarde de la phase
+		saveBot.println("# Pingouin restants à placer");
+		saveBot.println(toPlace);
+		System.out.println("toPlace saved");
+			
+		saveBot.close();
+		return true;
+	}
+	
+	public boolean load(String fileName) {
+		
+		return false;
+>>>>>>> Vincent
 	}
 }

@@ -58,6 +58,14 @@ public class Tile implements Cloneable {
 	public boolean occupied() {
 		return this.occupied;
 	}	
+
+	/**
+	 * Renvoie une version String des valeurs de la tuile
+	 * @return renvoie une représentation dans un String de la tuile 
+	 */
+	public String toString() {
+		 return fishNumber+" "+occupied;
+	}
 	
 	@Override
 	protected Tile clone() {
