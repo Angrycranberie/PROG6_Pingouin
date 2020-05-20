@@ -39,7 +39,7 @@ public class Board implements Cloneable{
 	}
 	
 	
-	private void changeTab(Tile[][] tab) {
+	public void changeTab(Tile[][] tab) {
 		this.tab = tab;
 	}
 	
