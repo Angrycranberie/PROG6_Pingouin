@@ -52,7 +52,7 @@ public class AIAccess extends Player{
 	private boolean moveTurn(){
 		
 		ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>> resList =
-				decTree.moveDecision(-10000, 10000, true, 1).getSecond();
+				decTree.moveDecision(-10000, 10000, true, 4).getSecond();
 		
 		Couple<Couple<Integer, Integer>, Couple<Integer, Integer>> move
 			= resList.get(r.nextInt(resList.size()));

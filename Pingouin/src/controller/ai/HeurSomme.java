@@ -2,7 +2,6 @@ package controller.ai;
 
 import model.Game;
 import model.Penguin;
-import model.Tile;
 import controller.Player;
 
 /**

@@ -14,6 +14,10 @@ import model.Penguin;
  * Intègre aussi quelques éléments de valuation lors du placement : 
  * Les bords sont dépréciés ; les coins sont très dépréciés ; être
  * proche d'un allié est déprécié.
+ * 
+ * Adaptée pour 2 joueurs uniquement. L'adaptation à n joueurs
+ * se fait par comparaison au plus grand score parmis les
+ * adversaires.
  * @author yeauhant
  *
  */
@@ -25,7 +29,61 @@ public class HeurAccess extends Heuristic {
 	 * de la classe.
 	 */
 	public int heuristicMove(Game g){
-		int somme = 0;
+		int somme = 0, score;
+		boolean canPlaySelf = true, canPlayOppo = false;
+		Player[] playList = g.getPlayers();
+		Player currPlayer;
+		Penguin currPeng;
+		Board b = g.getBoard();
+		/*
+		 * Point de départ : différence de score entre soi et l'adversaire.
+		 * On compte le score, + les poissons sous les pingouins.
+		 */
+		for(int i = 0 ; i < g.getPlayerCount() ; i++){
+			currPlayer = playList[i];
+			score = currPlayer.getFishScore();
+			for(int j = 0 ; j < currPlayer.getAmountPlaced() ; j++){
+				if(currPlayer.isPlaying()){
+					currPeng = currPlayer.getPenguin(j);
+					score += b.getTile(currPeng.getX(), currPeng.getY()).getFishNumber();
+				}
+			}
+			if(currPlayer == g.getCurrentPlayer()){
+				somme += score;
+				canPlaySelf = g.canPlay(currPlayer);
+			}
+			else{
+				somme -= score;
+				canPlayOppo = canPlayOppo || g.canPlay(currPlayer);
+			}
+		}
+		
+		/* Est-ce que la partie est finie/Qui gagne ? */
+		if(!canPlaySelf){
+			/* On a perdu */
+			if(somme <= 0) return -1000;
+			else {
+				/* On a gagné */
+				if(!canPlayOppo) return 1000;
+				/* Si on ne peut plus jouer, que l'adversaire
+				 * peut jouer, et qu'on a + de points que lui,
+				 * c'est dur de savoir qui gagne.
+				 */
+			}
+		}
+		
+		if(!canPlayOppo){
+			/* On a gagné, peu importe les prochains coups. */
+			if(somme > 0) return 1000;
+		}
+		
+		
+		/* 
+		 * Valuation de la configuration. On réutilise la valuation
+		 * de la phase de placement.
+		 */
+		
+		somme += heuristicPlace(g);
 		
 		return somme;
 	}
