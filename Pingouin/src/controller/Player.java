@@ -3,7 +3,9 @@ package controller;
 import model.Game;
 import model.Penguin;
 
-import java.awt.*;
+
+import controller.ai.AIAccess;
+import controller.ai.AISomme;
 
 /**
  * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
@@ -268,10 +270,10 @@ public class Player implements Cloneable {
 				p = new AIRandom(penguinsCount, color, name);
 				break;
 			case 2:
-				p = new AISmart(penguinsCount, color, name);
+				p = new AISomme(penguinsCount, color, name);
 				break;
 			case 3:
-				p = new AITrap(penguinsCount, color, name);
+				p = new AIAccess(penguinsCount, color, name);
 				break;
 			default:
 				break;

@@ -41,6 +41,9 @@ public class Game implements Cloneable{
 	public static final int ALREADY_OCCUPY = 23;
 	public static final int START_MOVE = 24;
 	
+	public static final int AI_STARTS = 31;
+	public static final int AI_DONE = 32;
+	
 	public int error;
 	
 	/**
@@ -311,7 +314,7 @@ public class Game implements Cloneable{
 		boolean possibility = false;
 		int[][] movePossibility;
 		Penguin[] penguins = p.getPenguins();
-		for(int i = 0; i < p.getPenguinsCount() ; i++) {
+		for(int i = 0; i < p.getAmountPlaced() ; i++) {
 			movePossibility = legitMovePossibility(penguins[i]);
 			possibility = possibility || (movePossibility[0][0] != -1);
 		}
@@ -434,7 +437,19 @@ public class Game implements Cloneable{
 			}
 		}
 	}
-	
+
+	/**
+	 * Annule le dernier placement de pingouin. Rend la main à ce joueur.
+	 */
+	public void cancelPlace() {
+		prevPlayer();
+		Player p = getCurrentPlayer();
+		p.addAmount(-1);
+		Penguin lastP = p.getPenguin(p.getAmountPlaced());
+		board.freeFromPenguin(lastP.getX(), lastP.getY());
+		p.getPenguins()[p.getAmountPlaced()] = null; 
+	}
+
 	/**
 	 * Indique si la case non-nulle donnée en argument est occupée
 	 * par un pingouin ou non.

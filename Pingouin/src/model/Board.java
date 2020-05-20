@@ -649,8 +649,10 @@ public class Board implements Cloneable{
 		for(int y = 0 ; y < LENGTH ; y++){
 			for(int x = 0 ; x < WIDTH ; x++){
 				if((curr = getTile(x, y)) != null){
-					if(curr.getFishNumber() == 1){
-						resList.add(new Couple<Integer, Integer>(x, y));
+					if(!curr.occupied()){
+						if(curr.getFishNumber() == 1){
+							resList.add(new Couple<Integer, Integer>(x, y));
+						}
 					}
 				}
 			}

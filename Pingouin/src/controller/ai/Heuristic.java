@@ -23,6 +23,7 @@ public abstract class Heuristic {
 		return 0;
 	}
 	
+	
 	/**
 	 * Calcule l'heuristique associée à la partie et au joueur courant
 	 * après un placement de pingouin.
@@ -33,4 +34,6 @@ public abstract class Heuristic {
 		System.err.println("Erreur : Heuristique indéfinie.");
 		return 0;
 	}
+
+
 }

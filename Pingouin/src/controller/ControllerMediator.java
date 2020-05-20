@@ -166,7 +166,7 @@ public class ControllerMediator implements EventCollector {
 			else if (y1 < 0){
 				y1 = val;
 				if(game.placePhase()){
-					try { 
+					try {
 						ret = game.placePenguin(x1, y1);
 					} catch (Exception e) {
 						throw(e);
@@ -248,6 +248,8 @@ public class ControllerMediator implements EventCollector {
 	 * Lance le tour de l'IA.
 	 */
 	public void startAITurn(){
+		game.setErr(Game.AI_STARTS);
 		game.getCurrentPlayer().play();
+		game.setErr(Game.AI_DONE);
 	}
 }

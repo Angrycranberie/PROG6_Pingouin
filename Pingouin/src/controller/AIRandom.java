@@ -3,7 +3,6 @@ package controller;
 import model.Board;
 import model.Penguin;
 
-import java.awt.Color;
 import java.util.Random;
 
 /**
