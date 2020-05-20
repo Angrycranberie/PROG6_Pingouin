@@ -70,7 +70,10 @@ public class GameInterface implements PropertyChangeListener {
         l_title.setVisible(true);
 
         l_feedback = new JLabel();
-        l_feedback.setText("La partie va commencer");
+        l_feedback.setText(
+                "<html><body><p><em>La partie va commencer !</em></p><p><strong>"
+                        +game.getCurrentPlayer().getName()+"</strong>, placez votre premier pingouin.</p></body></html>"
+        );
         l_feedback.setHorizontalAlignment(SwingConstants.CENTER);
         l_feedback.setHorizontalTextPosition(SwingConstants.CENTER);
         l_feedback.setBounds(l_title.getWidth()+10, 10, p_main.getWidth()-l_title.getWidth()-2*10, l_title.getHeight());
@@ -187,7 +190,6 @@ public class GameInterface implements PropertyChangeListener {
     public void resize(){
         p_main.setSize(gra.frame.getSize());
         gameView.setBounds(0, l_title.getHeight()+2*10, p_main.getWidth(), (int) (p_main.getHeight()*0.7));
-        //l_title.setLocation((p_main.getWidth()-1500/4)/2,0);
         l_feedback.setBounds(l_title.getWidth()+10, 10, p_main.getWidth()-l_title.getWidth()-2*10, l_title.getHeight());
         l_scoreJ2.setLocation(p_main.getWidth()*2/3 + (l_scoreJ2.getWidth() + (int)(p_main.getWidth()*0.05) ), gameView.getY() +gameView.getHeight() + 10);
         l_scoreJ1.setLocation(p_main.getWidth()*2/3 - (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
@@ -198,6 +200,9 @@ public class GameInterface implements PropertyChangeListener {
 
     }
 
+    /**
+     * Fonction de remplissage des chaines de statuts.
+     */
     private void populateStatusString() {
         statusString = new HashMap<Integer, String>();
         statusString.put(
@@ -212,25 +217,96 @@ public class GameInterface implements PropertyChangeListener {
                 Game.ALREADY_OCCUPIED,
                 "<p><em>Mince !</em> Un pingouin occupe déjà cette case. <br/>Choisissez-en une autre, <strong>$1</strong> !</p>"
         );
+        statusString.put(
+                Game.START_MOVE,
+                "<p><em>La partie peut commencer !</em></p><p>C'est au tour de <strong>$1</strong> de jouer.</p>"
+        );
+        statusString.put(
+                Game.NO_TARGET,
+                "<p><strong>$1<strong>, cliquez sur un pingouin pour le sélectionner !</p>"
+        );
+        statusString.put(
+                Game.SAME_TARGET,
+                "<p>Vous avez désélectionné votre pingouin, <strong>$1</strong>."
+        );
+        statusString.put(
+                Game.PENGUIN_SELECTED,
+                "<p>Vous avez sélectionné votre pingouin, <strong>$1</strong> !</p><p>Vous pouvez maintenant le déplacer.</p>"
+        );
+        statusString.put(
+                Game.WRONG_PENGUIN,
+                "<p>Ce n'est pas votre pingouin, <strong>$1</strong> !</p><p>Sélectionnez l'un des vôtres.</p>"
+        );
+        statusString.put(
+                Game.NO_TILE,
+                "<p>Il n'y a pas de poissons à manger ici, <strong>$1</strong> !</p><p>Essayez d'aller sur une tuile.</p>"
+        );
+        statusString.put(
+                Game.TRAVEL_DONE,
+                "<p><strong>$1</strong> a déplacé son pingouin et mangé ses poissons. <em>Miam !</em></p><p>Au tour de <strong>$2</strong> !</p>"
+        );
+        statusString.put(
+                Game.PENGUIN_IN_PATH,
+                "<p><em>Oh oh...</em> Il y a un pingouin sur votre chemin, <strong>$1</strong> !</p><p>Essayez de vous déplacer autre part.</p>"
+        );
+        statusString.put(
+                Game.HOLE_IN_PATH,
+                "<p><em>Ouh là !</em> Attention à ne pas tomber dans l'eau, <strong>$1</strong> !</p><p>Essayez de vous déplacer autre part.</p>"
+        );
+        statusString.put(
+                Game.PATH_NOT_ALIGNED,
+                "<p>Vous ne pouvez pas aller ici, <strong>$1</strong> !</p><p>Suivez une trajectoire rectiligne.</p>"
+        );
+        statusString.put(
+                Game.AI_STARTS,
+                "<p>C'est au tour de l'IA \"<strong>$1</strong>\" !</p>"
+        );
+        statusString.put(
+                Game.AI_DONE,
+                "<p>L'IA \"<strong>$1</strong>\" a fini son tour.</p><p>Au tour de <strong>$2</strong> de jouer !</p>"
+        );
+        statusString.put(
+                Game.GAME_END,
+                "<p><em>La partie est terminée !</em></p>"
+        );
     }
 
+    /**
+     * Fonction de mise à jour du label de feedback pour permettre de faire un retour aux joueurs sur l'état de la partie.
+     */
     private void updateFeedback() {
         String feedback, statStr = statusString.get(game.status);
         switch (game.status) {
             case Game.PENGUIN_PLACED:
+            case Game.TRAVEL_DONE:
+            case Game.AI_DONE:
                 feedback = parseStatusString(
                         statStr,
-                        game.getPlayer(0).getName(),
-                        game.getPlayer(1).getName()
+                        game.getCurrentPlayer().getName(),
+                        game.getPlayer((game.getCurrentPlayerNumber()+1)%2).getName()
                 );
                 break;
             case Game.ONLY_ONE_FISH:
             case Game.ALREADY_OCCUPIED:
+            case Game.START_MOVE:
+            case Game.NO_TARGET:
+            case Game.SAME_TARGET:
+            case Game.PENGUIN_SELECTED:
+            case Game.WRONG_PENGUIN:
+            case Game.NO_TILE:
+            case Game.PENGUIN_IN_PATH:
+            case Game.HOLE_IN_PATH:
+            case Game.PATH_NOT_ALIGNED:
                 feedback = parseStatusString(
                         statStr,
                         game.getCurrentPlayer().getName()
                 );
                 break;
+            case Game.GAME_END:
+                feedback = statStr;
+                feedback += "<p>C'est <strong>"+game.getCurrentPlayer().getName()+"</strong> qui l'emporte avec un score de <em>"
+                        +game.getCurrentPlayer().getFishScore()+" poissons</em> et <em>"+game.getCurrentPlayer().getTileScore()
+                        +" tuiles</em>.";
             default:
                 feedback = "";
                 break;
@@ -239,6 +315,12 @@ public class GameInterface implements PropertyChangeListener {
         l_feedback.updateUI();
     }
 
+    /**
+     * Fonction utilitaire permettant de formater une chaîne de feedback avant affichage sur l'interface.
+     * @param s Chaîne de feedback non formatée.
+     * @param c Chaînes de remplissage du feedback.
+     * @return Chaîne de feedback.
+     */
     private String parseStatusString(String s, String... c) {
         String f = s;
         for (int i = 0; i < c.length; i++) {

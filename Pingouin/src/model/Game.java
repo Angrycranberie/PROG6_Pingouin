@@ -38,8 +38,8 @@ public class Game implements Cloneable{
 	public static final int PENGUIN_SELECTED = 30; // Pingouin correctement sélectionné.
 	public static final int WRONG_PENGUIN = 31; // Le pingouin n'appartient pas au joueur courant.
 
-	public static final int HAS_TILE = 40;
-	public static final int NO_TILE = 41;
+	public static final int HAS_TILE = 40; // La tuile existe bien.
+	public static final int NO_TILE = 41; // La tuile n'existe pas.
 
 	public static final int TRAVEL_DONE = 50; // Le déplacement a été effectué.
 	public static final int PENGUIN_IN_PATH = 51; // Un pingouin se trouve sur le chemin du déplacement.
@@ -230,6 +230,12 @@ public class Game implements Cloneable{
 	 * @return joueur courant
 	 */
 	public Player getCurrentPlayer() { return players[currentPlayerNumber - 1]; }
+
+	/**
+	 * Retourne le numéro (à partir de 1) du joueur courant.
+	 * @return Numéro du joueur courant.
+	 */
+	public int getCurrentPlayerNumber() { return currentPlayerNumber-1; }
 
 	/**
 	 * Retourne les joueurs de la partie.
