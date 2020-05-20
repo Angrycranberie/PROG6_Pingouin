@@ -42,6 +42,7 @@ public class HeurAccess extends Heuristic {
 	 * de cases à trois poissons).
 	 */
 	public int heuristicPlace(Game g){
+		
 		int maxX, valTile, index, somme = 0;
 		int [][] moveList;
 		Board b = g.getBoard();
@@ -62,6 +63,7 @@ public class HeurAccess extends Heuristic {
 				 * Les cases à 1 poisson.. C'est mieux que rien.
 				 */
 				somme += valTile*valTile;
+				index++;
 			}
 			
 			//On vérifie si l'on est sur un bord de carte.

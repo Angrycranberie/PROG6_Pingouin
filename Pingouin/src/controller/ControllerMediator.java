@@ -98,7 +98,7 @@ public class ControllerMediator implements EventCollector {
 			else if (y1 < 0){
 				y1 = val;
 				if(game.placePhase()){
-					try { 
+					try {
 						ret = game.placePenguin(x1, y1);
 					} catch (Exception e) {
 						throw(e);
