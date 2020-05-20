@@ -16,11 +16,13 @@ public class ControllerMediator implements EventCollector {
 	Game game;
 	Board board;
 	int x1, y1, x2, y2;
+	boolean gameStatus;
 	
 	public ControllerMediator(Game g){
 		game = g;
 		board = g.getBoard();
 		x1 = y1 = x2 = y2 = -1;
+		gameStatus = true;
 	}
 	
 	/**
@@ -34,6 +36,10 @@ public class ControllerMediator implements EventCollector {
 	@Override
 	public void mouseClick(int l, int c){
 		boolean ret = false;
+
+		if(!gameStatus){
+			return;
+		}
 		
 		if(x1 < 0){ /* Choix de la 1è case.. */
 			x1 = c;
@@ -89,6 +95,7 @@ public class ControllerMediator implements EventCollector {
 		if (game.movePhase()) {
             if (!startTurn()) {
                 game.endGame();
+                gameStatus = false;
                 return;
             }
         } else {
