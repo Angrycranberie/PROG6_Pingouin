@@ -1,6 +1,10 @@
 package model;
+
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+
+import controller.ai.Couple;
 
 /**
  * Classe Board. Correspond à un tableau de jeu 8*8 qui contient les cases du jeu
@@ -15,8 +19,16 @@ public class Board implements Cloneable{
 	public static final int ANTISLASH_ALIGN = 3;
 	public static final int LENGTH = 8;
 	public static final int WIDTH = 8;
+	
+	public static final int GOOD_TRAVEL = 0;
+	public static final int PENGUIN_IN_TRAVEL = 1;
+	public static final int HOLE_IN_TRAVEL = 2;
+	public static final int TRAVEL_NOT_ALIGNED = 3;
+	
+	
 
 	private Tile[][] tab; // Représentation du plateau sous forme de tableau.
+	public int error;
 
 	/** Constructeur du plateau.
 	 * On modélise ce dernier par un tableau de 8*8 cases puis on génère aléatoirement son contenu.
@@ -341,6 +353,20 @@ public class Board implements Cloneable{
 		return res;
 	}
 	
+	private boolean isTileAvailable(int x1,int y1) {
+		if (tab[y1][x1] == null) {
+			error = HOLE_IN_TRAVEL;
+			return false;
+		}
+		else if (tab[y1][x1].occupied()) {
+			error = PENGUIN_IN_TRAVEL;
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	/**
 	 * Indique si un déplacement entre deux tuiles est valide ou non.
 	 * @param x1 Coordonnée x de la tuile de départ.
@@ -356,25 +382,23 @@ public class Board implements Cloneable{
 			case Board.HORIZONTAL_ALIGN:
 				while(coord[0] != x2 || coord[1] != y2) {
 					coord = nextTile(coord[0],coord[1],HORIZONTAL_ALIGN,x2 > x1);
-					if (tab[coord[1]][coord[0]] == null || tab[coord[1]][coord[0]].occupied()) 
-						return false;
+					if(!isTileAvailable(coord[0],coord[1])) return false;
 				}
 				return true;
 			case Board.SLASH_ALIGN:
 				while(coord[0] != x2 || coord[1] != y2) {
 					coord = nextTile(coord[0],coord[1],SLASH_ALIGN,y2 > y1);
-					if (tab[coord[1]][coord[0]] == null || tab[coord[1]][coord[0]].occupied()) 
-						return false;
+					if(!isTileAvailable(coord[0],coord[1])) return false;
 				}
 				return true;
 			case Board.ANTISLASH_ALIGN:
 				while(coord[0] != x2 || coord[1] != y2) {
 					coord = nextTile(coord[0],coord[1],ANTISLASH_ALIGN,y2 > y1);
-					if (tab[coord[1]][coord[0]] == null || tab[coord[1]][coord[0]].occupied()) 
-						return false;
+					if(!isTileAvailable(coord[0],coord[1])) return false;
 				}
 				return true;
 			default:
+				error = TRAVEL_NOT_ALIGNED;
 				return false;
 		}
 	}
@@ -575,6 +599,8 @@ public class Board implements Cloneable{
 		return index;
 	}
 	
+	
+	
 	/**
 	 * Determine la liste de coups possible depuis la position donnée.
 	 * @param x1 Coordonnée x de la position de départ.
@@ -587,11 +613,7 @@ public class Board implements Cloneable{
 	public int[][] movePossibility(int x1, int y1) {
 		// création du tableau à rendre
 		int result[][] = new int[60][2];
-		for(int i = 0 ; i < 60 ; i++){
-			for (int j = 0 ; j < 2 ; j++){
-				result[i][j] = -1;
-			}
-		}
+
 		int index = 0;
 		
 		// coups à l'horizontal partie droit
@@ -618,6 +640,22 @@ public class Board implements Cloneable{
 		}
 		
 		return result;
+	}
+	
+	public ArrayList<Couple<Integer, Integer>> placePossiblity(){
+		ArrayList<Couple<Integer, Integer>> resList = 
+				new ArrayList<Couple<Integer, Integer>>();
+		Tile curr;
+		for(int y = 0 ; y < LENGTH ; y++){
+			for(int x = 0 ; x < WIDTH ; x++){
+				if((curr = getTile(x, y)) != null){
+					if(curr.getFishNumber() == 1){
+						resList.add(new Couple<Integer, Integer>(x, y));
+					}
+				}
+			}
+		}
+		return resList;
 	}
 	
 	private boolean test_movePossibility(boolean print) {

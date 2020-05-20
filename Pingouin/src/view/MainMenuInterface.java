@@ -1,8 +1,6 @@
 package view;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.DefaultMenuLayout;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,8 +12,10 @@ public class MainMenuInterface {
     private JButton b_newGame;
     private JButton b_settings;
 
+    EventCollector eventCollector;
 
-    MainMenuInterface(GraphicInterface gra){
+    MainMenuInterface(EventCollector ec, GraphicInterface gra){
+        eventCollector = ec;
 
         final MainMenuInterface me = this;
 
@@ -37,6 +37,7 @@ public class MainMenuInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 NewGameInterface ng = new NewGameInterface(gra);
+                NewGameInterface ng = new NewGameInterface(ec);
                 p_main.getRootPane().setContentPane(ng.p_main);
                 ng.p_main.getRootPane().updateUI();
             }
