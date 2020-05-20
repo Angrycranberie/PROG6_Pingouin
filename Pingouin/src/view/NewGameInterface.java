@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class NewGameInterface {
     private JTextField tf_joueur2;
@@ -41,7 +42,13 @@ public class NewGameInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Game g = new Game(2, new Player(4, 0,tf_joueur1.getText()), new Player(4, 1,tf_joueur2.getText()),null,null);
-                gra.gameInterface = new GameInterface(g, new ControllerMediator(g), gra);
+                try {
+                    gra.gameInterface = new GameInterface(g, new ControllerMediator(g), gra);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (FontFormatException fontFormatException) {
+                    fontFormatException.printStackTrace();
+                }
                 p_main.getRootPane().setContentPane(gra.gameInterface.p_main);
                 gra.gameInterface.p_main.getRootPane().getJMenuBar().setVisible(true);
                 gra.gameInterface.p_main.getRootPane().updateUI();
