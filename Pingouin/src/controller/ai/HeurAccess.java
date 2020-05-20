@@ -29,11 +29,13 @@ public class HeurAccess extends Heuristic {
 	 * de la classe.
 	 */
 	public int heuristicMove(Game g){
-		int somme = 0, score;
+		int somme = 0, score, index, valTile;
+		int[][] moveList;
 		boolean canPlaySelf = true, canPlayOppo = false;
 		Player[] playList = g.getPlayers();
 		Player currPlayer;
 		Penguin currPeng;
+		Penguin[] tabP;
 		Board b = g.getBoard();
 		/*
 		 * Point de départ : différence de score entre soi et l'adversaire.
@@ -77,13 +79,52 @@ public class HeurAccess extends Heuristic {
 			if(somme > 0) return 1000;
 		}
 		
+		/* On augmente le poids du fait d'être en avance sur le score. */
+		somme *= 2;
 		
 		/* 
 		 * Valuation de la configuration. On réutilise la valuation
-		 * de la phase de placement.
+		 * de la phase de placement, mais on ajoute la notion "Ne pas
+		 * s'enfermer" et "Enfermer les autres".
 		 */
+		for(int i = 0 ; i < g.getPlayerCount() ; i++){
+			currPlayer = g.getPlayers()[i];
+			tabP = currPlayer.getPenguins();
+			for(int j = 0 ; j < currPlayer.getAmountPlaced() ; j++){
+				
+				currPeng = tabP[j];
+				moveList = b.movePossibility(currPeng.getX(), currPeng.getY());
+				index = 0;
+				
+				if(currPlayer == g.getCurrentPlayer()){
+				
+					currPeng = tabP[j];
+					moveList = b.movePossibility(currPeng.getX(), currPeng.getY());
+					
+					//On regarde les cases accessibles, et leur valeur.
+					index = 0;
+					while(moveList[index][0] != -1){
+						valTile = b.getTile(moveList[index][0], moveList[index][1]).getFishNumber();
+						
+						/* On value très fortement les cases à 3 poissons.
+						 * Les cases à 2 poissons sont quand même un peu intéressantes.
+						 * Les cases à 1 poisson.. C'est mieux que rien.
+						 */
+						somme += valTile*valTile;
+						index++;
+					}
+					
+					/* On est enfermé. Pas bien. */
+					if(index == 0) somme -= 100;
+				} else {
+					/* C'est un pingouin ennemi. On voit si on l'enferme. */
+
+					while(moveList[index][0] != -1) { index ++; }
+					if(index == 0) somme += 100;
+				}
+			}
+		}
 		
-		somme += heuristicPlace(g);
 		
 		return somme;
 	}
