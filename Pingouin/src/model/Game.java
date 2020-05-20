@@ -28,6 +28,9 @@ public class Game implements Cloneable{
 	public static final int NO_TARGET = 6;
 	public static final int HAS_TARGET = 7;
 	
+	public static final int HAS_TILE = 8;
+	public static final int NO_TILE = 9;
+	
 	public static final int GOOD_PLACE = 21;
 	public static final int ONLY_ONE_FISH = 22;
 	public static final int ALREADY_OCCUPY = 23;
@@ -411,6 +414,9 @@ public class Game implements Cloneable{
 		return c;
 	}
 
+	/**
+	 * Passe au joueur précédent.
+	 */
 	public void prevPlayer() {
 		for(int i = 1 ; i <= playerCount ; i++) {
 			int loopPlayerNumber = (currentPlayerNumber - i);
@@ -422,11 +428,31 @@ public class Game implements Cloneable{
 			}
 		}
 	}
-
+	
+	/**
+	 * Indique si la case non-nulle donnée en argument est occupée
+	 * par un pingouin ou non.
+	 * @param x1 Coordonnée x de la case à tester.
+	 * @param y1 Coordonnée y de la case à tester.
+	 * @return Vrai si la case est occupée ; faux sinon.
+	 */
 	public boolean occupied(int x1, int y1) {
 		boolean res = board.getTile(x1, y1).occupied();
 		if(!res) error = NO_TARGET;
 		else error = HAS_TARGET;
+		return res;
+	}
+
+	/**
+	 * Indique si la case donnée en argument est nulle ou non.
+	 * @param x1 Coordonnée x de la case à tester.
+	 * @param y1 Coordonnée y de la case à tester.
+	 * @return Faux si la case est nulle, Vrai sinon.
+	 */
+	public boolean exists(int x1, int y1) {
+		boolean res = board.getTile(x1, y1) != null;
+		if(res) error = HAS_TILE;
+		else error = NO_TILE;
 		return res;
 	}
 }

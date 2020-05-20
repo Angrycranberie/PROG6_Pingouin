@@ -53,10 +53,14 @@ public class ControllerMediator implements EventCollector {
 				/* Sinon, on sélectionne la case : on vérifie qu'il y a un pingouin
 				 * du joueur courant
 				 */
-				if(game.occupied(x1, y1)){
-					if(!game.hasPenguinGoodOwning(game.getCurrentPlayer(), x1, y1)){
-						x1 = y1 = -1;	/* Il n'y a pas de pingouin du joueur courant
-											sur cette case. */
+				if(game.exists(x1, y1)){
+					if(game.occupied(x1, y1)){
+						if(!game.hasPenguinGoodOwning(game.getCurrentPlayer(), x1, y1)){
+							x1 = y1 = -1;	/* Il n'y a pas de pingouin du joueur courant
+												sur cette case. */
+						}
+					} else {
+						x1 = y1 = -1;
 					}
 				} else {
 					x1 = y1 = -1;
@@ -67,8 +71,12 @@ public class ControllerMediator implements EventCollector {
 			x2 = c;
 			y2 = l;
 			try {
-				if(ret = game.movePenguin(x1, y1, x2, y2)){
-					game.nextPlayer();
+				if(x1 == x2 && y1 == y2){
+					x1 = x2 = y1 = y2 = -1;
+				} else {
+					if(ret = game.movePenguin(x1, y1, x2, y2)){
+						game.nextPlayer();
+					}
 				}
 			} catch(Exception e) {
 				

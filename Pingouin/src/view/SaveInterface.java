@@ -14,7 +14,7 @@ public class SaveInterface {
 
     EventCollector eventCollector;
 
-    SaveInterface(final JPanel g, final String s, EventCollector ec, GraphicInterface gra){
+    SaveInterface(final JPanel g, final String s, EventCollector ec, final GraphicInterface gra){
         eventCollector = ec;
 
         ActionListener al_save = new ActionListener() {
