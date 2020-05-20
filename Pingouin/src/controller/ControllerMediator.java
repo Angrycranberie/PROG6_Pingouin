@@ -47,7 +47,7 @@ public class ControllerMediator implements EventCollector {
 			if(game.placePhase()){ /* Si on est en placement, c'est la seule qu'on veut */
 				try {
 					if(ret = game.placePenguin(x1, y1)){
-						
+						if(game.movePhase()) game.setErr(Game.START_MOVE);
 					}
 				} catch(Exception e){
 					// A compléter.
@@ -79,6 +79,7 @@ public class ControllerMediator implements EventCollector {
 			try {
 				if(x1 == x2 && y1 == y2){
 					x1 = x2 = y1 = y2 = -1;
+					game.setErr(Game.SAME_TARGET);
 				} else {
 					if(ret = game.movePenguin(x1, y1, x2, y2)){
 						game.nextPlayer();
@@ -95,6 +96,7 @@ public class ControllerMediator implements EventCollector {
 		if (game.movePhase()) {
             if (!startTurn()) {
                 game.endGame();
+                game.setErr(Game.GAME_END);
                 gameStatus = false;
                 return;
             }

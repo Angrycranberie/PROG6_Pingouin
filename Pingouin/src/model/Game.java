@@ -32,9 +32,15 @@ public class Game implements Cloneable{
 	public static final int HAS_TILE = 8;
 	public static final int NO_TILE = 9;
 	
+	public static final int SAME_TARGET = 10;
+	
+	public static final int GAME_END = 11;
+	
 	public static final int GOOD_PLACE = 21;
 	public static final int ONLY_ONE_FISH = 22;
 	public static final int ALREADY_OCCUPY = 23;
+	public static final int START_MOVE = 24;
+	
 	
 	public int error;
 	
@@ -155,7 +161,6 @@ public class Game implements Cloneable{
 	 * @return Vrai (true) si le mouvement a été fait ; faux (false) sinon.
 	 */
 	public boolean movePenguin(int x1, int y1, int x2, int y2) {
-		error = GOOD_TRAVEL;
 		Player p = getCurrentPlayer();
 		if (hasPenguinGoodOwning(p,x1,y1)) {
 			Tile t = board.makeMove(x1, y1, x2, y2);
@@ -168,6 +173,7 @@ public class Game implements Cloneable{
 				moveCount++;
 				Move m = new Move(x1, y1, x2, y2, currentPlayerNumber, t.getFishNumber());
 				history.addMove(m);
+				error = GOOD_TRAVEL;
 				return true;
 			}
 			else {
@@ -455,5 +461,9 @@ public class Game implements Cloneable{
 		if(res) error = HAS_TILE;
 		else error = NO_TILE;
 		return res;
+	}
+	
+	public void setErr(int e){
+		error = e;
 	}
 }
