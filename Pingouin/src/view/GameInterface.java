@@ -12,6 +12,8 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GameInterface implements PropertyChangeListener {
     public JPanel p_main;
@@ -200,7 +202,7 @@ public class GameInterface implements PropertyChangeListener {
         statusString = new HashMap<Integer, String>();
         statusString.put(
                 Game.PENGUIN_PLACED,
-                "<p><strong>$1</strong>, vous avez placé votre $2 pingouin !</p><p><strong>$3</strong>, placez votre $4 pingouin.</p>"
+                "<p><strong>$1</strong>, vous avez placé votre pingouin !</p><p><strong>$2</strong>, placez votre pingouin.</p>"
         );
         statusString.put(
                 Game.ONLY_ONE_FISH,
@@ -213,7 +215,35 @@ public class GameInterface implements PropertyChangeListener {
     }
 
     private void updateFeedback() {
-        l_feedback.setText("<html><body>"+statusString.get(game.status)+"</body></html>");
+        String feedback, statStr = statusString.get(game.status);
+        switch (game.status) {
+            case Game.PENGUIN_PLACED:
+                feedback = parseStatusString(
+                        statStr,
+                        game.getPlayer(0).getName(),
+                        game.getPlayer(1).getName()
+                );
+                break;
+            case Game.ONLY_ONE_FISH:
+            case Game.ALREADY_OCCUPIED:
+                feedback = parseStatusString(
+                        statStr,
+                        game.getCurrentPlayer().getName()
+                );
+                break;
+            default:
+                feedback = "";
+                break;
+        }
+        l_feedback.setText("<html><body>"+feedback+"</body></html>");
         l_feedback.updateUI();
+    }
+
+    private String parseStatusString(String s, String... c) {
+        String f = s;
+        for (int i = 0; i < c.length; i++) {
+            f = f.replace("$"+(i+1), c[i]);
+        }
+        return f;
     }
 }
