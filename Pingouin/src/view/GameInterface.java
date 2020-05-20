@@ -6,11 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -23,12 +20,17 @@ public class GameInterface implements PropertyChangeListener {
     private JButton b_redo;
     private JLabel l_title;
     private JLabel l_feedback;
-    private JLabel l_scoreJ1;
-    private JLabel l_scoreJ2;
+    private JLabel l_nameJ1;
+    private JLabel l_nameJ2;
     private HashMap color;
     private Image[] pinguoins;
     private JLabel l_pingouinJ1;
     private JLabel l_pingouinJ2;
+    private JLabel l_tileScoreJ1;
+    private JLabel l_fishScoreJ1;
+    private JLabel l_tileScoreJ2;
+    private JLabel l_fishScoreJ2;
+    private int logoHeight;
 
 
     public Game game;
@@ -59,7 +61,7 @@ public class GameInterface implements PropertyChangeListener {
 
         p_main.setLayout(new GroupLayout(p_main));
 
-        int logoHeight = (int) (p_main.getHeight()*0.1);
+        logoHeight = (int) (p_main.getHeight()*0.1);
 
 
 
@@ -112,32 +114,72 @@ public class GameInterface implements PropertyChangeListener {
        // File font = new File("/fonts/icecube.ttf");
        // Font labelFont = Font.createFont(Font.TRUETYPE_FONT, font);
 
-        l_scoreJ2 = new JLabel();
+        l_nameJ2 = new JLabel();
         //l_scoreJ2.setFont(labelFont);
-        l_scoreJ2.setText(game.getPlayer(1).getName());
-        l_scoreJ2.setHorizontalAlignment(SwingConstants.CENTER);
-        l_scoreJ2.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_scoreJ2.setSize(logoHeight,(int)(logoHeight*0.5));
-        l_scoreJ2.setLocation(p_main.getWidth()*2/3 + (l_scoreJ2.getWidth() + (int)(p_main.getWidth()*0.05) ), gameView.getY() +gameView.getHeight() + 10);
-        l_scoreJ2.setForeground((Color)color.get(game.getPlayer(1).getColor()));
-        l_scoreJ2.setForeground(l_scoreJ2.getForeground().darker());
+        l_nameJ2.setText(game.getPlayer(1).getName());
+        l_nameJ2.setHorizontalAlignment(SwingConstants.CENTER);
+        l_nameJ2.setHorizontalTextPosition(SwingConstants.CENTER);
+        l_nameJ2.setSize(logoHeight,(int)(logoHeight*0.5));
+        l_nameJ2.setLocation(p_main.getWidth()*2/3 + (l_nameJ2.getWidth() + (int)(p_main.getWidth()*0.05) ), gameView.getY() +gameView.getHeight() + 10);
+        l_nameJ2.setForeground((Color)color.get(game.getPlayer(1).getColor()));
+        l_nameJ2.setForeground(l_nameJ2.getForeground().darker());
 
-        l_scoreJ1 = new JLabel();
-        l_scoreJ1.setText(gameView.game.getPlayer(0).getName());
-        l_scoreJ1.setHorizontalAlignment(SwingConstants.CENTER);
-        l_scoreJ1.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_scoreJ1.setSize(logoHeight,(int)(logoHeight*0.5));
-        l_scoreJ1.setLocation(p_main.getWidth()*2/3 - (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
-        l_scoreJ1.setForeground((Color)color.get(game.getPlayer(0).getColor()));
+        l_nameJ1 = new JLabel();
+        l_nameJ1.setText(gameView.game.getPlayer(0).getName());
+        l_nameJ1.setHorizontalAlignment(SwingConstants.CENTER);
+        l_nameJ1.setHorizontalTextPosition(SwingConstants.CENTER);
+        l_nameJ1.setSize(logoHeight,(int)(logoHeight*0.5));
+        l_nameJ1.setLocation(p_main.getWidth()*2/3 - (l_nameJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+        l_nameJ1.setForeground((Color)color.get(game.getPlayer(0).getColor()));
+
+        l_fishScoreJ1 = new JLabel();
+        l_fishScoreJ1.setText("Poissons : " + game.getPlayer(0).getFishScore());
+        l_fishScoreJ1.setHorizontalTextPosition(SwingConstants.CENTER);
+        l_fishScoreJ1.setHorizontalAlignment(SwingConstants.CENTER);
+        l_fishScoreJ1.setVerticalTextPosition(SwingConstants.TOP);
+        l_fishScoreJ1.setVerticalAlignment(SwingConstants.TOP);
+        l_fishScoreJ1.setSize(logoHeight,(int) (logoHeight*0.2));
+        l_fishScoreJ1.setLocation(l_nameJ1.getX(),l_nameJ1.getY()+l_nameJ1.getHeight());
+        l_fishScoreJ1.setForeground(l_nameJ1.getForeground());
+
+        l_fishScoreJ2 = new JLabel();
+        l_fishScoreJ2.setText("Poissons : " + game.getPlayer(1).getFishScore());
+        l_fishScoreJ2.setHorizontalTextPosition(SwingConstants.CENTER);
+        l_fishScoreJ2.setHorizontalAlignment(SwingConstants.CENTER);
+        l_fishScoreJ2.setVerticalTextPosition(SwingConstants.TOP);
+        l_fishScoreJ2.setVerticalAlignment(SwingConstants.TOP);
+        l_fishScoreJ2.setSize(logoHeight,(int) (logoHeight*0.2));
+        l_fishScoreJ2.setLocation(l_nameJ2.getX(),l_nameJ2.getY()+l_nameJ2.getHeight());
+        l_fishScoreJ2.setForeground(l_nameJ2.getForeground());
+
+        l_tileScoreJ1 = new JLabel();
+        l_tileScoreJ1.setText("Tuiles : " + game.getPlayer(0).getTileScore());
+        l_tileScoreJ1.setHorizontalTextPosition(SwingConstants.CENTER);
+        l_tileScoreJ1.setHorizontalAlignment(SwingConstants.CENTER);
+        l_tileScoreJ1.setVerticalTextPosition(SwingConstants.TOP);
+        l_tileScoreJ1.setVerticalAlignment(SwingConstants.TOP);
+        l_tileScoreJ1.setSize(logoHeight,(int) (logoHeight*0.5));
+        l_tileScoreJ1.setLocation(l_fishScoreJ1.getX(),l_fishScoreJ1.getY()+l_fishScoreJ1.getHeight());
+        l_tileScoreJ1.setForeground(l_nameJ1.getForeground());
+
+        l_tileScoreJ2 = new JLabel();
+        l_tileScoreJ2.setText("Tuiles : " + game.getPlayer(1).getTileScore());
+        l_tileScoreJ2.setHorizontalTextPosition(SwingConstants.CENTER);
+        l_tileScoreJ2.setHorizontalAlignment(SwingConstants.CENTER);
+        l_tileScoreJ2.setVerticalTextPosition(SwingConstants.TOP);
+        l_tileScoreJ2.setVerticalAlignment(SwingConstants.TOP);
+        l_tileScoreJ2.setSize(logoHeight,(int) (logoHeight*0.5));
+        l_tileScoreJ2.setLocation(l_fishScoreJ2.getX(),l_fishScoreJ2.getY()+l_fishScoreJ2.getHeight());
+        l_tileScoreJ2.setForeground(l_nameJ2.getForeground());
 
         l_pingouinJ1 = new JLabel();
-        l_pingouinJ1.setBounds(l_scoreJ1.getX()-l_scoreJ1.getWidth(),l_scoreJ1.getY() - 50,l_scoreJ1.getWidth(),(int) (p_main.getHeight()*0.2));
+        l_pingouinJ1.setBounds(l_nameJ1.getX()- l_nameJ1.getWidth(), l_nameJ1.getY() - 50, l_nameJ1.getWidth(),(int) (p_main.getHeight()*0.2));
         l_pingouinJ1.setIcon(new ImageIcon(avatarJ1));
         l_pingouinJ1.setOpaque(true);
         l_pingouinJ1.setVisible(true);
 
         l_pingouinJ2 = new JLabel();
-        l_pingouinJ2.setBounds(l_scoreJ2.getX()-l_scoreJ2.getWidth(),l_scoreJ2.getY() - 50,l_scoreJ2.getWidth(),(int) (p_main.getHeight()*0.2));
+        l_pingouinJ2.setBounds(l_nameJ2.getX()- l_nameJ2.getWidth(), l_nameJ2.getY() - 50, l_nameJ2.getWidth(),(int) (p_main.getHeight()*0.2));
         l_pingouinJ2.setIcon(new ImageIcon(avatarJ2));
         l_pingouinJ2.setOpaque(true);
         l_pingouinJ2.setVisible(true);
@@ -151,50 +193,67 @@ public class GameInterface implements PropertyChangeListener {
         p_main.add(gameView);
         p_main.add(b_undo);
         p_main.add(b_redo);
-        p_main.add(l_scoreJ1);
-        p_main.add(l_scoreJ2);
+        p_main.add(l_nameJ1);
+        p_main.add(l_nameJ2);
         p_main.add(l_pingouinJ1);
         p_main.add(l_pingouinJ2);
+        p_main.add(l_fishScoreJ1);
+        p_main.add(l_fishScoreJ2);
+        p_main.add(l_tileScoreJ1);
+        p_main.add(l_tileScoreJ2);
     }
 
     public JLabel getL_feedback() {
         return l_feedback;
     }
 
-    public JLabel getL_scoreJ1() {
-        return l_scoreJ1;
+    public JLabel getL_nameJ1() {
+        return l_nameJ1;
     }
 
-    public JLabel getL_scoreJ2() {
-        return l_scoreJ2;
+    public JLabel getL_nameJ2() {
+        return l_nameJ2;
     }
 
     public void setL_feedback(JLabel l_feedback) {
         this.l_feedback = l_feedback;
     }
 
-    public void setL_scoreJ1(JLabel l_scoreJ1) {
-        this.l_scoreJ1 = l_scoreJ1;
+    public void setL_nameJ1(JLabel l_nameJ1) {
+        this.l_nameJ1 = l_nameJ1;
     }
 
-    public void setL_scoreJ2(JLabel l_scoreJ2) {
-        this.l_scoreJ2 = l_scoreJ2;
+    public void setL_nameJ2(JLabel l_nameJ2) {
+        this.l_nameJ2 = l_nameJ2;
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) { gameView.repaint(); }
 
     public void resize(){
+        logoHeight = (int) (p_main.getHeight()*0.1);
         p_main.setSize(gra.frame.getSize());
         gameView.setBounds(0, l_title.getHeight()+2*10, p_main.getWidth(), (int) (p_main.getHeight()*0.7));
         //l_title.setLocation((p_main.getWidth()-1500/4)/2,0);
         l_feedback.setBounds(l_title.getWidth()+10, 10, p_main.getWidth()-l_title.getWidth()-2*10, l_title.getHeight());
-        l_scoreJ2.setLocation(p_main.getWidth()*2/3 + (l_scoreJ2.getWidth() + (int)(p_main.getWidth()*0.05) ), gameView.getY() +gameView.getHeight() + 10);
-        l_scoreJ1.setLocation(p_main.getWidth()*2/3 - (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+        l_nameJ1.setSize(logoHeight,(int)(logoHeight*0.5));
+        l_nameJ2.setSize(logoHeight,(int)(logoHeight*0.5));
+        l_fishScoreJ1.setSize(logoHeight,(int)(logoHeight*0.5));
+        l_fishScoreJ2.setSize(logoHeight,(int)(logoHeight*0.5));
+        l_tileScoreJ1.setSize(logoHeight,(int)(logoHeight*0.5));
+        l_tileScoreJ2.setSize(logoHeight,(int)(logoHeight*0.5));
+
+
+        l_nameJ2.setLocation(p_main.getWidth()*2/3 + (l_nameJ2.getWidth() + (int)(p_main.getWidth()*0.05) ), gameView.getY() +gameView.getHeight() + 10);
+        l_nameJ1.setLocation(p_main.getWidth()*2/3 - (l_nameJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
         b_undo.setLocation(50, gameView.getY() +gameView.getHeight() + 10);
         b_redo.setLocation(b_undo.getLocation().x+b_undo.getWidth()+10, gameView.getY() +gameView.getHeight() + 10);
-        l_pingouinJ1.setBounds(l_scoreJ1.getX()-l_scoreJ1.getWidth(),l_scoreJ1.getY() - 50,l_scoreJ1.getWidth(),(int) (p_main.getHeight()*0.2));
-        l_pingouinJ2.setBounds(l_scoreJ2.getX()-l_scoreJ2.getWidth(),l_scoreJ2.getY() - 50,l_scoreJ2.getWidth(),(int) (p_main.getHeight()*0.2));
+        l_pingouinJ1.setBounds(l_nameJ1.getX()- l_nameJ1.getWidth(), l_nameJ1.getY() - 50, l_nameJ1.getWidth(),(int) (p_main.getHeight()*0.2));
+        l_pingouinJ2.setBounds(l_nameJ2.getX()- l_nameJ2.getWidth(), l_nameJ2.getY() - 50, l_nameJ2.getWidth(),(int) (p_main.getHeight()*0.2));
+        l_fishScoreJ1.setLocation(l_nameJ1.getX(),l_nameJ1.getY()+l_nameJ1.getHeight());
+        l_fishScoreJ2.setLocation(l_nameJ2.getX(),l_nameJ2.getY()+l_nameJ2.getHeight());
+        l_tileScoreJ1.setLocation(l_fishScoreJ1.getX(),l_fishScoreJ1.getY()+l_fishScoreJ1.getHeight());
+        l_tileScoreJ2.setLocation(l_fishScoreJ2.getX(),l_fishScoreJ2.getY()+l_fishScoreJ2.getHeight());
 
     }
 
