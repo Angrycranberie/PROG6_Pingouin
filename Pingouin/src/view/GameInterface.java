@@ -97,7 +97,7 @@ public class GameInterface implements PropertyChangeListener {
         });
 
         pinguoins = new Image[4];
-        for(int i = 0; i<3; i++){
+        for(int i = 0; i<4; i++){
             pinguoins[i] = GraphicGame.loadImage("/gfx/game/penguins/"+i+"_0.png").getScaledInstance((int)((Math.sqrt(3)/2) * gameView.getHeight()/7),gameView.getHeight()/7,Image.SCALE_SMOOTH);
         }
 

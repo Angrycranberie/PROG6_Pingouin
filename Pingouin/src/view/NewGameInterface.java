@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class NewGameInterface {
     private JTextField tf_joueur2;
@@ -22,9 +23,10 @@ public class NewGameInterface {
     private JLabel l_joueur1;
     private JLabel l_VS;
     public JPanel p_main;
-    
+    private JComboBox cb_color2;
+    private JComboBox cb_color1;
+
     EventCollector eventCollector;
-   
    
      NewGameInterface(EventCollector ec, final GraphicInterface gra){
         eventCollector = ec;
@@ -41,7 +43,21 @@ public class NewGameInterface {
         ActionListener al_startGame = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game g = new Game(2, new Player(4, 0,tf_joueur1.getText()), new Player(4, 1,tf_joueur2.getText()),null,null);
+                Game g = new Game(
+                        2,
+                        new Player(
+                                4,
+                                cb_color1.getSelectedIndex(),
+                                tf_joueur1.getText()
+                        ),
+                        new Player(
+                                4,
+                                cb_color2.getSelectedIndex(),
+                                tf_joueur2.getText()
+                        ),
+                        null,
+                        null
+                );
                 try {
                     gra.gameInterface = new GameInterface(g, new ControllerMediator(g), gra);
                 } catch (IOException ioException) {
@@ -59,6 +75,7 @@ public class NewGameInterface {
         b_startGame.addActionListener(al_startGame);
 
     }
+
 
 
 }
