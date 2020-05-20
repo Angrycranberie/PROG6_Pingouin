@@ -86,7 +86,9 @@ public class GameInterface implements PropertyChangeListener {
         b_undo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                game.undo(1);
+                game.prevPlayer();
+                p_main.getRootPane().updateUI();
             }
         });
 
@@ -96,7 +98,9 @@ public class GameInterface implements PropertyChangeListener {
         b_redo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                game.redo(1);
+                game.nextPlayer();
+                p_main.getRootPane().updateUI();
             }
         });
 
