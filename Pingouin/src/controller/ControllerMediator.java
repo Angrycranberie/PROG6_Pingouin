@@ -85,6 +85,17 @@ public class ControllerMediator implements EventCollector {
 				errorGestion();
 			}
 		}
+		
+		if (game.movePhase()) {
+            if (!startTurn()) {
+                game.endGame();
+                return;
+            }
+        } else {
+            if (game.getCurrentPlayer().isAI()) {
+                startAITurn();
+            }
+        }
 	}
 
 	@Override

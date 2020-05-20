@@ -50,12 +50,14 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
      * @param ec Collecteur des événements de la fenêtre.
      */
     public static void start(Game g, EventCollector ec) {
-        GraphicInterface view = new GraphicInterface(g, ec);
+        int i = 0;
+    	GraphicInterface view = new GraphicInterface(g, ec);
         ec.addUI(view);
         SwingUtilities.invokeLater(view);
         while (true) {
-        	System.out.println(g.getToPlace());
-            if (!g.placePhase()) {
+        	i = i+1 %10;
+            if (g.movePhase()) {
+            	System.err.println("I'm on");
                 if (!ec.startTurn()) {
                     g.endGame();
                     return;
