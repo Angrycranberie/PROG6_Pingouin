@@ -1,17 +1,15 @@
 package controller.ai;
 
-import java.awt.Color;
-import java.util.Random;
 import java.util.ArrayList;
-import model.Game;
+import java.util.Random;
+
 import controller.Player;
 
-/*
- * Classe AISmart
- * 
- * 
- */
-public class AISmart extends Player {
+import model.Game;
+import controller.ai.HeurAccess;
+
+public class AIAccess extends Player{
+
 	Game game;
 	Random r;
 	DecisionTree decTree;
@@ -20,11 +18,11 @@ public class AISmart extends Player {
 	/* Crée une IA et son arbre associé.
 	 * Le booleen start indique si elle joue en premier (true) ou non (false)
 	 */
-	public AISmart(int penguinsNumber, int color, String name, Heuristic h) {
+	public AIAccess(int penguinsNumber, int color, String name) {
 		super(penguinsNumber, color, name);
 		setAI(2);
 		r = new Random();
-		heur = h;
+		heur = new HeurAccess();
 	}
 
 	public void setGame(Game g){
@@ -53,7 +51,7 @@ public class AISmart extends Player {
 	private boolean moveTurn(){
 		
 		ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>> resList =
-				decTree.moveDecision(-10000, 10000, true, 1).getSecond();
+				decTree.moveDecision(-10000, 10000, true, DepthVal.depthCalc(game)).getSecond();
 		
 		Couple<Couple<Integer, Integer>, Couple<Integer, Integer>> move
 			= resList.get(r.nextInt(resList.size()));
@@ -63,6 +61,6 @@ public class AISmart extends Player {
 		
 		return game.movePenguin(from.getFirst(), from.getSecond(), target.getFirst(), target.getSecond());
 		
-	}
-
+	}	
+		
 }

@@ -2,7 +2,6 @@ package controller.ai;
 
 import model.Game;
 import model.Penguin;
-import model.Tile;
 import controller.Player;
 
 /**
@@ -20,11 +19,6 @@ public class HeurSomme extends Heuristic{
 	public int heuristicMove(Game g){
 		int somme = 0;
 		int curr;
-		
-		/* Détails */
-		int x, y;
-		Tile currT;
-		/* Fin */
 		
 		Player selfPlayer = g.getCurrentPlayer();
 		

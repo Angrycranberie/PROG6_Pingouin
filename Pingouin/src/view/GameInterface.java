@@ -1,6 +1,7 @@
 package view;
 
 import model.Game;
+import sun.misc.JavaLangAccess;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,9 +14,6 @@ import java.util.HashMap;
 
 public class GameInterface implements PropertyChangeListener {
     public JPanel p_main;
-    private JButton b_save;
-    private JButton b_newGame;
-    private JButton b_backMainMenu;
     private JButton b_undo;
     private JButton b_redo;
     private JLabel l_title;
@@ -38,6 +36,8 @@ public class GameInterface implements PropertyChangeListener {
     public EventCollector eventCollector;
     public static boolean saved = false;
     GraphicInterface gra;
+    
+    HashMap<Integer, String> statusString;
 
     GameInterface(Game g, EventCollector ec, GraphicInterface gra) throws IOException, FontFormatException {
 
@@ -47,18 +47,16 @@ public class GameInterface implements PropertyChangeListener {
         color.put((int) 2, new Color(0, 102, 255));
         color.put((int) 3, new Color(102, 255, 255));
 
-
-
-
         this.gra = gra;
         final GameInterface me = this;
         game = g;
         game.addPropertyChangeListener(this);
         eventCollector = ec;
 
+        populateStatusString(); // Association des statuts à leur feedback.
+
         p_main = new JPanel();
         p_main.setSize(gra.frame.getSize());
-
         p_main.setLayout(new GroupLayout(p_main));
 
         logoHeight = (int) (p_main.getHeight()*0.1);
@@ -101,7 +99,6 @@ public class GameInterface implements PropertyChangeListener {
 
             }
         });
-
 
         pinguoins = new Image[4];
         for(int i = 0; i<3; i++){
@@ -203,7 +200,7 @@ public class GameInterface implements PropertyChangeListener {
         p_main.add(l_tileScoreJ2);
     }
 
-    public JLabel getL_feedback() {
+    public JLabel getFeedbackLabel() {
         return l_feedback;
     }
 
@@ -228,7 +225,10 @@ public class GameInterface implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) { gameView.repaint(); }
+    public void propertyChange(PropertyChangeEvent evt) {
+        gameView.repaint();
+        updateFeedback();
+    }
 
     public void resize(){
         logoHeight = (int) (p_main.getHeight()*0.1);
@@ -257,4 +257,23 @@ public class GameInterface implements PropertyChangeListener {
 
     }
 
+    private void populateStatusString() {
+        statusString = new HashMap<Integer, String>();
+        statusString.put(
+                Game.PENGUIN_PLACED,
+                "$1, vous avez placé votre $2 pingouin !\n$3, placez votre $4 pingouin."
+        );
+        statusString.put(
+                Game.ONLY_ONE_FISH,
+                "Vous ne pouvez placer votre pingouin que sur les cases ayant un poisson, $1 !"
+        );
+        statusString.put(
+                Game.ALREADY_OCCUPIED,
+                "Mince ! Un pingouin occupe déjà cette case.\nChoisissez-en une autre, $1 !"
+        );
+    }
+
+    public void updateFeedback() {
+        l_feedback.setText(statusString.get(game.status));
+    }
 }

@@ -42,4 +42,8 @@ public class Penguin implements Cloneable{
 	public Penguin clone() {
 		return new Penguin(x,y);
 	}
+
+	public String toString() {
+		return x+" "+y;
+	}
 }
