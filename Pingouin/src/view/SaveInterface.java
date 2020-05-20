@@ -12,9 +12,11 @@ public class SaveInterface {
     private JButton b_cancel;
     public JPanel p_main;
 
+    EventCollector eventCollector;
 
-    SaveInterface(final JPanel g, final String s){
 
+    SaveInterface(final JPanel g, final String s, EventCollector ec){
+        eventCollector = ec;
 
         ActionListener al_save = new ActionListener() {
             @Override
@@ -27,12 +29,12 @@ public class SaveInterface {
                         g.getRootPane().updateUI();
                         break;
                     case "ng":
-                        NewGameInterface ng = new NewGameInterface();
+                        NewGameInterface ng = new NewGameInterface(eventCollector);
                         p_main.getRootPane().setContentPane(ng.p_main);
                         ng.p_main.getRootPane().updateUI();
                         break;
                     case "mm":
-                        MainMenuInterface mm = new MainMenuInterface();
+                        MainMenuInterface mm = new MainMenuInterface(eventCollector);
                         p_main.getRootPane().setContentPane(mm.p_main);
                         mm.p_main.getRootPane().updateUI();
                         break;
@@ -49,12 +51,12 @@ public class SaveInterface {
                         g.getRootPane().updateUI();
                         break;
                     case "ng":
-                        NewGameInterface ng = new NewGameInterface();
+                        NewGameInterface ng = new NewGameInterface(eventCollector);
                         p_main.getRootPane().setContentPane(ng.p_main);
                         ng.p_main.getRootPane().updateUI();
                         break;
                     case "mm":
-                        MainMenuInterface mm = new MainMenuInterface();
+                        MainMenuInterface mm = new MainMenuInterface(eventCollector);
                         p_main.getRootPane().setContentPane(mm.p_main);
                         mm.p_main.getRootPane().updateUI();
                         break;

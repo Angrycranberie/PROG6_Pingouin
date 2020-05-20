@@ -40,5 +40,6 @@ public abstract class GraphicGame extends JPanel {
         drawable = (Graphics2D) g;
         drawable.clearRect(0, 0, getWidth(), getHeight());
         generateBoard();
+        placePenguins();
     }
 }

@@ -3,7 +3,6 @@ package controller;
 import model.Board;
 import model.Penguin;
 
-import java.awt.Color;
 import java.util.Random;
 
 /**
@@ -14,7 +13,7 @@ public class AIRandom extends Player {
 
 	Random r;
 	
-	public AIRandom(int penguinsNumber, Color color, String name) {
+	public AIRandom(int penguinsNumber, int color, String name) {
 		super(penguinsNumber, color, name);
 		setAI(1);
 		r = new Random();

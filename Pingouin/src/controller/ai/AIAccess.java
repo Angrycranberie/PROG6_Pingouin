@@ -1,6 +1,5 @@
 package controller.ai;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -19,7 +18,7 @@ public class AIAccess extends Player{
 	/* Crée une IA et son arbre associé.
 	 * Le booleen start indique si elle joue en premier (true) ou non (false)
 	 */
-	public AIAccess(int penguinsNumber, Color color, String name) {
+	public AIAccess(int penguinsNumber, int color, String name) {
 		super(penguinsNumber, color, name);
 		setAI(2);
 		r = new Random();
@@ -52,7 +51,7 @@ public class AIAccess extends Player{
 	private boolean moveTurn(){
 		
 		ArrayList<Couple<Couple<Integer, Integer>, Couple<Integer, Integer>>> resList =
-				decTree.moveDecision(-10000, 10000, true, 4).getSecond();
+				decTree.moveDecision(-10000, 10000, true, DepthVal.depthCalc(game)).getSecond();
 		
 		Couple<Couple<Integer, Integer>, Couple<Integer, Integer>> move
 			= resList.get(r.nextInt(resList.size()));

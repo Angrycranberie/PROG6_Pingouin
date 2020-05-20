@@ -3,7 +3,9 @@ package controller;
 import model.Game;
 import model.Penguin;
 
-import java.awt.*;
+
+import controller.ai.AIAccess;
+import controller.ai.AISomme;
 
 /**
  * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
@@ -17,17 +19,23 @@ public class Player implements Cloneable {
 	private int amountPlaced; // Nombre courant de pingouins placés.
 	private Penguin penguins[]; // Liste des pingouins du joueur.
 	private int penguinsCount; // Nombre de pingouins du joueur.
-	private Color color; // Couleur du joueur.
+	private int color; // Couleur du joueur.
 	private boolean playing; // Si le joueur est toujours dans la partie ou non.
 	private int isAI;
-	
+
+	// Constantes de couleurs du joueur.
+	public static final int COLOR_CLASSIC = 0; // Noir pingouin
+	public static final int COLOR_CHICK = 1; // Jaune poussin
+	public static final int COLOR_SEA = 2; // Bleu océan
+	public static final int COLOR_POLAR = 3; // Cyan polaire
+
 	/**
 	 * Création du joueur.
 	 * @param penguinsCount Indique le nombre de pingouin du joueur
 	 * @param color Couleur du joueur.
 	 */
 
-	public Player(int penguinsCount, Color color, String name) {
+	public Player(int penguinsCount, int color, String name) {
 		this.fishScore = this.tileScore = this.amountPlaced = 0;
 		this.penguinsCount = penguinsCount;
 		this.color = color;
@@ -100,7 +108,7 @@ public class Player implements Cloneable {
 	 * Retourne la couleur du joueur.
 	 * @return Couleur du joueur.
 	 */
-	public Color getColor() {
+	public int getColor() {
 		return color;
 	}
 	
@@ -262,10 +270,10 @@ public class Player implements Cloneable {
 				p = new AIRandom(penguinsCount, color, name);
 				break;
 			case 2:
-				p = new AISmart(penguinsCount, color, name);
+				p = new AISomme(penguinsCount, color, name);
 				break;
 			case 3:
-				p = new AITrap(penguinsCount, color, name);
+				p = new AIAccess(penguinsCount, color, name);
 				break;
 			default:
 				break;

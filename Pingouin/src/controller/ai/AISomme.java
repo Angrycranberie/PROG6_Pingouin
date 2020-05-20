@@ -1,6 +1,5 @@
 package controller.ai;
 
-import java.awt.Color;
 import java.util.Random;
 import java.util.ArrayList;
 import model.Game;
@@ -20,7 +19,7 @@ public class AISomme extends Player {
 	/* Crée une IA et son arbre associé.
 	 * Le booleen start indique si elle joue en premier (true) ou non (false)
 	 */
-	public AISomme(int penguinsNumber, Color color, String name) {
+	public AISomme(int penguinsNumber, int color, String name) {
 		super(penguinsNumber, color, name);
 		setAI(2);
 		r = new Random();
