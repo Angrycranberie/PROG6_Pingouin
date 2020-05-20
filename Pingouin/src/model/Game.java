@@ -454,10 +454,10 @@ public class Game implements Cloneable{
 		for(int  i = 0; i < playerCount; i++) {
 			saveBot.println("# Joueur "+i);
 			// Sauvegarde des informations du joueur 
-			players[i].toString();
+			saveBot.println(players[i].toString());
 			// Sauvegarde de ses pingouins
 			for(int j = 0; j < players[i].getPenguinsCount() ; j++) {
-				players[i].getPenguins()[j].toString();
+				saveBot.println(players[i].getPenguins()[j].toString());
 			}
 			
 			System.out.println("Player "+i+" saved");
