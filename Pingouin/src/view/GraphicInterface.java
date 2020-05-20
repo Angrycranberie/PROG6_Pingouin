@@ -56,7 +56,6 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         ec.addUI(view);
         SwingUtilities.invokeLater(view);
         while (true) {
-        	System.out.println(g.getToPlace());
             if (!g.placePhase()) {
                 if (!ec.startTurn()) {
                     g.endGame();

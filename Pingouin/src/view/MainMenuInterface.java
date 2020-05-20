@@ -14,7 +14,7 @@ public class MainMenuInterface {
 
     EventCollector eventCollector;
 
-    MainMenuInterface(EventCollector ec, GraphicInterface gra){
+    MainMenuInterface(EventCollector ec, final GraphicInterface gra){
         eventCollector = ec;
 
         final MainMenuInterface me = this;

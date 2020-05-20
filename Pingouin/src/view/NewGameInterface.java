@@ -25,7 +25,7 @@ public class NewGameInterface {
     EventCollector eventCollector;
    
    
-     NewGameInterface(EventCollector ec, GraphicInterface gra){
+     NewGameInterface(EventCollector ec, final GraphicInterface gra){
         eventCollector = ec;
 
         ActionListener al_cancel = new ActionListener() {
