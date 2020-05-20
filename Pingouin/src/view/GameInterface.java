@@ -1,7 +1,7 @@
 package view;
 
 import model.Game;
-import sun.misc.JavaLangAccess;
+//import sun.misc.JavaLangAccess;
 
 import javax.swing.*;
 import java.awt.*;
@@ -228,6 +228,7 @@ public class GameInterface implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         gameView.repaint();
         updateFeedback();
+        updateScore();
     }
 
     public void resize(){
@@ -276,4 +277,12 @@ public class GameInterface implements PropertyChangeListener {
     public void updateFeedback() {
         l_feedback.setText(statusString.get(game.status));
     }
+
+    public void updateScore() {
+        l_fishScoreJ1.setText("Poissons : " + game.getPlayer(0).getFishScore());
+        l_fishScoreJ2.setText("Poissons : " + game.getPlayer(1).getFishScore());
+        l_tileScoreJ1.setText("Tuiles : " + game.getPlayer(0).getTileScore());
+        l_tileScoreJ2.setText("Tuiles : " + game.getPlayer(1).getTileScore());
+    }
+
 }
