@@ -20,7 +20,7 @@ public class AISmart extends Player {
 	/* Crée une IA et son arbre associé.
 	 * Le booleen start indique si elle joue en premier (true) ou non (false)
 	 */
-	public AISmart(int penguinsNumber, Color color, String name, Heuristic h) {
+	public AISmart(int penguinsNumber, int color, String name, Heuristic h) {
 		super(penguinsNumber, color, name);
 		setAI(2);
 		r = new Random();

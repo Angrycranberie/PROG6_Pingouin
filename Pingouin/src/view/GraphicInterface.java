@@ -53,6 +53,18 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         GraphicInterface view = new GraphicInterface(g, ec);
         ec.addUI(view);
         SwingUtilities.invokeLater(view);
+        while (true) {
+            if (!g.placePhase()) {
+                if (!ec.startTurn()) {
+                    g.endGame();
+                    return;
+                }
+            } else {
+                if (g.getCurrentPlayer().isAI()) {
+                    ec.startAITurn();
+                }
+            }
+        }
     }
 
     @Override
@@ -125,27 +137,27 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     public void actionPerformed(ActionEvent e){
         frame.getJMenuBar().setVisible(false);
         if(e.getSource()==save){
-            SaveInterface si = new SaveInterface( (JPanel) frame.getContentPane(), "game");
+            SaveInterface si = new SaveInterface( (JPanel) frame.getContentPane(), "game", eventCollector);
             frame.getRootPane().setContentPane(si.p_main);
             si.p_main.getRootPane().updateUI();
         } else if (e.getSource()==ng){
             if(GameInterface.saved){
-                NewGameInterface ng = new NewGameInterface();
+                NewGameInterface ng = new NewGameInterface(eventCollector);
                 frame.getRootPane().setContentPane(ng.p_main);
                 ng.p_main.getRootPane().updateUI();
             } else {
-                QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "ng");
+                QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "ng", eventCollector);
                 frame.getRootPane().setContentPane(qg.p_main);
                 qg.p_main.getRootPane().updateUI();
             }
         } else if (e.getSource()==mm){
                 if(GameInterface.saved){
-                    MainMenuInterface mm = new MainMenuInterface();
+                    MainMenuInterface mm = new MainMenuInterface(eventCollector);
                     frame.getRootPane().setContentPane(mm.p_main);
                     mm.p_main.getRootPane().updateUI();
 
                 } else {
-                    QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "mm");
+                    QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "mm", eventCollector);
                     frame.getRootPane().setContentPane(qg.p_main);
                     qg.p_main.getRootPane().updateUI();
                 }

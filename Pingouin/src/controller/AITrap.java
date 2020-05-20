@@ -8,7 +8,7 @@ import java.awt.Color;
  */
 public class AITrap extends Player {
 
-	public AITrap(int penguinsNumber, Color color, String name) {
+	public AITrap(int penguinsNumber, int color, String name) {
 		super(penguinsNumber, color, name);
 		setAI(3);
 	}
