@@ -122,6 +122,7 @@ public class GameView extends GraphicGame {
         final int g = 10; // Taille de la gouttière entre les tuiles.
         int cx = (getWidth() - (w + g) * 7 - w) / 2; // Valeur de décalage pour centrage horizontal.
         int cy = (getHeight() - (h - h/4 + g) * 7 - h) / 2; // Valeur de décalage pour centrage vertical.
+        int s = 15;
 
         for (int i = 0; i < game.getPlayerCount(); i++) {
             Player ply = game.getPlayer(i);
@@ -131,7 +132,7 @@ public class GameView extends GraphicGame {
                 if (png != null) {
                     Image img = penguinsImg[color][j].getScaledInstance(w, h, Image.SCALE_SMOOTH);
                     int x = getTileX(png.getY(), png.getX(), w, g, cx);
-                    int y = getTileY(png.getY(), h, g, cy)-10;
+                    int y = getTileY(png.getY(), h, g, cy)-s;
                     drawImageAt(img, x, y, w, h);
                 }
             }
