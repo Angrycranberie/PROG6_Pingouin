@@ -444,8 +444,7 @@ public class Game implements Cloneable{
 		else error = HAS_TARGET;
 		return res;
 	}
-
-<<<<<<< HEAD
+	
 	/**
 	 * Indique si la case donnée en argument est nulle ou non.
 	 * @param x1 Coordonnée x de la case à tester.
@@ -457,7 +456,8 @@ public class Game implements Cloneable{
 		if(res) error = HAS_TILE;
 		else error = NO_TILE;
 		return res;
-=======
+	}
+
 	public boolean save(String fileName) {
 		
 		PrintWriter saveBot;
@@ -555,8 +555,6 @@ public class Game implements Cloneable{
 	}
 	
 	public boolean load(String fileName) {
-		
 		return false;
->>>>>>> Vincent
 	}
 }
