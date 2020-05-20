@@ -410,7 +410,7 @@ public class Game implements Cloneable{
 
 	public void redo(int n){
 		try{
-			history.backInFutur(history.getPastIndex()-n, board, players);
+			history.backInFutur(history.getFuturIndex()-n, board, players);
 		} catch (ArrayIndexOutOfBoundsException e){
 			// Il faudrait prévenir l'appelant d'une erreur.
 		}

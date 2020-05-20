@@ -126,7 +126,7 @@ public class History implements Cloneable{
 	 * @param index indice du coup
 	 */
 	public void backInFutur(int index,Board boardGame, Player p[]) {
-		while(futurIndex >= index) {
+		while(futurIndex > index) {
 			removeMoveFromFutur(boardGame,p);
 		}
 	}
