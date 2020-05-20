@@ -102,7 +102,7 @@ public class GameView extends GraphicGame {
                     l.setVisible(true); // Le label est "visible" (cliquable)...
                     l.setOpaque(false); // ... mais pas opaque (invisible par dessus les images de tuiles).
 
-                    if (t.getFishNumber() > 0) {
+                    if (t != null) {
                         l.setCursor(new Cursor(Cursor.HAND_CURSOR));
                         drawImageAt(img, x, y, w, h);
                     } else {
@@ -128,9 +128,12 @@ public class GameView extends GraphicGame {
             int color = Math.max(ply.getColor(), 0);
             for (int j = 0; j < ply.getPenguinsCount(); j++) {
                 Penguin png = ply.getPenguin(j);
-                Image img = loadImage(PENGUINS_PATH + color + "_" + j + PNG_EXT)
-                        .getScaledInstance(w, h, Image.SCALE_SMOOTH);
-                drawImageAt(img, getTileX(png.getX(), png.getY(), w, g, cx), getTileY(png.getX(), h, g, cy), w, h);
+                if (png != null) {
+                    Image img = penguinsImg[color][j].getScaledInstance(w, h, Image.SCALE_SMOOTH);
+                    int x = getTileX(png.getY(), png.getX(), w, g, cx);
+                    int y = getTileY(png.getY(), h, g, cy)-10;
+                    drawImageAt(img, x, y, w, h);
+                }
             }
         }
     }
