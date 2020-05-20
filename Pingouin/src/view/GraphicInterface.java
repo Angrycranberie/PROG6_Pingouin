@@ -97,6 +97,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         mb.add(menu);
 
         frame.setJMenuBar(mb);
+        frame.getJMenuBar().setVisible(false);
         // Retransmission des événements au contrôleur.
         frame.addKeyListener(new GameKeyAdapter(eventCollector));
         Timer t = new Timer(TIMER_DELAY, new TimerAdapter(eventCollector));
@@ -121,6 +122,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     }
 
 
+    //Méthode qui met à jour l'interface lors du redimensionnement de la fenêtre
     @Override
     public void componentResized(ComponentEvent e) {
         if(gameInterface != null){
@@ -142,6 +144,8 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     public void componentHidden(ComponentEvent e) {
 
     }
+
+    //Gestion des clics sur la barre de menu en haut de l'écran
     public void actionPerformed(ActionEvent e){
         frame.getJMenuBar().setVisible(false);
         if(e.getSource()==save){
@@ -173,8 +177,8 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
             }
     }
 
+    //Mise à jour de la fenêtre avec la barre de menu
     public void updateGIUI(){
-        frame.getContentPane().setSize(frame.getSize());
         frame.getJMenuBar().setVisible(true);
         frame.getRootPane().updateUI();
     }
