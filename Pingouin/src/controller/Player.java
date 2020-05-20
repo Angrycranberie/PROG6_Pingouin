@@ -290,4 +290,11 @@ public class Player implements Cloneable {
 		p.changePenguins(pe);
 		return p;
 	}
+	
+	/**
+	 * Renvoie les informations de Player en un String hormis Game et Penguins[] 
+	 */
+	public String toString() {
+		return name+" "+fishScore+" "+tileScore+" "+amountPlaced+" "+penguinsCount+" "+color+" "+playing+" "+isAI;
+	}
 }

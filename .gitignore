@@ -32,3 +32,4 @@ Pingouin/.gitignore
 .idea/
 *.iml
 out/
+Pingouin/test.save
