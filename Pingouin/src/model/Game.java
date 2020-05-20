@@ -500,6 +500,11 @@ public class Game implements Cloneable{
 		status = e;
 	}
 
+	/* bug !!
+	 * save ne sauvegarde pas les pingouins des joueurs ni l'historique, le point commun entre ces deux cas et la récupération d'un tableau d'objets
+	 * L'erreur: on tente d'accéder à un objet du tableau et il n'existe pas, le tableau commence par un null ce qui fait une exception, hors on est sur que cette objet existe
+	 * On pense à un problème d'accès à ces tableaux.
+	 */
 	public boolean save(String fileName) {
 		
 		PrintWriter saveBot;
