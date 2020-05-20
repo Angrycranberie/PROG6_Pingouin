@@ -10,6 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import model.Penguin;
 
 /**
  * Classe Game. Gère une partie du jeu : ordre des tours, coups sur le plateau.
@@ -407,6 +408,14 @@ public class Game implements Cloneable{
 			// Il faudrait prévenir l'appelant d'une erreur.
 		}
 	}
+
+	public void redo(int n){
+		try{
+			history.backInFutur(history.getFuturIndex()-n, board, players);
+		} catch (ArrayIndexOutOfBoundsException e){
+			// Il faudrait prévenir l'appelant d'une erreur.
+		}
+	}
 	
 	@Override
 	public Game clone() {
@@ -490,6 +499,11 @@ public class Game implements Cloneable{
 		supportCount.firePropertyChange("status", !statusSwitch, statusSwitch);
 	}
 
+	/* bug !!
+	 * save ne sauvegarde pas les pingouins des joueurs ni l'historique, le point commun entre ces deux cas et la récupération d'un tableau d'objets
+	 * L'erreur: on tente d'accéder à un objet du tableau et il n'existe pas, le tableau commence par un null ce qui fait une exception, hors on est sur que cette objet existe
+	 * On pense à un problème d'accès à ces tableaux.
+	 */
 	public boolean save(String fileName) {
 		
 		PrintWriter saveBot;
@@ -515,7 +529,12 @@ public class Game implements Cloneable{
 			saveBot.println(players[i].toString());
 			// Sauvegarde de ses pingouins
 			for(int j = 0; j < players[i].getPenguinsCount() ; j++) {
-				saveBot.println(players[i].getPenguins()[j].toString());
+				System.out.println(players[i].getPenguinsCount());
+				System.out.printf(""+j);
+				if(players[i].getPenguin(j) != null){
+					saveBot.println(players[i].getPenguin(j).toString());
+				}
+
 			}
 			
 			System.out.println("Player "+i+" saved");
