@@ -17,6 +17,20 @@ public class Game implements Cloneable{
 	private History history;
 	private int toPlace;
 	
+	public static final int GOOD_TRAVEL = 0;
+	public static final int PENGUIN_IN_TRAVEL = 1;
+	public static final int HOLE_IN_TRAVEL = 2;
+	public static final int TRAVEL_NOT_ALIGNED = 3;
+	
+	public static final int GOOD_PENGUIN = 4;
+	public static final int WRONG_PENGUIN = 5;
+	
+	public static final int GOOD_PLACE = 0;
+	public static final int ONLY_ONE_FISH = 1;
+	public static final int ALREADY_OCCUPY = 2;
+	
+	public int error;
+	
 	/**
 	 * initialise le jeu
 	 * @param playerCount nombre de joueur
@@ -132,6 +146,7 @@ public class Game implements Cloneable{
 	 * @return Vrai (true) si le mouvement a été fait ; faux (false) sinon.
 	 */
 	public boolean movePenguin(int x1, int y1, int x2, int y2) {
+		error = GOOD_TRAVEL;
 		Player p = getCurrentPlayer();
 		if (hasPenguinGoodOwning(p,x1,y1)) {
 			Game oldGame = this;
@@ -146,11 +161,21 @@ public class Game implements Cloneable{
 				return true;
 			}
 			else {
+				switch(board.error) {
+				case 1: // board.PENGUIN_IN_TRAVEL
+					error = PENGUIN_IN_TRAVEL;
+				case 2: // board.HOLE_IN_TRAVEL
+					error = HOLE_IN_TRAVEL;
+				case 3: // board.TRAVEL_NOT_ALIGNED
+					error = TRAVEL_NOT_ALIGNED;
+				default:
+				}
 				return false;
 			}
 		}
 		else {
 			System.out.println("Ce pingouin ne vous appartient pas.");
+			error = WRONG_PENGUIN;
 			return false;
 		}
 	}
@@ -162,6 +187,7 @@ public class Game implements Cloneable{
 	 * @return true le pingouin appartient au joueur courant false sinon
 	 */
 	public boolean hasPenguinGoodOwning(Player p, int x1, int y1) {
+		error = GOOD_PENGUIN;
 		Penguin[] penguins = p.getPenguins();
 		int nbPenguins = p.getPenguinsCount();
 		for(int i = 0; i < nbPenguins ; i++) {
@@ -169,6 +195,7 @@ public class Game implements Cloneable{
 				return true;
 			}
 		}
+		error = WRONG_PENGUIN;
 		return false;
 	}
 	
@@ -226,6 +253,7 @@ public class Game implements Cloneable{
 	 * @param y Coorfonnée y où l'on souhaite placer le pingouin.
 	 */
 	public boolean placePenguin(int x, int y){
+		error = GOOD_PLACE;
 		boolean val = false;
 		Player p = getCurrentPlayer();
 		if(p.getAmountPlaced() < p.getPenguinsCount()){
@@ -245,9 +273,11 @@ public class Game implements Cloneable{
 				} else {
 					System.out.print("Les pingouins doivent être placés sur" +
 							" une case de valeur 1.");
+					error = ONLY_ONE_FISH;
 				}
 			} else {
 				System.out.print("La case est occupée.");
+				error = ALREADY_OCCUPY;
 			}
 		} else {
 			System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");

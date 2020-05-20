@@ -12,7 +12,7 @@ import view.UserInterface;
  * @author Yoann
  */
 public class ControllerMediator implements EventCollector {
-
+	
 	Game game;
 	Board board;
 	int x1, y1, x2, y2;
@@ -33,7 +33,7 @@ public class ControllerMediator implements EventCollector {
 	 */
 	@Override
 	public void mouseClick(int l, int c){
-		boolean ret;
+		boolean ret = false;
 		
 		if(x1 < 0){ /* Choix de la 1è case.. */
 			x1 = c;
@@ -47,6 +47,7 @@ public class ControllerMediator implements EventCollector {
 					// A compléter.
 				} finally {
 					x1 = y1 = -1;
+					errorGestion();
 				}
 			} else {
 				/* Sinon, on sélectionne la case : on vérifie qu'il y a un pingouin
@@ -56,6 +57,7 @@ public class ControllerMediator implements EventCollector {
 					x1 = y1 = -1;	/* Il n'y a pas de pingouin du joueur courant
 										sur cette case. */
 				}
+				errorGestion();
 			}
 		} else { /* Choix de la case cible */
 			x2 = c;
@@ -68,6 +70,7 @@ public class ControllerMediator implements EventCollector {
 				
 			} finally {
 				x1 = y1 = x2 = y2 = -1;
+				errorGestion();
 			}
 		}
 	}
@@ -80,6 +83,39 @@ public class ControllerMediator implements EventCollector {
 	@Override
 	public void timedAction() {
 		
+	}
+	
+	public void errorGestion() {
+		if(game.placePhase()) {
+			switch(game.error) {
+			case 0: // game.GOOD_PLACE
+				break;
+			case 1: // game.ONLY_ONE_FISH
+				break;
+			case 2: // game.ALREADY_OCCUPY
+				break;
+			default:
+				break;
+			}
+		}
+		else if(game.movePhase()) {
+			switch(game.error) {
+			case 0: // game.GOOD_TRAVEL
+				break;
+			case 1: // game.PENGUIN_IN_TRAVEL
+				break;
+			case 2: // game.HOLE_IN_TRAVEL
+				break;
+			case 3: // game.TRAVEL_NOT_ALIGNED
+				break;
+			case 4: // game.GOOD_PENGUIN
+				break;
+			case 5: // game.WRONG_PENGUIN
+				break;
+			default:
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -136,7 +172,8 @@ public class ControllerMediator implements EventCollector {
 			game.nextPlayer();
 			return true;
 		}
-		return false;
+		errorGestion();
+		return false;		
 	}
 	
 	/**
