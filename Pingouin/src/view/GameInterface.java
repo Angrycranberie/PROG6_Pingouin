@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -24,17 +26,19 @@ public class GameInterface implements PropertyChangeListener {
     public Game game;
     public GameView gameView;
     public EventCollector eventCollector;
-    public final static boolean saved = false;
+    public static boolean saved = false;
+    GraphicInterface gra;
 
-
-    GameInterface(Game g, EventCollector ec){
+    GameInterface(Game g, EventCollector ec, GraphicInterface gra){
+        this.gra = gra;
         final GameInterface me = this;
         game = g;
         game.addPropertyChangeListener(this);
         eventCollector = ec;
 
         p_main = new JPanel();
-        p_main.setSize(900,900);
+        p_main.setSize(gra.frame.getSize());
+
         p_main.setLayout(new GroupLayout(p_main));
 
         int logoHeight = (int) (p_main.getHeight()*0.1);
@@ -75,19 +79,22 @@ public class GameInterface implements PropertyChangeListener {
             }
         });
 
-        l_scoreJ1 = new JLabel();
-        l_scoreJ1.setText("Score joueur 1 : ");
-        l_scoreJ1.setHorizontalAlignment(SwingConstants.CENTER);
-        l_scoreJ1.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_scoreJ1.setSize(150,10);
-        l_scoreJ1.setLocation(b_redo.getLocation().x+b_redo.getWidth()+10, gameView.getY() +gameView.getHeight() + 10);
+
+
 
         l_scoreJ2 = new JLabel();
         l_scoreJ2.setText("Score joueur 2 : ");
         l_scoreJ2.setHorizontalAlignment(SwingConstants.CENTER);
         l_scoreJ2.setHorizontalTextPosition(SwingConstants.CENTER);
         l_scoreJ2.setSize(150,10);
-        l_scoreJ2.setLocation(l_scoreJ1.getLocation().x+l_scoreJ1.getWidth()+10, gameView.getY() +gameView.getHeight() + 10);
+        l_scoreJ2.setLocation(p_main.getWidth()/2 + (l_scoreJ2.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+
+        l_scoreJ1 = new JLabel();
+        l_scoreJ1.setText("Score joueur 1 : ");
+        l_scoreJ1.setHorizontalAlignment(SwingConstants.CENTER);
+        l_scoreJ1.setHorizontalTextPosition(SwingConstants.CENTER);
+        l_scoreJ1.setSize(150,10);
+        l_scoreJ1.setLocation(p_main.getWidth()/2 - (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
 
         p_main.add(l_title);
         p_main.add(l_feedback);
@@ -123,7 +130,16 @@ public class GameInterface implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        gameView.repaint();
+    public void propertyChange(PropertyChangeEvent evt) { gameView.repaint(); }
+
+    public void redimensionnement(){
+        p_main.setSize(gra.frame.getSize());
+        gameView.setSize(p_main.getWidth(), gameView.getHeight());
+        //l_title.setLocation((p_main.getWidth()-1500/4)/2,0);
+        l_feedback.setBounds(l_title.getWidth()+10, 10, p_main.getWidth()-l_title.getWidth()-2*10, l_title.getHeight());
+        l_scoreJ2.setLocation(p_main.getWidth()/2 - (l_scoreJ2.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+        l_scoreJ1.setLocation(p_main.getWidth()/2 + (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+
     }
+
 }

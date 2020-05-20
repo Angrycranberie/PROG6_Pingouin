@@ -14,8 +14,7 @@ public class MainMenuInterface {
 
     EventCollector eventCollector;
 
-
-    MainMenuInterface(final EventCollector ec){
+    MainMenuInterface(EventCollector ec, GraphicInterface gra){
         eventCollector = ec;
 
         final MainMenuInterface me = this;
@@ -23,7 +22,7 @@ public class MainMenuInterface {
         ActionListener al_loadGame = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoadGameInterface lg = new LoadGameInterface(me);
+                LoadGameInterface lg = new LoadGameInterface(me,gra);
                 p_main.getRootPane().setContentPane(lg.p_main);
                 lg.p_main.getRootPane().updateUI();
             }
@@ -31,13 +30,13 @@ public class MainMenuInterface {
         ActionListener al_quit = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                return;
             }
         };
         ActionListener al_newGame = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                NewGameInterface ng = new NewGameInterface(ec);
+                NewGameInterface ng = new NewGameInterface(eventCollector,gra);
                 p_main.getRootPane().setContentPane(ng.p_main);
                 ng.p_main.getRootPane().updateUI();
             }

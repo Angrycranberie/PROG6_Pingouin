@@ -12,7 +12,7 @@ public class LoadGameInterface {
     private JLabel l_title;
     private JLabel l_select;
 
-    LoadGameInterface(final MainMenuInterface mm){
+    LoadGameInterface(final MainMenuInterface mm, GraphicInterface gra){
         ActionListener al_cancel = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
