@@ -33,6 +33,7 @@ public class GameMouseAdapter extends MouseAdapter {
         int c = Integer.parseInt(p[0]);
         int r = Integer.parseInt(p[1]);
         System.out.println("Row : "+r+ " ; Col : "+c);
-        // eventCollector.mouseClick(r, c);
+        eventCollector.mouseClick(r, c);
+        System.out.println(gameView.game.error);
     }
 }

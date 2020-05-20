@@ -1,6 +1,7 @@
 package view;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,26 +12,31 @@ public class QuitGameInterface {
     private JButton b_resume;
     private JButton b_quit;
     public JPanel p_main;
+    EventCollector eventCollector;
 
-    QuitGameInterface(final GameInterface g, final String s){
+    QuitGameInterface(final JPanel g, final String s, final EventCollector ec ,final GraphicInterface gra){
+
+
+        eventCollector = ec;
 
         ActionListener al_resume = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                p_main.getRootPane().setContentPane(g.p_main);
-                g.p_main.getRootPane().updateUI();
+                p_main.getRootPane().setContentPane(g);
+                g.getRootPane().getJMenuBar().setVisible(true);
+                g.getRootPane().updateUI();
             }
         };
 
         ActionListener al_quit = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(s=="mm"){
-                    MainMenuInterface mm = new MainMenuInterface();
+                if(s.equals("mm")){
+                    MainMenuInterface mm = new MainMenuInterface(ec,gra);
                     p_main.getRootPane().setContentPane(mm.p_main);
                     mm.p_main.getRootPane().updateUI();
-                } else if(s=="ng"){
-                    NewGameInterface ng = new NewGameInterface();
+                } else if(s.equals("ng")){
+                    NewGameInterface ng = new NewGameInterface(ec, gra);
                     p_main.getRootPane().setContentPane(ng.p_main);
                     ng.p_main.getRootPane().updateUI();
                 }
@@ -41,7 +47,7 @@ public class QuitGameInterface {
         ActionListener al_save = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SaveInterface si = new SaveInterface(g,s);
+                SaveInterface si = new SaveInterface(g,s,ec,gra);
                 p_main.getRootPane().setContentPane(si.p_main);
                 si.p_main.getRootPane().updateUI();
             }

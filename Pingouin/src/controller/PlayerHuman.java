@@ -8,7 +8,7 @@ import java.awt.Color;
  */
 public class PlayerHuman extends Player {
 
-	public PlayerHuman(int penguinsNumber, Color color, String name) {
+	public PlayerHuman(int penguinsNumber, int color, String name) {
 		super(penguinsNumber, color, name);
 		setAI(0);
 	}

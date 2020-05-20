@@ -3,9 +3,6 @@ package view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.FileInputStream;
 
 /**
  * Vue graphique préparée du jeu.
@@ -43,5 +40,6 @@ public abstract class GraphicGame extends JPanel {
         drawable = (Graphics2D) g;
         drawable.clearRect(0, 0, getWidth(), getHeight());
         generateBoard();
+        placePenguins();
     }
 }

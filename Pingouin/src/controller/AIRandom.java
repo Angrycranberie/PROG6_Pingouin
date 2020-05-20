@@ -14,7 +14,7 @@ public class AIRandom extends Player {
 
 	Random r;
 	
-	public AIRandom(int penguinsNumber, Color color, String name) {
+	public AIRandom(int penguinsNumber, int color, String name) {
 		super(penguinsNumber, color, name);
 		setAI(1);
 		r = new Random();
@@ -25,17 +25,17 @@ public class AIRandom extends Player {
 		
 		
 		// placement des pingouins
-		if(getGame().placePhase()) return false;
+		if(getGame().placePhase()) return positionPenguin();
 		else {
 			int tmp, x, y, index=0;
-			int move[][];
-			Penguin tabPen[] = penguins();
+			int[][] move;
+			Penguin[] tabPen = getPenguins();
 			Penguin pen;
 			
 			/* choix du pingouin à jouer 
 			 * si le pingouin n'a pas de coup disponible, on en joue un autre */
 			do {
-				tmp = r.nextInt(getPenguinsNumber());
+				tmp = r.nextInt(getPenguinsCount());
 				pen = tabPen[tmp];
 				move = getGame().legitMovePossibility(pen);
 				
@@ -49,7 +49,7 @@ public class AIRandom extends Player {
 				tmp = r.nextInt(index);
 				x = move[tmp][0];
 				y = move[tmp][1];
-			} while (!getGame().movePenguin(pen.coord_x(), pen.coord_y(), x, y));
+			} while (!getGame().movePenguin(pen.getX(), pen.getY(), x, y));
 		}
 		return true;
 	}
@@ -59,7 +59,7 @@ public class AIRandom extends Player {
 	 * @param move le tableau de coup disponible
 	 * @return le nombre de coup
 	 */
-	private int lengthMove(int move[][]) {
+	private int lengthMove(int[][] move) {
 		int len=0;
 		boolean end = false;
 		while(!end && len < 60) {

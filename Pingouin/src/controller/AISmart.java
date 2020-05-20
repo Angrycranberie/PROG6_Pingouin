@@ -9,7 +9,7 @@ import java.awt.Color;
  */
 public class AISmart extends Player {
 
-	public AISmart(int penguinsNumber, Color color, String name) {
+	public AISmart(int penguinsNumber, int color, String name) {
 		super(penguinsNumber, color, name);
 		setAI(2);
 	}

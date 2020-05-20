@@ -32,3 +32,6 @@ Pingouin/.gitignore
 .idea/
 *.iml
 out/
+
+# META-INF #
+Pingouin/src/META-INF

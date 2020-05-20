@@ -4,6 +4,8 @@ import model.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -13,13 +15,23 @@ import java.awt.event.ComponentListener;
  * @author Alexis
  * @author Mathias
  */
-public class GraphicInterface implements Runnable, UserInterface, ComponentListener {
+public class GraphicInterface implements Runnable, UserInterface, ComponentListener, ActionListener {
 
     Game game; // Le jeu en lui-même.
     EventCollector eventCollector; // Collecteur d'événements pour garantir l'interaction avec le jeu.
     JFrame frame; // Composant de la fenêtre de jeu.
     boolean maximized; // Si la fenêtre est en pleine écran ou non.
     public GameInterface gameInterface;
+    public MainMenuInterface mainMenu;
+    GraphicInterface me = this;
+
+    // La barre de menu
+    JMenuBar mb = new JMenuBar();
+    JMenu menu = new JMenu("Menu");
+    JMenuItem save = new JMenuItem("Sauvegarder");
+    JMenuItem ng = new JMenuItem("Nouvelle Partie");
+    JMenuItem mm = new JMenuItem("Menu Principal");
+
 
     /**
      * Constructeur de l'interface graphique (fenêtre) du jeu.
@@ -29,7 +41,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     GraphicInterface(Game g, EventCollector ec) {
         game = g;
         eventCollector = ec;
-        gameInterface = new GameInterface(game, eventCollector);
+
     }
     GameInterface getGameInterface(){
         return gameInterface;
@@ -43,6 +55,18 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         GraphicInterface view = new GraphicInterface(g, ec);
         ec.addUI(view);
         SwingUtilities.invokeLater(view);
+        while (true) {
+            if (!g.placePhase()) {
+                if (!ec.startTurn()) {
+                    g.endGame();
+                    return;
+                }
+            } else {
+                if (g.getCurrentPlayer().isAI()) {
+                    ec.startAITurn();
+                }
+            }
+        }
     }
 
     @Override
@@ -55,6 +79,21 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
         frame.setMinimumSize(new Dimension(915, 950)); // Définition de la taille de fenêtre par défaut.
 
+        mainMenu = new MainMenuInterface(eventCollector, this);
+        gameInterface = new GameInterface(game, eventCollector,this);
+
+        //La barre de menu
+        save.addActionListener(this);
+        ng.addActionListener(this);
+        mm.addActionListener(this);
+
+        menu.add(save);
+        menu.add(ng);
+        menu.add(mm);
+
+        mb.add(menu);
+
+        frame.setJMenuBar(mb);
         // Retransmission des événements au contrôleur.
         frame.addKeyListener(new GameKeyAdapter(eventCollector));
         Timer t = new Timer(TIMER_DELAY, new TimerAdapter(eventCollector));
@@ -81,9 +120,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
 
     @Override
     public void componentResized(ComponentEvent e) {
-        gameInterface.p_main.setSize(frame.getSize());
-        gameInterface.gameView.setSize(gameInterface.p_main.getWidth(), gameInterface.gameView.getHeight());
-        gameInterface.gameView.repaint();
+        gameInterface.redimensionnement();
     }
 
     @Override
@@ -100,4 +137,41 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
     public void componentHidden(ComponentEvent e) {
 
     }
+    public void actionPerformed(ActionEvent e){
+        frame.getJMenuBar().setVisible(false);
+        if(e.getSource()==save){
+            SaveInterface si = new SaveInterface( (JPanel) frame.getContentPane(), "game", eventCollector, me);
+            frame.getRootPane().setContentPane(si.p_main);
+            si.p_main.getRootPane().updateUI();
+        } else if (e.getSource()==ng){
+            if(GameInterface.saved){
+                NewGameInterface ng = new NewGameInterface(eventCollector, me);
+                frame.getRootPane().setContentPane(ng.p_main);
+                ng.p_main.getRootPane().updateUI();
+            } else {
+                QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "ng",eventCollector ,me);
+                frame.getRootPane().setContentPane(qg.p_main);
+                qg.p_main.getRootPane().updateUI();
+            }
+        } else if (e.getSource()==mm){
+                if(GameInterface.saved){
+                    MainMenuInterface mm = new MainMenuInterface(eventCollector, me);
+                    frame.getRootPane().setContentPane(mm.p_main);
+                    mm.p_main.getRootPane().updateUI();
+
+                } else {
+                    QuitGameInterface qg = new QuitGameInterface((JPanel) frame.getContentPane(), "mm", eventCollector, me);
+                    frame.getRootPane().setContentPane(qg.p_main);
+                    qg.p_main.getRootPane().updateUI();
+                }
+
+            }
+    }
+
+    public void updateGIUI(){
+        frame.getContentPane().setSize(frame.getSize());
+        frame.getJMenuBar().setVisible(true);
+        frame.getRootPane().updateUI();
+    }
+
 }

@@ -15,18 +15,16 @@ public class Penguin implements Cloneable{
 	}
 	
 	/**
-	 * Retourne la coordonnée x du pingouin
-	 * @return coord x
+	 * Retourne la coordonnée x du pingouin.
+	 * @return Coordonnée x du pingouin.
 	 */
-	public int coord_x() {
-		return x;
-	}
+	public int getX() { return x; }
 	
 	/**
-	 * Retourne la coordonnée y du pingouin
-	 * @return coord y
+	 * Retourne la coordonnée y du pingouin.
+	 * @return Coordonnée y du pingouin.
 	 */
-	public int coord_y() {
+	public int getY() {
 		return y;
 	}
 	

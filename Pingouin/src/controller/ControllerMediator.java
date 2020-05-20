@@ -41,7 +41,7 @@ public class ControllerMediator implements EventCollector {
 			if(game.placePhase()){ /* Si on est en placement, c'est la seule qu'on veut */
 				try {
 					if(ret = game.placePenguin(x1, y1)){
-						game.setToPlace(game.getToPlace()-1);
+						
 					}
 				} catch(Exception e){
 					// A compléter.
@@ -53,9 +53,17 @@ public class ControllerMediator implements EventCollector {
 				/* Sinon, on sélectionne la case : on vérifie qu'il y a un pingouin
 				 * du joueur courant
 				 */
-				if(!game.hasPenguinGoodOwning(game.getCurrentPlayer(), x1, y1)){
-					x1 = y1 = -1;	/* Il n'y a pas de pingouin du joueur courant
-										sur cette case. */
+				if(game.exists(x1, y1)){
+					if(game.occupied(x1, y1)){
+						if(!game.hasPenguinGoodOwning(game.getCurrentPlayer(), x1, y1)){
+							x1 = y1 = -1;	/* Il n'y a pas de pingouin du joueur courant
+												sur cette case. */
+						}
+					} else {
+						x1 = y1 = -1;
+					}
+				} else {
+					x1 = y1 = -1;
 				}
 				errorGestion();
 			}
@@ -63,8 +71,12 @@ public class ControllerMediator implements EventCollector {
 			x2 = c;
 			y2 = l;
 			try {
-				if(ret = game.movePenguin(x1, y1, x2, y2)){
-					
+				if(x1 == x2 && y1 == y2){
+					x1 = x2 = y1 = y2 = -1;
+				} else {
+					if(ret = game.movePenguin(x1, y1, x2, y2)){
+						game.nextPlayer();
+					}
 				}
 			} catch(Exception e) {
 				
@@ -135,9 +147,7 @@ public class ControllerMediator implements EventCollector {
 				y1 = val;
 				if(game.placePhase()){
 					try { 
-						if(ret = game.placePenguin(x1, y1)) { 
-							game.setToPlace(game.getToPlace() - 1);
-						}
+						ret = game.placePenguin(x1, y1);
 					} catch (Exception e) {
 						throw(e);
 					} finally {
@@ -205,6 +215,7 @@ public class ControllerMediator implements EventCollector {
 			if(!game.nextPlayer()){
 				return false;
 			}
+			return startTurn();	// On teste aussi le joueur suivant.
 		}
 		if(game.getCurrentPlayer().isAI()){
 			startAITurn();
@@ -216,8 +227,7 @@ public class ControllerMediator implements EventCollector {
 	/**
 	 * Lance le tour de l'IA.
 	 */
-	private void startAITurn(){
-		if(game.placePhase()) game.getCurrentPlayer().positionPenguin();
-		else game.getCurrentPlayer().play();
+	public void startAITurn(){
+		game.getCurrentPlayer().play();
 	}
 }
