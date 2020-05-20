@@ -11,7 +11,7 @@ import controller.Player;
  * 
  * 
  */
-public class AISmart extends Player {
+public class AISomme extends Player {
 	Game game;
 	Random r;
 	DecisionTree decTree;
@@ -20,11 +20,11 @@ public class AISmart extends Player {
 	/* Crée une IA et son arbre associé.
 	 * Le booleen start indique si elle joue en premier (true) ou non (false)
 	 */
-	public AISmart(int penguinsNumber, Color color, String name, Heuristic h) {
+	public AISomme(int penguinsNumber, Color color, String name) {
 		super(penguinsNumber, color, name);
 		setAI(2);
 		r = new Random();
-		heur = h;
+		heur = new HeurSomme();
 	}
 
 	public void setGame(Game g){

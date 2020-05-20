@@ -21,11 +21,6 @@ public class HeurSomme extends Heuristic{
 		int somme = 0;
 		int curr;
 		
-		/* Détails */
-		int x, y;
-		Tile currT;
-		/* Fin */
-		
 		Player selfPlayer = g.getCurrentPlayer();
 		
 		for(Player currPlayer : g.getPlayers()){
