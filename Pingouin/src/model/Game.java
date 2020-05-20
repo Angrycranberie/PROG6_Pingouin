@@ -41,7 +41,6 @@ public class Game implements Cloneable{
 	public static final int ALREADY_OCCUPY = 23;
 	public static final int START_MOVE = 24;
 	
-	
 	public int error;
 	
 	/**
@@ -173,17 +172,17 @@ public class Game implements Cloneable{
 				moveCount++;
 				Move m = new Move(x1, y1, x2, y2, currentPlayerNumber, t.getFishNumber());
 				history.addMove(m);
-				error = GOOD_TRAVEL;
+				setErr(GOOD_TRAVEL);
 				return true;
 			}
 			else {
 				switch(board.error) {
 				case 1: // board.PENGUIN_IN_TRAVEL
-					error = PENGUIN_IN_TRAVEL;
+					setErr(PENGUIN_IN_TRAVEL);
 				case 2: // board.HOLE_IN_TRAVEL
-					error = HOLE_IN_TRAVEL;
+					setErr(HOLE_IN_TRAVEL);
 				case 3: // board.TRAVEL_NOT_ALIGNED
-					error = TRAVEL_NOT_ALIGNED;
+					setErr(TRAVEL_NOT_ALIGNED);
 				default:
 				}
 				return false;
@@ -191,7 +190,7 @@ public class Game implements Cloneable{
 		}
 		else {
 			System.out.println("Ce pingouin ne vous appartient pas.");
-			error = WRONG_PENGUIN;
+			setErr(WRONG_PENGUIN);
 			return false;
 		}
 	}
@@ -203,14 +202,14 @@ public class Game implements Cloneable{
 	 * @return true le pingouin appartient au joueur courant false sinon
 	 */
 	public boolean hasPenguinGoodOwning(Player p, int x1, int y1) {
-		error = GOOD_PENGUIN;
+		setErr(GOOD_PENGUIN);
 		Penguin[] penguins = p.getPenguins();
 		for(int i = 0; i < p.getAmountPlaced() ; i++) {
 			if(penguins[i].getX() == x1 && penguins[i].getY() == y1) {
 				return true;
 			}
 		}
-		error = WRONG_PENGUIN;
+		setErr(WRONG_PENGUIN);
 		return false;
 	}
 	
@@ -268,7 +267,6 @@ public class Game implements Cloneable{
 	 * @param y Coorfonnée y où l'on souhaite placer le pingouin.
 	 */
 	public boolean placePenguin(int x, int y){
-		error = GOOD_PLACE;
 		boolean val = false;
 		Player p = getCurrentPlayer();
 		if(p.getAmountPlaced() < p.getPenguinsCount()){
@@ -285,14 +283,15 @@ public class Game implements Cloneable{
 					setToPlace(getToPlace()-1);
 					val = true;
 					nextPlayer();
+					setErr(GOOD_PLACE);
 				} else {
 					System.out.print("Les pingouins doivent être placés sur" +
 							" une case de valeur 1.");
-					error = ONLY_ONE_FISH;
+					setErr(ONLY_ONE_FISH);
 				}
 			} else {
 				System.out.print("La case est occupée.");
-				error = ALREADY_OCCUPY;
+				setErr(ALREADY_OCCUPY);
 			}
 		} else {
 			System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");
@@ -445,8 +444,8 @@ public class Game implements Cloneable{
 	 */
 	public boolean occupied(int x1, int y1) {
 		boolean res = board.getTile(x1, y1).occupied();
-		if(!res) error = NO_TARGET;
-		else error = HAS_TARGET;
+		if(!res) setErr(NO_TARGET);
+		else setErr(HAS_TARGET);
 		return res;
 	}
 
@@ -458,12 +457,13 @@ public class Game implements Cloneable{
 	 */
 	public boolean exists(int x1, int y1) {
 		boolean res = board.getTile(x1, y1) != null;
-		if(res) error = HAS_TILE;
-		else error = NO_TILE;
+		if(res) setErr(HAS_TILE);
+		else setErr(NO_TILE);
 		return res;
 	}
 	
 	public void setErr(int e){
+		supportCount.firePropertyChange("status", error, e);
 		error = e;
 	}
 }
