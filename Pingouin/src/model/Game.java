@@ -10,6 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import model.Penguin;
 
 /**
  * Classe Game. Gère une partie du jeu : ordre des tours, coups sur le plateau.
@@ -524,7 +525,12 @@ public class Game implements Cloneable{
 			saveBot.println(players[i].toString());
 			// Sauvegarde de ses pingouins
 			for(int j = 0; j < players[i].getPenguinsCount() ; j++) {
-				saveBot.println(players[i].getPenguins()[j].toString());
+				System.out.println(players[i].getPenguinsCount());
+				System.out.printf(""+j);
+				if(players[i].getPenguin(j) != null){
+					saveBot.println(players[i].getPenguin(j).toString());
+				}
+
 			}
 			
 			System.out.println("Player "+i+" saved");

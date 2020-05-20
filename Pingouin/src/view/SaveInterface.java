@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 public class SaveInterface {
     private JTextField tf_saveName;
@@ -21,9 +22,10 @@ public class SaveInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPopupMenu confirm = new JPopupMenu();
-
+                gra.game.save(tf_saveName.getText()+".txt");
                 switch (s) {
                     case "game":
+                       // gra.gameInterface.game.save(tf_saveName + "")
                         p_main.getRootPane().setContentPane(g);
                         g.getRootPane().updateUI();
                         break;
