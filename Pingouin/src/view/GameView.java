@@ -129,7 +129,7 @@ public class GameView extends GraphicGame {
             int color = Math.max(ply.getColor(), 0);
             for (int j = 0; j < ply.getPenguinsCount(); j++) {
                 Penguin png = ply.getPenguin(j);
-                if (png != null) {
+                if (png != null && ply.isPlaying()) {
                     Image img = penguinsImg[color][j].getScaledInstance(w, h, Image.SCALE_SMOOTH);
                     int x = getTileX(png.getY(), png.getX(), w, g, cx);
                     int y = getTileY(png.getY(), h, g, cy)-s;
