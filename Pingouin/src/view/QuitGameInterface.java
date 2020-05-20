@@ -14,7 +14,7 @@ public class QuitGameInterface {
     public JPanel p_main;
     EventCollector eventCollector;
 
-    QuitGameInterface(final JPanel g, final String s, EventCollector ec ,GraphicInterface gra){
+    QuitGameInterface(final JPanel g, final String s, final EventCollector ec ,final GraphicInterface gra){
 
 
         eventCollector = ec;

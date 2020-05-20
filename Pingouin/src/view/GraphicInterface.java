@@ -1,6 +1,5 @@
 package view;
 
-import com.sun.tools.javac.Main;
 import model.Game;
 
 import javax.swing.*;
@@ -78,7 +77,9 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         frame = new JFrame("Hey, that's my fish !");
         frame.addComponentListener(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Opération de sortie par défaut.
-        frame.setMinimumSize(new Dimension(915, 950)); // Définition de la taille de fenêtre par défaut.
+        frame.setMinimumSize(
+                new Dimension(915, Math.min(1000, Toolkit.getDefaultToolkit().getScreenSize().height))
+        ); // Définition de la taille de fenêtre par défaut.
 
         mainMenu = new MainMenuInterface(eventCollector, this);
         gameInterface = new GameInterface(game, eventCollector,this);
