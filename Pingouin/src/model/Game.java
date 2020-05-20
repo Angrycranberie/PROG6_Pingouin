@@ -54,6 +54,7 @@ public class Game implements Cloneable{
 	/* * * */
 
 	public int status;
+	public boolean statusSwitch = false;
 	
 	/**
 	 * initialise le jeu
@@ -176,7 +177,6 @@ public class Game implements Cloneable{
 		if (hasPenguinGoodOwning(p,x1,y1)) {
 			Tile t = board.makeMove(x1, y1, x2, y2);
 			if (t != null) {
-				System.out.println("Réussi");
 				p.changeScore(t.getFishNumber());
 				p.addTile();
 				p.movePenguin(x1, y1, x2, y2);
@@ -201,7 +201,7 @@ public class Game implements Cloneable{
 			}
 		}
 		else {
-			System.out.println("Ce pingouin ne vous appartient pas.");
+			System.err.println("Ce pingouin ne vous appartient pas.");
 			setErr(WRONG_PENGUIN);
 			return false;
 		}
@@ -284,7 +284,7 @@ public class Game implements Cloneable{
 		if(p.getAmountPlaced() < p.getPenguinsCount()){
 			Tile t = board.getTile(x, y);
 			if(t == null) {
-				System.out.println("La case est vide.");
+				System.err.println("La case est vide.");
 				return false;
 			}
 			if(!t.occupied()){
@@ -294,19 +294,19 @@ public class Game implements Cloneable{
 					p.addAmount(1);
 					setToPlace(getToPlace()-1);
 					val = true;
-					nextPlayer();
 					setErr(PENGUIN_PLACED);
+					nextPlayer();
 				} else {
-					System.out.print("Les pingouins doivent être placés sur" +
+					System.err.println("Les pingouins doivent être placés sur" +
 							" une case de valeur 1.");
 					setErr(ONLY_ONE_FISH);
 				}
 			} else {
-				System.out.print("La case est occupée.");
+				System.err.println("La case est occupée.");
 				setErr(ALREADY_OCCUPIED);
 			}
 		} else {
-			System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");
+			System.err.println("Tous les pingouins sont déjà placés pour ce joueur.");
 			nextPlayer();
 		}
 		return val;
@@ -442,7 +442,6 @@ public class Game implements Cloneable{
 			if (players[loopPlayerNumber-1].isPlaying()) {
 				supportCount.firePropertyChange("currentPlayerNumber", currentPlayerNumber, loopPlayerNumber + 1);
 				currentPlayerNumber = loopPlayerNumber;
-
 			}
 		}
 	}
@@ -487,7 +486,7 @@ public class Game implements Cloneable{
 	}
 	
 	public void setErr(int e){
-		supportCount.firePropertyChange("status", status, e);
+		supportCount.firePropertyChange("status", !statusSwitch, statusSwitch);
 		status = e;
 	}
 

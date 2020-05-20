@@ -138,9 +138,6 @@ public class GameInterface implements PropertyChangeListener {
         l_pingouinJ2.setVisible(true);
 
 
-
-
-
         p_main.add(l_title);
         p_main.add(l_feedback);
         p_main.add(gameView);
@@ -178,8 +175,11 @@ public class GameInterface implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        gameView.repaint();
-        updateFeedback();
+        if (!evt.getPropertyName().equals("status")) gameView.repaint();
+        else{
+            System.out.println(evt.getOldValue().toString()+" >> "+evt.getNewValue().toString());
+            updateFeedback();
+        }
     }
 
     public void resize(){
@@ -200,19 +200,20 @@ public class GameInterface implements PropertyChangeListener {
         statusString = new HashMap<Integer, String>();
         statusString.put(
                 Game.PENGUIN_PLACED,
-                "$1, vous avez placé votre $2 pingouin !\n$3, placez votre $4 pingouin."
+                "<p><strong>$1</strong>, vous avez placé votre $2 pingouin !</p><p><strong>$3</strong>, placez votre $4 pingouin.</p>"
         );
         statusString.put(
                 Game.ONLY_ONE_FISH,
-                "Vous ne pouvez placer votre pingouin que sur les cases ayant un poisson, $1 !"
+                "<p>Vous ne pouvez placer votre pingouin que sur les cases ayant un poisson, <strong>$1</strong> !</p>"
         );
         statusString.put(
                 Game.ALREADY_OCCUPIED,
-                "Mince ! Un pingouin occupe déjà cette case.\nChoisissez-en une autre, $1 !"
+                "<p><em>Mince !</em> Un pingouin occupe déjà cette case. <br/>Choisissez-en une autre, <strong>$1</strong> !</p>"
         );
     }
 
-    public void updateFeedback() {
-        l_feedback.setText(statusString.get(game.status));
+    private void updateFeedback() {
+        l_feedback.setText("<html><body>"+statusString.get(game.status)+"</body></html>");
+        l_feedback.updateUI();
     }
 }
