@@ -41,6 +41,14 @@ public class History implements Cloneable{
 		futurIndex = i;
 	}
 	
+	public int getPastIndex(){
+		return pastIndex;
+	}
+	
+	public int getFuturIndex(){
+		return futurIndex;
+	}
+	
 	/**
 	 * méthode qui permet d'ajouté un coup qui vient d'être effectué
 	 * @param m coup
@@ -100,7 +108,7 @@ public class History implements Cloneable{
 	 * @param index indice du coup
 	 */
 	public void backInPast(int index,Board boardGame, Player p[]) {
-		while(pastIndex >= index) {
+		while(pastIndex > index) {
 			removeMoveFromPast(boardGame,p);
 		}
 	}

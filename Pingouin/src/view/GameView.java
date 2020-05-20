@@ -1,13 +1,12 @@
 package view;
 
+import controller.Player;
 import model.Game;
+import model.Penguin;
 import model.Tile;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 
 /**
  * Vue effective du jeu en cours.
@@ -24,7 +23,6 @@ public class GameView extends GraphicGame {
 
     private Image[] tilesImg; // Tableau des images de tuiles.
     private Image[][] penguinsImg; // Tableau des images de pingouins.
-
 
     /**
      * Constructeur de l'affichage du jeu.
@@ -51,6 +49,31 @@ public class GameView extends GraphicGame {
     }
 
     /**
+     * Retourne la position X d'une tuile vis-à-vis des paramètres donné en entrée.
+     * @param r Numéro de ligne.
+     * @param c Numéro de colonne.
+     * @param w Largeur d'une tuile.
+     * @param g Gouttière entre les tuiles.
+     * @param cx Décalage pour centrage horizontal.
+     * @return Coordonnée X du coin supérieur gauche d'une tuile.
+     */
+    private int getTileX(int r, int c, int w, int g, int cx) {
+        return ((r % 2 == 0) ? ((w + g) / 2) + ((w + g) * c) : (w + g) * c) + cx;
+    }
+
+    /**
+     * Retourne la position Y d'une tuile vis-à-vis des paramètres donné en entrée.
+     * @param r Numéro de ligne.
+     * @param h Hauteur d'une tuile.
+     * @param g Gouttière entre les tuiles.
+     * @param cy Décalage pour centrage vertical.
+     * @return Coordonnée Y du coin supérieur gauche d'une tuile.
+     */
+    private int getTileY(int r, int h, int g, int cy) {
+        return (h - h/4 + g) * r + cy;
+    }
+
+    /**
      * Méthode de création du plateau de jeu.
      */
     @Override
@@ -67,13 +90,11 @@ public class GameView extends GraphicGame {
         for (int i = 0; i < 8; i++){
             for (int j = 0; j < 8; j++) {
                 if (i %2 == 1 || j < 7) {
-		    final int fi = i, fj = j; // Valeurs fixées de i et j.
                     // Coordonnées x et y pour positionner l'image et son label.
-                    int x =  ((i % 2 == 0) ? ((w + g) / 2) + ((w + g) * j) : (w + g) * j) + cx;
-                    int y = (h - h/4 + g) * i + cy;
+                    int x =  getTileX(i, j, w, g, cx), y = getTileY(i, h, g, cy);
                     Tile t = game.getBoard().getTile(j,i); // Récupération de la case du jeu.
                     // Récupération de l'image de la tuile avec le bon nombre de poissons.
-                    Image img = tilesImg[t.getFishNumber()].getScaledInstance(w, h, Image.SCALE_SMOOTH);
+                    Image img = tilesImg[t != null ? t.getFishNumber() : 0].getScaledInstance(w, h, Image.SCALE_SMOOTH);
 
                     JLabel l = new JLabel(); // Label cliquable associé à l'image.
                     l.setName(j+":"+i); // Nom de la tuile : "colonne:ligne".
@@ -81,7 +102,7 @@ public class GameView extends GraphicGame {
                     l.setVisible(true); // Le label est "visible" (cliquable)...
                     l.setOpaque(false); // ... mais pas opaque (invisible par dessus les images de tuiles).
 
-                    if (t.getFishNumber() > 0) {
+                    if (t != null) {
                         l.setCursor(new Cursor(Cursor.HAND_CURSOR));
                         drawImageAt(img, x, y, w, h);
                     } else {
@@ -96,6 +117,25 @@ public class GameView extends GraphicGame {
 
     @Override
     void placePenguins() {
+        // TODO : Enlever la répétition de cette section. Nécessaire pour le moment car permet d'éviter une exception de thread.
+        int h = getHeight()/8, w = (int)((Math.sqrt(3)/2) * h); // Hauteur et largeur des tuiles à afficher.
+        final int g = 10; // Taille de la gouttière entre les tuiles.
+        int cx = (getWidth() - (w + g) * 7 - w) / 2; // Valeur de décalage pour centrage horizontal.
+        int cy = (getHeight() - (h - h/4 + g) * 7 - h) / 2; // Valeur de décalage pour centrage vertical.
+        int s = 15;
 
+        for (int i = 0; i < game.getPlayerCount(); i++) {
+            Player ply = game.getPlayer(i);
+            int color = Math.max(ply.getColor(), 0);
+            for (int j = 0; j < ply.getPenguinsCount(); j++) {
+                Penguin png = ply.getPenguin(j);
+                if (png != null) {
+                    Image img = penguinsImg[color][j].getScaledInstance(w, h, Image.SCALE_SMOOTH);
+                    int x = getTileX(png.getY(), png.getX(), w, g, cx);
+                    int y = getTileY(png.getY(), h, g, cy)-s;
+                    drawImageAt(img, x, y, w, h);
+                }
+            }
+        }
     }
 }

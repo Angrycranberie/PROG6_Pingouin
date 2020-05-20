@@ -12,43 +12,54 @@ public class SaveInterface {
     private JButton b_cancel;
     public JPanel p_main;
 
+    EventCollector eventCollector;
 
-    SaveInterface(final GameInterface g, final String s){
 
+    SaveInterface(final JPanel g, final String s, EventCollector ec){
+        eventCollector = ec;
 
         ActionListener al_save = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPopupMenu confirm = new JPopupMenu();
 
-                if(s == "game"){
-                    p_main.getRootPane().setContentPane(g.p_main);
-                    g.p_main.getRootPane().updateUI();
-                } else if (s == "ng"){
-                    NewGameInterface ng = new NewGameInterface();
-                    p_main.getRootPane().setContentPane(ng.p_main);
-                    ng.p_main.getRootPane().updateUI();
-                } else if (s == "mm") {
-                    MainMenuInterface mm = new MainMenuInterface();
-                    p_main.getRootPane().setContentPane(mm.p_main);
-                    mm.p_main.getRootPane().updateUI();
+                switch (s) {
+                    case "game":
+                        p_main.getRootPane().setContentPane(g);
+                        g.getRootPane().updateUI();
+                        break;
+                    case "ng":
+                        NewGameInterface ng = new NewGameInterface(eventCollector);
+                        p_main.getRootPane().setContentPane(ng.p_main);
+                        ng.p_main.getRootPane().updateUI();
+                        break;
+                    case "mm":
+                        MainMenuInterface mm = new MainMenuInterface(eventCollector);
+                        p_main.getRootPane().setContentPane(mm.p_main);
+                        mm.p_main.getRootPane().updateUI();
+                        break;
                 }
             }
         };
         ActionListener al_cancel = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(s == "game"){
-                    p_main.getRootPane().setContentPane(g.p_main);
-                    g.p_main.getRootPane().updateUI();
-                } else if (s == "ng"){
-                    NewGameInterface ng = new NewGameInterface();
-                    p_main.getRootPane().setContentPane(ng.p_main);
-                    ng.p_main.getRootPane().updateUI();
-                } else if (s == "mm") {
-                    MainMenuInterface mm = new MainMenuInterface();
-                    p_main.getRootPane().setContentPane(mm.p_main);
-                    mm.p_main.getRootPane().updateUI();
+                switch (s) {
+                    case "game":
+                        p_main.getRootPane().setContentPane(g);
+                        g.getRootPane().getJMenuBar().setVisible(true);
+                        g.getRootPane().updateUI();
+                        break;
+                    case "ng":
+                        NewGameInterface ng = new NewGameInterface(eventCollector);
+                        p_main.getRootPane().setContentPane(ng.p_main);
+                        ng.p_main.getRootPane().updateUI();
+                        break;
+                    case "mm":
+                        MainMenuInterface mm = new MainMenuInterface(eventCollector);
+                        p_main.getRootPane().setContentPane(mm.p_main);
+                        mm.p_main.getRootPane().updateUI();
+                        break;
                 }
 
             }

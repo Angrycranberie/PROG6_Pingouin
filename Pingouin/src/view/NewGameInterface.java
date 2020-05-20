@@ -1,5 +1,6 @@
 package view;
 
+import controller.ControllerMediator;
 import controller.Player;
 import model.Game;
 
@@ -21,12 +22,15 @@ public class NewGameInterface {
     private JLabel l_VS;
     public JPanel p_main;
 
-    NewGameInterface(){
+    EventCollector eventCollector;
+
+    NewGameInterface(EventCollector ec){
+        eventCollector = ec;
 
         ActionListener al_cancel = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainMenuInterface mm = new MainMenuInterface();
+                MainMenuInterface mm = new MainMenuInterface(eventCollector);
                 p_main.getRootPane().setContentPane(mm.p_main);
                 mm.p_main.getRootPane().updateUI();
             }
@@ -35,9 +39,10 @@ public class NewGameInterface {
         ActionListener al_startGame = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game g = new Game(2, new Player(4, Color.red,tf_joueur1.getText()), new Player(4, Color.green,tf_joueur2.getText()),null,null);
-                GameInterface gi = new GameInterface(g, null); // TODO : "null" À CHANGER, URGENT !
+                Game g = new Game(2, new Player(4, 0, tf_joueur1.getText()), new Player(4, 1, tf_joueur2.getText()),null,null);
+                GameInterface gi = new GameInterface(g, new ControllerMediator(g));
                 p_main.getRootPane().setContentPane(gi.p_main);
+                gi.p_main.getRootPane().getJMenuBar().setVisible(true);
                 gi.p_main.getRootPane().updateUI();
             }
         };

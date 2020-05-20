@@ -12,7 +12,7 @@ import view.UserInterface;
  * @author Yoann
  */
 public class ControllerMediator implements EventCollector {
-
+	
 	Game game;
 	Board board;
 	int x1, y1, x2, y2;
@@ -33,7 +33,7 @@ public class ControllerMediator implements EventCollector {
 	 */
 	@Override
 	public void mouseClick(int l, int c){
-		boolean ret;
+		boolean ret = false;
 		
 		if(x1 < 0){ /* Choix de la 1è case.. */
 			x1 = c;
@@ -41,33 +41,40 @@ public class ControllerMediator implements EventCollector {
 			if(game.placePhase()){ /* Si on est en placement, c'est la seule qu'on veut */
 				try {
 					if(ret = game.placePenguin(x1, y1)){
-						game.setToPlace(game.getToPlace()-1);
+						
 					}
 				} catch(Exception e){
 					// A compléter.
 				} finally {
 					x1 = y1 = -1;
+					errorGestion();
 				}
 			} else {
 				/* Sinon, on sélectionne la case : on vérifie qu'il y a un pingouin
 				 * du joueur courant
 				 */
-				if(!game.hasPenguinGoodOwning(game.getCurrentPlayer(), x1, y1)){
-					x1 = y1 = -1;	/* Il n'y a pas de pingouin du joueur courant
-										sur cette case. */
+				if(game.occupied(x1, y1)){
+					if(!game.hasPenguinGoodOwning(game.getCurrentPlayer(), x1, y1)){
+						x1 = y1 = -1;	/* Il n'y a pas de pingouin du joueur courant
+											sur cette case. */
+					}
+				} else {
+					x1 = y1 = -1;
 				}
+				errorGestion();
 			}
 		} else { /* Choix de la case cible */
 			x2 = c;
 			y2 = l;
 			try {
 				if(ret = game.movePenguin(x1, y1, x2, y2)){
-					
+					game.nextPlayer();
 				}
 			} catch(Exception e) {
 				
 			} finally {
 				x1 = y1 = x2 = y2 = -1;
+				errorGestion();
 			}
 		}
 	}
@@ -80,6 +87,39 @@ public class ControllerMediator implements EventCollector {
 	@Override
 	public void timedAction() {
 		
+	}
+	
+	public void errorGestion() {
+		if(game.placePhase()) {
+			switch(game.error) {
+			case 0: // game.GOOD_PLACE
+				break;
+			case 1: // game.ONLY_ONE_FISH
+				break;
+			case 2: // game.ALREADY_OCCUPY
+				break;
+			default:
+				break;
+			}
+		}
+		else if(game.movePhase()) {
+			switch(game.error) {
+			case 0: // game.GOOD_TRAVEL
+				break;
+			case 1: // game.PENGUIN_IN_TRAVEL
+				break;
+			case 2: // game.HOLE_IN_TRAVEL
+				break;
+			case 3: // game.TRAVEL_NOT_ALIGNED
+				break;
+			case 4: // game.GOOD_PENGUIN
+				break;
+			case 5: // game.WRONG_PENGUIN
+				break;
+			default:
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -99,9 +139,7 @@ public class ControllerMediator implements EventCollector {
 				y1 = val;
 				if(game.placePhase()){
 					try { 
-						if(ret = game.placePenguin(x1, y1)) { 
-							game.setToPlace(game.getToPlace() - 1);
-						}
+						ret = game.placePenguin(x1, y1);
 					} catch (Exception e) {
 						throw(e);
 					} finally {
@@ -138,7 +176,8 @@ public class ControllerMediator implements EventCollector {
 			game.nextPlayer();
 			return true;
 		}
-		return false;
+		errorGestion();
+		return false;		
 	}
 	
 	/**
@@ -168,6 +207,7 @@ public class ControllerMediator implements EventCollector {
 			if(!game.nextPlayer()){
 				return false;
 			}
+			return startTurn();	// On teste aussi le joueur suivant.
 		}
 		if(game.getCurrentPlayer().isAI()){
 			startAITurn();
@@ -179,8 +219,7 @@ public class ControllerMediator implements EventCollector {
 	/**
 	 * Lance le tour de l'IA.
 	 */
-	private void startAITurn(){
-		if(game.placePhase()) game.getCurrentPlayer().positionPenguin();
-		else game.getCurrentPlayer().play();
+	public void startAITurn(){
+		game.getCurrentPlayer().play();
 	}
 }
