@@ -82,7 +82,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         ); // Définition de la taille de fenêtre par défaut.
 
         mainMenu = new MainMenuInterface(eventCollector, this);
-        gameInterface = new GameInterface(game, eventCollector,this);
+       // gameInterface = new GameInterface(game, eventCollector,this);
 
         //La barre de menu
         save.addActionListener(this);
@@ -101,7 +101,7 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
         Timer t = new Timer(TIMER_DELAY, new TimerAdapter(eventCollector));
 
         // Mise en place de l'interface principale.
-        frame.setContentPane(gameInterface.p_main); // On ajoute le jeu à l'interface.
+        frame.setContentPane(mainMenu.p_main); // On ajoute le jeu à l'interface.
         t.start(); // Début du timer.
         frame.setVisible(true); // On rend la fenêtre visible.
     }
@@ -122,7 +122,9 @@ public class GraphicInterface implements Runnable, UserInterface, ComponentListe
 
     @Override
     public void componentResized(ComponentEvent e) {
-        gameInterface.redimensionnement();
+        if(gameInterface != null){
+            gameInterface.resize();
+        }
     }
 
     @Override
