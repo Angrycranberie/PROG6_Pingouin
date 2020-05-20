@@ -25,9 +25,12 @@ public class Game implements Cloneable{
 	public static final int GOOD_PENGUIN = 4;
 	public static final int WRONG_PENGUIN = 5;
 	
-	public static final int GOOD_PLACE = 0;
-	public static final int ONLY_ONE_FISH = 1;
-	public static final int ALREADY_OCCUPY = 2;
+	public static final int NO_TARGET = 6;
+	public static final int HAS_TARGET = 7;
+	
+	public static final int GOOD_PLACE = 21;
+	public static final int ONLY_ONE_FISH = 22;
+	public static final int ALREADY_OCCUPY = 23;
 	
 	public int error;
 	
@@ -46,14 +49,15 @@ public class Game implements Cloneable{
 		players[1] = p2;
 		players[2] = p3;
 		players[3] = p4;
+		setToPlace(0);
 		for(int i = 0 ; i < playerCount ; i++){
 			players[i].setGame(this);
+			setToPlace(getToPlace() + players[i].getPenguinsCount());
 		}
 		currentPlayerNumber = 1;
 		board = new Board();
 		supportCount = new PropertyChangeSupport(this);
 		history = new History();
-		setToPlace(getPlayerCount()*(getCurrentPlayer().getPenguinsCount()));
 	}
 	
 	private void changeBoard(Board b) {
@@ -152,6 +156,7 @@ public class Game implements Cloneable{
 			Game oldGame = this;
 			Tile t = board.makeMove(x1, y1, x2, y2);
 			if (t != null) {
+				System.out.println("Réussi");
 				p.changeScore(t.getFishNumber());
 				p.addTile();
 				p.movePenguin(x1, y1, x2, y2);
@@ -190,7 +195,7 @@ public class Game implements Cloneable{
 		error = GOOD_PENGUIN;
 		Penguin[] penguins = p.getPenguins();
 		int nbPenguins = p.getPenguinsCount();
-		for(int i = 0; i < nbPenguins ; i++) {
+		for(int i = 0; i < p.getAmountPlaced() ; i++) {
 			if(penguins[i].getX() == x1 && penguins[i].getY() == y1) {
 				return true;
 			}
@@ -416,5 +421,12 @@ public class Game implements Cloneable{
 
 			}
 		}
+	}
+
+	public boolean occupied(int x1, int y1) {
+		boolean res = board.getTile(x1, y1).occupied();
+		if(!res) error = NO_TARGET;
+		else error = HAS_TARGET;
+		return res;
 	}
 }

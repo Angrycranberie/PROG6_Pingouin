@@ -94,7 +94,7 @@ public class GameView extends GraphicGame {
                     int x =  getTileX(i, j, w, g, cx), y = getTileY(i, h, g, cy);
                     Tile t = game.getBoard().getTile(j,i); // Récupération de la case du jeu.
                     // Récupération de l'image de la tuile avec le bon nombre de poissons.
-                    Image img = tilesImg[t.getFishNumber()].getScaledInstance(w, h, Image.SCALE_SMOOTH);
+                    Image img = tilesImg[t != null ? t.getFishNumber() : 0].getScaledInstance(w, h, Image.SCALE_SMOOTH);
 
                     JLabel l = new JLabel(); // Label cliquable associé à l'image.
                     l.setName(j+":"+i); // Nom de la tuile : "colonne:ligne".

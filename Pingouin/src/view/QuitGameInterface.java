@@ -15,7 +15,7 @@ public class QuitGameInterface {
 
     EventCollector eventCollector;
 
-    QuitGameInterface(final JPanel g, final String s, EventCollector ec){
+    QuitGameInterface(final JPanel g, final String s, final EventCollector ec){
         eventCollector = ec;
 
         ActionListener al_resume = new ActionListener() {
