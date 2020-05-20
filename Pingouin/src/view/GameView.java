@@ -24,6 +24,8 @@ public class GameView extends GraphicGame {
     private Image[] tilesImg; // Tableau des images de tuiles.
     private Image[][] penguinsImg; // Tableau des images de pingouins.
 
+    private final Color SEA_COLOR = new Color(44, 176, 229);
+
     /**
      * Constructeur de l'affichage du jeu.
      * @param g Jeu à afficher.
@@ -83,7 +85,7 @@ public class GameView extends GraphicGame {
         int cx = (getWidth() - (w + g) * 7 - w) / 2; // Valeur de décalage pour centrage horizontal.
         int cy = (getHeight() - (h - h/4 + g) * 7 - h) / 2; // Valeur de décalage pour centrage vertical.
 
-        drawable.setColor(new Color(127,148,255)); // Définition de la couleur du fond.
+        drawable.setColor(SEA_COLOR); // Définition de la couleur du fond.
         drawable.fillRect(0, 0, getWidth(), getHeight()); // Remplissage de la couleur du fond.
 
         // Création du plateau tuile par tuile.
@@ -122,7 +124,7 @@ public class GameView extends GraphicGame {
         final int g = 10; // Taille de la gouttière entre les tuiles.
         int cx = (getWidth() - (w + g) * 7 - w) / 2; // Valeur de décalage pour centrage horizontal.
         int cy = (getHeight() - (h - h/4 + g) * 7 - h) / 2; // Valeur de décalage pour centrage vertical.
-        int s = 15;
+        int s = 5;
 
         for (int i = 0; i < game.getPlayerCount(); i++) {
             Player ply = game.getPlayer(i);

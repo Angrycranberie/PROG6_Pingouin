@@ -24,34 +24,36 @@ public class Game implements Cloneable{
 	private History history;
 	private int toPlace;
 	private int moveCount;
+
+	/* Constantes de statut pour feedback. */
+	public static final int PENGUIN_PLACED = 10; // Pingouin correctement placé.
+	public static final int ONLY_ONE_FISH = 11; // Le pingouin n'a pas été placé car la case avait plus d'un poisson.
+	public static final int ALREADY_OCCUPIED = 12; // Il y a déjà un pingouin sur la case.
+	public static final int START_MOVE = 13; // Debut de la phase de déplacement.
+
+	public static final int NO_TARGET = 20; // Aucun pingouin sur la case ciblée.
+	public static final int HAS_TARGET = 21; // Un pingouin est présent sur la case ciblée.
+	public static final int SAME_TARGET = 22; // La cible d'un déplacement est la même que sa source.
 	
-	public static final int GOOD_TRAVEL = 0;
-	public static final int PENGUIN_IN_TRAVEL = 1;
-	public static final int HOLE_IN_TRAVEL = 2;
-	public static final int TRAVEL_NOT_ALIGNED = 3;
+	public static final int PENGUIN_SELECTED = 30; // Pingouin correctement sélectionné.
+	public static final int WRONG_PENGUIN = 31; // Le pingouin n'appartient pas au joueur courant.
+
+	public static final int HAS_TILE = 40;
+	public static final int NO_TILE = 41;
+
+	public static final int TRAVEL_DONE = 50; // Le déplacement a été effectué.
+	public static final int PENGUIN_IN_PATH = 51; // Un pingouin se trouve sur le chemin du déplacement.
+	public static final int HOLE_IN_PATH = 52; // Un case infranchissable se trouve sur le chemin du déplacement.
+	public static final int PATH_NOT_ALIGNED = 53; // La trajectoire du pingouin n'est pas rectiligne.
 	
-	public static final int GOOD_PENGUIN = 4;
-	public static final int WRONG_PENGUIN = 5;
+	public static final int GAME_END = 60; // La partie est terminée.
 	
-	public static final int NO_TARGET = 6;
-	public static final int HAS_TARGET = 7;
+	public static final int AI_STARTS = 70; // L'IA commence son tour.
+	public static final int AI_DONE = 71; // L'IA vient de finir son tour.
 	
-	public static final int HAS_TILE = 8;
-	public static final int NO_TILE = 9;
-	
-	public static final int SAME_TARGET = 10;
-	
-	public static final int GAME_END = 11;
-	
-	public static final int GOOD_PLACE = 21;
-	public static final int ONLY_ONE_FISH = 22;
-	public static final int ALREADY_OCCUPY = 23;
-	public static final int START_MOVE = 24;
-	
-	public static final int AI_STARTS = 31;
-	public static final int AI_DONE = 32;
-	
-	public int error;
+	/* * * */
+
+	public int status;
 	
 	/**
 	 * initialise le jeu
@@ -182,17 +184,17 @@ public class Game implements Cloneable{
 				moveCount++;
 				Move m = new Move(x1, y1, x2, y2, currentPlayerNumber, t.getFishNumber());
 				history.addMove(m);
-				setErr(GOOD_TRAVEL);
+				setErr(TRAVEL_DONE);
 				return true;
 			}
 			else {
 				switch(board.error) {
 				case 1: // board.PENGUIN_IN_TRAVEL
-					setErr(PENGUIN_IN_TRAVEL);
+					setErr(PENGUIN_IN_PATH);
 				case 2: // board.HOLE_IN_TRAVEL
-					setErr(HOLE_IN_TRAVEL);
+					setErr(HOLE_IN_PATH);
 				case 3: // board.TRAVEL_NOT_ALIGNED
-					setErr(TRAVEL_NOT_ALIGNED);
+					setErr(PATH_NOT_ALIGNED);
 				default:
 				}
 				return false;
@@ -212,10 +214,10 @@ public class Game implements Cloneable{
 	 * @return true le pingouin appartient au joueur courant false sinon
 	 */
 	public boolean hasPenguinGoodOwning(Player p, int x1, int y1) {
-		setErr(GOOD_PENGUIN);
 		Penguin[] penguins = p.getPenguins();
 		for(int i = 0; i < p.getAmountPlaced() ; i++) {
 			if(penguins[i].getX() == x1 && penguins[i].getY() == y1) {
+				setErr(PENGUIN_SELECTED);
 				return true;
 			}
 		}
@@ -293,7 +295,7 @@ public class Game implements Cloneable{
 					setToPlace(getToPlace()-1);
 					val = true;
 					nextPlayer();
-					setErr(GOOD_PLACE);
+					setErr(PENGUIN_PLACED);
 				} else {
 					System.out.print("Les pingouins doivent être placés sur" +
 							" une case de valeur 1.");
@@ -301,7 +303,7 @@ public class Game implements Cloneable{
 				}
 			} else {
 				System.out.print("La case est occupée.");
-				setErr(ALREADY_OCCUPY);
+				setErr(ALREADY_OCCUPIED);
 			}
 		} else {
 			System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");
@@ -485,8 +487,8 @@ public class Game implements Cloneable{
 	}
 	
 	public void setErr(int e){
-		supportCount.firePropertyChange("status", error, e);
-		error = e;
+		supportCount.firePropertyChange("status", status, e);
+		status = e;
 	}
 
 	public boolean save(String fileName) {
