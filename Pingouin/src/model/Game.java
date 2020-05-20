@@ -533,7 +533,8 @@ public class Game implements Cloneable{
 				System.out.println(players[i].getPenguinsCount());
 				System.out.printf(""+j);
 				if(players[i].getPenguin(j) != null){
-					saveBot.println(players[i].getPenguin(j).toString());
+					Penguin p_tmp = players[i].getPenguin(j);
+					saveBot.println(p_tmp.toString());
 				}
 
 			}

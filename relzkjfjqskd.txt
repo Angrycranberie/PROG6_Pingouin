@@ -1,0 +1,96 @@
+# Nombre de joueur
+2
+# Joueur 0
+0
+Joueur 1
+4
+0
+0
+0
+0
+true
+
+# Joueur 1
+2
+Joueur 2
+4
+1
+0
+0
+0
+true
+
+# Numéro du joueur courant
+1
+# Board
+1 false
+1 false
+2 false
+2 false
+3 false
+1 false
+1 false
+
+1 false
+3 false
+3 false
+1 false
+1 false
+2 false
+2 false
+1 false
+1 false
+1 false
+2 false
+2 false
+2 false
+2 false
+1 false
+
+1 false
+1 false
+2 false
+3 false
+1 false
+1 false
+3 false
+1 false
+2 false
+2 false
+2 false
+1 false
+3 false
+1 false
+1 false
+
+3 false
+2 false
+1 false
+1 false
+2 false
+1 false
+3 false
+3 false
+1 false
+2 false
+1 false
+2 false
+2 false
+1 false
+2 false
+
+3 false
+2 false
+2 false
+1 false
+1 false
+1 false
+1 false
+1 false
+# Historique
+0
+
+0
+
+# Pingouin restants à placer
+8
