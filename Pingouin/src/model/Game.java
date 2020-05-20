@@ -486,8 +486,8 @@ public class Game implements Cloneable{
 	}
 	
 	public void setErr(int e){
-		supportCount.firePropertyChange("status", !statusSwitch, statusSwitch);
 		status = e;
+		supportCount.firePropertyChange("status", !statusSwitch, statusSwitch);
 	}
 
 	public boolean save(String fileName) {
