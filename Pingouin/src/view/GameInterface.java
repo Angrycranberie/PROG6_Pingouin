@@ -1,21 +1,18 @@
 package view;
 
 import model.Game;
+import sun.misc.JavaLangAccess;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
 
 public class GameInterface implements PropertyChangeListener {
     public JPanel p_main;
-    private JButton b_save;
-    private JButton b_newGame;
-    private JButton b_backMainMenu;
     private JButton b_undo;
     private JButton b_redo;
     private JLabel l_title;
@@ -29,6 +26,8 @@ public class GameInterface implements PropertyChangeListener {
     public static boolean saved = false;
     GraphicInterface gra;
 
+    HashMap<Integer, String> statusString;
+
     GameInterface(Game g, EventCollector ec, GraphicInterface gra){
         this.gra = gra;
         final GameInterface me = this;
@@ -36,9 +35,10 @@ public class GameInterface implements PropertyChangeListener {
         game.addPropertyChangeListener(this);
         eventCollector = ec;
 
+        populateStatusString(); // Association des statuts à leur feedback.
+
         p_main = new JPanel();
         p_main.setSize(gra.frame.getSize());
-
         p_main.setLayout(new GroupLayout(p_main));
 
         int logoHeight = (int) (p_main.getHeight()*0.1);
@@ -79,9 +79,6 @@ public class GameInterface implements PropertyChangeListener {
             }
         });
 
-
-
-
         l_scoreJ2 = new JLabel();
         l_scoreJ2.setText("Score joueur 2 : ");
         l_scoreJ2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -105,7 +102,7 @@ public class GameInterface implements PropertyChangeListener {
         p_main.add(l_scoreJ2);
     }
 
-    public JLabel getL_feedback() {
+    public JLabel getFeedbackLabel() {
         return l_feedback;
     }
 
@@ -130,7 +127,10 @@ public class GameInterface implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) { gameView.repaint(); }
+    public void propertyChange(PropertyChangeEvent evt) {
+        gameView.repaint();
+        updateFeedback();
+    }
 
     public void redimensionnement(){
         p_main.setSize(gra.frame.getSize());
@@ -142,4 +142,23 @@ public class GameInterface implements PropertyChangeListener {
 
     }
 
+    private void populateStatusString() {
+        statusString = new HashMap<Integer, String>();
+        statusString.put(
+                Game.PENGUIN_PLACED,
+                "$1, vous avez placé votre $2 pingouin !\n$3, placez votre $4 pingouin."
+        );
+        statusString.put(
+                Game.ONLY_ONE_FISH,
+                "Vous ne pouvez placer votre pingouin que sur les cases ayant un poisson, $1 !"
+        );
+        statusString.put(
+                Game.ALREADY_OCCUPIED,
+                "Mince ! Un pingouin occupe déjà cette case.\nChoisissez-en une autre, $1 !"
+        );
+    }
+
+    public void updateFeedback() {
+        l_feedback.setText(statusString.get(game.status));
+    }
 }
