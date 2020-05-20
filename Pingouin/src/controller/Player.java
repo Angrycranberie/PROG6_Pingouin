@@ -3,7 +3,8 @@ package controller;
 import model.Game;
 import model.Penguin;
 
-import java.awt.*;
+import controller.ai.AIAccess;
+import controller.ai.AISomme;
 
 /**
  * Classe Player. Contient l'ensemble des méthodes et éléments associés à un joueur
@@ -45,21 +46,21 @@ public class Player implements Cloneable {
 
 	// SETTERS
 
-	private void changeTileScore(int i) {
+	public void changeTileScore(int i) {
 		tileScore = i;
 	}
 	
-	private void changeFishScore(int i) {
+	public void changeFishScore(int i) {
 		fishScore = i;
 	}
 	
-	private void changeAmountPlaced(int i) {
+	public void changeAmountPlaced(int i) {
 		amountPlaced = i;
 	}
 	
-	private void changePenguins(Penguin[] p) { penguins = p; }
+	public void changePenguins(Penguin[] p) { penguins = p; }
 	
-	private void changePlaying(boolean b) {	playing = b; }
+	public void changePlaying(boolean b) {	playing = b; }
 	
 	public void setGame(Game g){ game = g; }
 
@@ -268,10 +269,10 @@ public class Player implements Cloneable {
 				p = new AIRandom(penguinsCount, color, name);
 				break;
 			case 2:
-				p = new AISmart(penguinsCount, color, name);
+				p = new AISomme(penguinsCount, color, name);
 				break;
 			case 3:
-				p = new AITrap(penguinsCount, color, name);
+				p = new AIAccess(penguinsCount, color, name);
 				break;
 			default:
 				break;
@@ -289,5 +290,12 @@ public class Player implements Cloneable {
 		}
 		p.changePenguins(pe);
 		return p;
+	}
+	
+	/**
+	 * Renvoie les informations de Player en un String hormis Game et Penguins[] 
+	 */
+	public String toString() {
+		return isAI + "\n" + name + "\n" + penguinsCount + "\n" + color + "\n" + fishScore + "\n" + tileScore + "\n" + amountPlaced + "\n" + playing + "\n";
 	}
 }

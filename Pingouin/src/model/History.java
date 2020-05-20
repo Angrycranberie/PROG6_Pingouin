@@ -25,24 +25,32 @@ public class History implements Cloneable{
 		futurIndex = 0;
 	}
 	
-	private void changePast(Move p[]) {
+	protected void changePast(Move p[]) {
 		past = p;
 	}
 	
-	private void changeFutur(Move f[]) {
+	protected void changeFutur(Move f[]) {
 		futur = f;
 	}
 	
-	private void changePastIndex(int i) {
+	protected void changePastIndex(int i) {
 		pastIndex = i;
 	}
 	
-	private void changeFuturIndex(int i) {
+	protected void changeFuturIndex(int i) {
 		futurIndex = i;
+	}
+	
+	public Move[] getPast(){
+		return past;
 	}
 	
 	public int getPastIndex(){
 		return pastIndex;
+	}
+	
+	public Move[] getFutur(){
+		return futur;
 	}
 	
 	public int getFuturIndex(){

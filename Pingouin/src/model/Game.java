@@ -1,8 +1,15 @@
 package model;
 
+import controller.AIRandom;
 import controller.Player;
+import controller.PlayerHuman;
+import controller.ai.AIAccess;
+import controller.ai.AISomme;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 /**
  * Classe Game. Gère une partie du jeu : ordre des tours, coups sur le plateau.
@@ -16,15 +23,18 @@ public class Game implements Cloneable{
 	private PropertyChangeSupport supportCount;
 	private History history;
 	private int toPlace;
+	private int moveCount;
 
 	/* Constantes de statut pour feedback. */
 	public static final int PENGUIN_PLACED = 10; // Pingouin correctement placé.
 	public static final int ONLY_ONE_FISH = 11; // Le pingouin n'a pas été placé car la case avait plus d'un poisson.
 	public static final int ALREADY_OCCUPIED = 12; // Il y a déjà un pingouin sur la case.
+	public static final int START_MOVE = 13; // Debut de la phase de déplacement.
 
 	public static final int NO_TARGET = 20; // Aucun pingouin sur la case ciblée.
 	public static final int HAS_TARGET = 21; // Un pingouin est présent sur la case ciblée.
-
+	public static final int SAME_TARGET = 22; // La cible d'un déplacement est la même que sa source.
+	
 	public static final int PENGUIN_SELECTED = 30; // Pingouin correctement sélectionné.
 	public static final int WRONG_PENGUIN = 31; // Le pingouin n'appartient pas au joueur courant.
 
@@ -35,6 +45,12 @@ public class Game implements Cloneable{
 	public static final int PENGUIN_IN_PATH = 51; // Un pingouin se trouve sur le chemin du déplacement.
 	public static final int HOLE_IN_PATH = 52; // Un case infranchissable se trouve sur le chemin du déplacement.
 	public static final int PATH_NOT_ALIGNED = 53; // La trajectoire du pingouin n'est pas rectiligne.
+	
+	public static final int GAME_END = 60; // La partie est terminée.
+	
+	public static final int AI_STARTS = 70; // L'IA commence son tour.
+	public static final int AI_DONE = 71; // L'IA vient de finir son tour.
+	
 	/* * * */
 
 	public int status;
@@ -63,6 +79,7 @@ public class Game implements Cloneable{
 		board = new Board();
 		supportCount = new PropertyChangeSupport(this);
 		history = new History();
+		moveCount = 0;
 	}
 	
 	private void changeBoard(Board b) {
@@ -155,32 +172,29 @@ public class Game implements Cloneable{
 	 * @return Vrai (true) si le mouvement a été fait ; faux (false) sinon.
 	 */
 	public boolean movePenguin(int x1, int y1, int x2, int y2) {
-		status = TRAVEL_DONE;
 		Player p = getCurrentPlayer();
 		if (hasPenguinGoodOwning(p,x1,y1)) {
-			Game oldGame = this;
 			Tile t = board.makeMove(x1, y1, x2, y2);
 			if (t != null) {
 				System.out.println("Réussi");
 				p.changeScore(t.getFishNumber());
 				p.addTile();
 				p.movePenguin(x1, y1, x2, y2);
-				supportCount.firePropertyChange("game", oldGame, this);
+				supportCount.firePropertyChange("moveCount", moveCount, moveCount+1);
+				moveCount++;
 				Move m = new Move(x1, y1, x2, y2, currentPlayerNumber, t.getFishNumber());
 				history.addMove(m);
+				setErr(TRAVEL_DONE);
 				return true;
 			}
 			else {
 				switch(board.error) {
 				case 1: // board.PENGUIN_IN_TRAVEL
-					supportCount.firePropertyChange("status", PENGUIN_IN_PATH, status);
-					status = PENGUIN_IN_PATH;
+					setErr(PENGUIN_IN_PATH);
 				case 2: // board.HOLE_IN_TRAVEL
-					supportCount.firePropertyChange("status", HOLE_IN_PATH, status);
-					status = HOLE_IN_PATH;
+					setErr(HOLE_IN_PATH);
 				case 3: // board.TRAVEL_NOT_ALIGNED
-					supportCount.firePropertyChange("status", PATH_NOT_ALIGNED, status);
-					status = PATH_NOT_ALIGNED;
+					setErr(PATH_NOT_ALIGNED);
 				default:
 				}
 				return false;
@@ -188,8 +202,7 @@ public class Game implements Cloneable{
 		}
 		else {
 			System.out.println("Ce pingouin ne vous appartient pas.");
-			supportCount.firePropertyChange("status", WRONG_PENGUIN, status);
-			status = WRONG_PENGUIN;
+			setErr(WRONG_PENGUIN);
 			return false;
 		}
 	}
@@ -201,17 +214,14 @@ public class Game implements Cloneable{
 	 * @return true le pingouin appartient au joueur courant false sinon
 	 */
 	public boolean hasPenguinGoodOwning(Player p, int x1, int y1) {
-		status = PENGUIN_SELECTED;
 		Penguin[] penguins = p.getPenguins();
-		int nbPenguins = p.getPenguinsCount();
 		for(int i = 0; i < p.getAmountPlaced() ; i++) {
 			if(penguins[i].getX() == x1 && penguins[i].getY() == y1) {
-				supportCount.firePropertyChange("status", PENGUIN_SELECTED, status);
+				setErr(PENGUIN_SELECTED);
 				return true;
 			}
 		}
-		supportCount.firePropertyChange("status", WRONG_PENGUIN, status);
-		status = WRONG_PENGUIN;
+		setErr(WRONG_PENGUIN);
 		return false;
 	}
 	
@@ -249,7 +259,7 @@ public class Game implements Cloneable{
 		for(int i = 1 ; i <= playerCount ; i++) {
 			int loopPlayerNumber = (currentPlayerNumber - 1 + i) % playerCount;
 			if (players[loopPlayerNumber].isPlaying()) {
-				supportCount.firePropertyChange("currentPlayerNumber", currentPlayerNumber, loopPlayerNumber+1);
+				supportCount.firePropertyChange("moveCount", moveCount, loopPlayerNumber+1);
 				currentPlayerNumber = loopPlayerNumber + 1;
 				return true;
 			}
@@ -259,7 +269,7 @@ public class Game implements Cloneable{
 	
 	public int[][] legitMovePossibility(Penguin p){
 		return board.movePossibility(p.getX(),p.getY());
-	}	/**
+	}
 
 	/**
 	 * Place un pingouin du joueur courant aux coordonnées d'entrée.
@@ -269,7 +279,6 @@ public class Game implements Cloneable{
 	 * @param y Coorfonnée y où l'on souhaite placer le pingouin.
 	 */
 	public boolean placePenguin(int x, int y){
-		status = PENGUIN_PLACED;
 		boolean val = false;
 		Player p = getCurrentPlayer();
 		if(p.getAmountPlaced() < p.getPenguinsCount()){
@@ -286,16 +295,15 @@ public class Game implements Cloneable{
 					setToPlace(getToPlace()-1);
 					val = true;
 					nextPlayer();
+					setErr(PENGUIN_PLACED);
 				} else {
 					System.out.print("Les pingouins doivent être placés sur" +
 							" une case de valeur 1.");
-					supportCount.firePropertyChange("status", ONLY_ONE_FISH, status);
-					status = ONLY_ONE_FISH;
+					setErr(ONLY_ONE_FISH);
 				}
 			} else {
 				System.out.print("La case est occupée.");
-				supportCount.firePropertyChange("status", ALREADY_OCCUPIED, status);
-				status = ALREADY_OCCUPIED;
+				setErr(ALREADY_OCCUPIED);
 			}
 		} else {
 			System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");
@@ -315,7 +323,7 @@ public class Game implements Cloneable{
 		boolean possibility = false;
 		int[][] movePossibility;
 		Penguin[] penguins = p.getPenguins();
-		for(int i = 0; i < p.getPenguinsCount() ; i++) {
+		for(int i = 0; i < p.getAmountPlaced() ; i++) {
 			movePossibility = legitMovePossibility(penguins[i]);
 			possibility = possibility || (movePossibility[0][0] != -1);
 		}
@@ -438,7 +446,19 @@ public class Game implements Cloneable{
 			}
 		}
 	}
-	
+
+	/**
+	 * Annule le dernier placement de pingouin. Rend la main à ce joueur.
+	 */
+	public void cancelPlace() {
+		prevPlayer();
+		Player p = getCurrentPlayer();
+		p.addAmount(-1);
+		Penguin lastP = p.getPenguin(p.getAmountPlaced());
+		board.freeFromPenguin(lastP.getX(), lastP.getY());
+		p.getPenguins()[p.getAmountPlaced()] = null; 
+	}
+
 	/**
 	 * Indique si la case non-nulle donnée en argument est occupée
 	 * par un pingouin ou non.
@@ -448,16 +468,11 @@ public class Game implements Cloneable{
 	 */
 	public boolean occupied(int x1, int y1) {
 		boolean res = board.getTile(x1, y1).occupied();
-		if(!res) {
-			supportCount.firePropertyChange("status", NO_TARGET, status);
-			status = NO_TARGET;
-		} else {
-			supportCount.firePropertyChange("status", HAS_TARGET, status);
-			status = HAS_TARGET;
-		}
+		if(!res) setErr(NO_TARGET);
+		else setErr(HAS_TARGET);
 		return res;
 	}
-
+	
 	/**
 	 * Indique si la case donnée en argument est nulle ou non.
 	 * @param x1 Coordonnée x de la case à tester.
@@ -466,13 +481,478 @@ public class Game implements Cloneable{
 	 */
 	public boolean exists(int x1, int y1) {
 		boolean res = board.getTile(x1, y1) != null;
-		if (res) {
-			supportCount.firePropertyChange("status", HAS_TILE, status);
-			status = HAS_TILE;
-		} else {
-			supportCount.firePropertyChange("status", NO_TILE, status);
-			status = NO_TILE;
-		}
+		if(res) setErr(HAS_TILE);
+		else setErr(NO_TILE);
 		return res;
+	}
+	
+	public void setErr(int e){
+		supportCount.firePropertyChange("status", status, e);
+		status = e;
+	}
+
+	public boolean save(String fileName) {
+		
+		PrintWriter saveBot;
+		
+		try {
+			saveBot = new PrintWriter(fileName, "UTF-8") ;
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			return false;
+		} 
+		
+		saveBot.flush(); // on vide le fichier si jamais il a déjà été utilisé
+		
+		// Sauvegarde du nombre de joueur
+		saveBot.println("# Nombre de joueur");
+		saveBot.println(playerCount);
+		System.out.println("playerCount saved");
+		
+		// Sauvegarde des joueurs
+		for(int  i = 0; i < playerCount; i++) {
+			saveBot.println("# Joueur "+i);
+			// Sauvegarde des informations du joueur 
+			saveBot.println(players[i].toString());
+			// Sauvegarde de ses pingouins
+			for(int j = 0; j < players[i].getPenguinsCount() ; j++) {
+				saveBot.println(players[i].getPenguins()[j].toString());
+			}
+			
+			System.out.println("Player "+i+" saved");
+		}
+		
+		// Sauvegarde du joueur courant
+		saveBot.println("# Numéro du joueur courant");
+		saveBot.println(currentPlayerNumber);
+		System.out.println("currentPlayerNumber saved");
+		
+		// Sauvegarde du plateau
+		saveBot.println("# Board");
+		for(int i = 0; i < Board.LENGTH; i++) {
+			for(int j = 0; j < Board.WIDTH; j++) {
+				try {
+					saveBot.println(board.getTile(j, i).toString());
+				} catch (NullPointerException e) {
+					// Soit on est arrivé sur une tuile null (plus en jeu), soit on est au bout du tableau
+					saveBot.println();
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
+					saveBot.close();
+					return false;
+				}
+			}
+		}
+		System.out.println("board saved");
+		
+		// Sais pas si doit être sauvegardé
+		//PropertyChangeSupport supportCount;
+		
+		// Sauvegarde de l'historique
+		saveBot.println("# Historique");
+		saveBot.println(history.getPastIndex());
+		for(int i = 0; i < history.getPast().length; i++) {
+			try {
+				saveBot.println(history.getPast()[i].toString());
+			} catch (NullPointerException e) {
+				// On est arrivé au bout du tableau
+				// Si le tableau est vide
+				if(i==0) saveBot.println();
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				saveBot.close();
+				return false;
+			}
+		}
+		saveBot.println(history.getFuturIndex());
+		for(int i = 0; i < history.getFutur().length; i++) {
+			try {
+				saveBot.println(history.getFutur()[i].toString());
+			} catch (NullPointerException e) {
+				// On est arrivé au bout du tableau
+				// Si le tableau est vide
+				if(i==0) saveBot.println();
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				saveBot.close();
+				return false;
+			}
+		}
+		System.out.println("history saved");
+		
+		// Sauvegarde de la phase
+		saveBot.println("# Pingouin restants à placer");
+		saveBot.println(toPlace);
+		System.out.println("toPlace saved");
+			
+		saveBot.close();
+		return true;
+	}
+	
+	public boolean load(String fileName) {
+		Scanner loadBot;
+		
+		loadBot = new Scanner(fileName);
+		
+		// récupération du nombre de joueur
+		if(loadBot.hasNext("# Nombre de joueur")) {
+			loadBot.next("# Nombre de joueur");
+			if(loadBot.hasNextInt()) {
+				playerCount = loadBot.nextInt();
+			}
+			else {
+				System.out.println("Erreur : on attendez un entier signifiant le nombre joueur");
+				loadBot.close();
+				return false;
+			}
+		}
+		else {
+			System.out.println("Erreur : on attendez le nombre de joueur dans la partie");
+			loadBot.close();
+			return false;
+		}
+		
+		// récupération des joueurs
+		players = null;
+		Player player;
+		int isAI;
+		String name;
+		int color;
+		int penguinsCount;
+		Penguin p[];
+		int x,y;
+		
+		players = new Player[playerCount];
+		for(int  i = 0; i < playerCount; i++) {
+			if(loadBot.hasNext("# Joueur " + i)) {
+				loadBot.next("# Joueur " + i);
+				if(loadBot.hasNextInt()) {
+					isAI = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez un entier représentant l'IA du joueur");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextLine()) {
+					name = loadBot.nextLine();
+				}
+				else {
+					System.out.println("Erreur : on attendez une chaine représentant le nom du joueur");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					penguinsCount = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez un entier signifiant le nombre de pingouins du joueur");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					color = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez un entier signifiant la couleur du joueur");
+					loadBot.close();
+					return false;
+				}
+				player = new Player(penguinsCount,color,name);
+				switch(isAI) {
+				case 0:
+					player = new PlayerHuman(penguinsCount,color,name);
+					break;
+				case 1:
+					player = new AIRandom(penguinsCount,color,name);
+					break;
+				case 2:
+					player = new AISomme(penguinsCount,color,name);
+					break;
+				case 3:
+					player = new AIAccess(penguinsCount,color,name);
+					break;
+				default:
+						break;
+				}
+				if(loadBot.hasNextInt()) {
+					player.changeFishScore(loadBot.nextInt());
+				}
+				else {
+					System.out.println("Erreur : on attendez un entier signifiant le nombre de points du joueur");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					player.changeTileScore(loadBot.nextInt());
+				}
+				else {
+					System.out.println("Erreur : on attendez un entier signifiant le nombre de tuiles récupérées");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					player.changeAmountPlaced(loadBot.nextInt());
+				}
+				else {
+					System.out.println("Erreur : on attendez un entier signifiant le nombre de pingouins placés");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextBoolean()) {
+					player.changePlaying(loadBot.nextBoolean());
+				}
+				else {
+					System.out.println("Erreur : on attendez un booleen signifiant si le joueur joue encore ou pas");
+					loadBot.close();
+					return false;
+				}
+				
+				p = new Penguin[penguinsCount];
+				for(int j = 0; j < penguinsCount ; j++) {
+					if(loadBot.hasNextInt()) {
+						x = loadBot.nextInt();
+					}
+					else {
+						System.out.println("Erreur : on attendez un entier signifiant la coordonnée x d'un pingouin");
+						loadBot.close();
+						return false;
+					}
+					if(loadBot.hasNextInt()) {
+						y = loadBot.nextInt();
+					}
+					else {
+						System.out.println("Erreur : on attendez un entier signifiant la coordonnée y d'un pingouin");
+						loadBot.close();
+						return false;
+					}
+					p[j] = new Penguin(x,y);
+				}
+				
+				player.changePenguins(p);
+				players[i] = player;
+			}
+			else {
+				System.out.println("Erreur : on attendez un joueur");
+				loadBot.close();
+				return false;
+			}
+		}
+		
+		// récupération du joueur courant
+		if(loadBot.hasNext("# Numéro du joueur courant")) {
+			loadBot.next("# Numéro du joueur courant");
+			if(loadBot.hasNextInt()) {
+				currentPlayerNumber = loadBot.nextInt();
+			}
+			else {
+				System.out.println("Erreur : on attendez un entier signifiant le numéro du joueur courant");
+				loadBot.close();
+				return false;
+			}
+		}
+		else {
+			System.out.println("Erreur : on attendez le joueur courant");
+			loadBot.close();
+			return false;
+		}
+		
+		// récupération du plateau
+		board = new Board();
+		Tile tab[][] = new Tile[Board.LENGTH][Board.WIDTH];
+		int fishNumber;
+		boolean occupied;
+		if(loadBot.hasNext("# Board")) {
+			loadBot.next("# Board");
+			for(int i = 0; i < Board.LENGTH; i++) {
+				for(int j = 0; j < Board.WIDTH; j++) {
+					if(loadBot.hasNextInt()) {
+						fishNumber = loadBot.nextInt();
+					}
+					else {
+						System.out.println("Erreur : on attendez un entier signifiant le nombre de poisson de la tuile");
+						loadBot.close();
+						return false;
+					}
+					if(loadBot.hasNextBoolean()) {
+						occupied = loadBot.nextBoolean();
+					}
+					else {
+						System.out.println("Erreur : on attendez le booléen représentant si un pingouin est sur la tuile");
+						loadBot.close();
+						return false;
+					}
+					tab[i][j] = new Tile(fishNumber);
+					if(occupied) tab[i][j].occupy();
+					else tab[i][j].free();
+				}
+			}
+		}
+		else {
+			System.out.println("Erreur : on attendez un plateau");
+			loadBot.close();
+			return false;
+		}
+		board.changeTab(tab);
+		
+		// récupération de l'historique
+		history = new History();
+		int pastIndex,futurIndex;
+		int x1,y1,x2,y2,playerNumber;
+		Move past[],futur[];
+		if(loadBot.hasNext("# Historique")) {
+			loadBot.next("# Historique");
+			if(loadBot.hasNextInt()) {
+				pastIndex = loadBot.nextInt();
+			}
+			else {
+				System.out.println("Erreur : on attendez la longueur de past");
+				loadBot.close();
+				return false;
+			}
+			history.changePastIndex(pastIndex);
+			past = new Move[pastIndex+1];
+			for(int i = 0; i < pastIndex; i++) {
+				if(loadBot.hasNextInt()) {
+					x1 = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez x1");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					y1 = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez y1");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					x2 = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez x2");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					y2 = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez y2");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					playerNumber = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez le numéro du joueur");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					fishNumber = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez le nombre de poisson");
+					loadBot.close();
+					return false;
+				}
+				past[i] = new Move(x1,y1,x2,y2,playerNumber,fishNumber);
+			}
+			history.changePast(past);
+			
+			if(loadBot.hasNextInt()) {
+				futurIndex = loadBot.nextInt();
+			}
+			else {
+				System.out.println("Erreur : on attendez la longueur de futur");
+				loadBot.close();
+				return false;
+			}
+			history.changeFuturIndex(pastIndex);
+			futur = new Move[futurIndex+1];
+			for(int i = 0; i < futurIndex; i++) {
+				if(loadBot.hasNextInt()) {
+					x1 = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez x1");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					y1 = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez y1");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					x2 = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez x2");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					y2 = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez y2");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					playerNumber = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez le numéro du joueur");
+					loadBot.close();
+					return false;
+				}
+				if(loadBot.hasNextInt()) {
+					fishNumber = loadBot.nextInt();
+				}
+				else {
+					System.out.println("Erreur : on attendez le nombre de poisson");
+					loadBot.close();
+					return false;
+				}
+				futur[i] = new Move(x1,y1,x2,y2,playerNumber,fishNumber);
+			}
+			history.changeFutur(futur);
+		}else {
+			System.out.println("Erreur : on attendez l'historique");
+			loadBot.close();
+			return false;
+		}
+			
+		// récupération de la phase de jeu
+		if(loadBot.hasNext("# Pingouin restants à placer")) {
+			loadBot.next("# Pingouin restants à placer");
+			if(loadBot.hasNextInt()) {
+				toPlace = loadBot.nextInt();
+			}
+			else {
+				System.out.println("Erreur : on attendez un entier signifiant le nombre de pigouin à placer");
+				loadBot.close();
+				return false;
+			}
+		}
+		else {
+			System.out.println("Erreur : on attendez le nombre de pingouin à placer");
+			loadBot.close();
+			return false;
+		}
+		
+		
+		loadBot.close();
+		return false;
 	}
 }

@@ -16,11 +16,13 @@ public class ControllerMediator implements EventCollector {
 	Game game;
 	Board board;
 	int x1, y1, x2, y2;
+	boolean gameStatus;
 	
 	public ControllerMediator(Game g){
 		game = g;
 		board = g.getBoard();
 		x1 = y1 = x2 = y2 = -1;
+		gameStatus = true;
 	}
 	
 	/**
@@ -34,6 +36,10 @@ public class ControllerMediator implements EventCollector {
 	@Override
 	public void mouseClick(int l, int c){
 		boolean ret = false;
+
+		if(!gameStatus){
+			return;
+		}
 		
 		if(x1 < 0){ /* Choix de la 1è case.. */
 			x1 = c;
@@ -41,7 +47,7 @@ public class ControllerMediator implements EventCollector {
 			if(game.placePhase()){ /* Si on est en placement, c'est la seule qu'on veut */
 				try {
 					if(ret = game.placePenguin(x1, y1)){
-						
+						if(game.movePhase()) game.setErr(Game.START_MOVE);
 					}
 				} catch(Exception e){
 					// A compléter.
@@ -72,6 +78,7 @@ public class ControllerMediator implements EventCollector {
 			try {
 				if(x1 == x2 && y1 == y2){
 					x1 = x2 = y1 = y2 = -1;
+					game.setErr(Game.SAME_TARGET);
 				} else {
 					if(ret = game.movePenguin(x1, y1, x2, y2)){
 						game.nextPlayer();
@@ -84,6 +91,19 @@ public class ControllerMediator implements EventCollector {
 				errorGestion();
 			}
 		}
+		
+		if (game.movePhase()) {
+            if (!startTurn()) {
+                game.endGame();
+                game.setErr(Game.GAME_END);
+                gameStatus = false;
+                return;
+            }
+        } else {
+            if (game.getCurrentPlayer().isAI()) {
+                startAITurn();
+            }
+        }
 	}
 
 	@Override
@@ -145,7 +165,7 @@ public class ControllerMediator implements EventCollector {
 			else if (y1 < 0){
 				y1 = val;
 				if(game.placePhase()){
-					try { 
+					try {
 						ret = game.placePenguin(x1, y1);
 					} catch (Exception e) {
 						throw(e);
@@ -227,6 +247,8 @@ public class ControllerMediator implements EventCollector {
 	 * Lance le tour de l'IA.
 	 */
 	public void startAITurn(){
+		game.setErr(Game.AI_STARTS);
 		game.getCurrentPlayer().play();
+		game.setErr(Game.AI_DONE);
 	}
 }

@@ -153,11 +153,10 @@ public class DecisionTree {
 		int value, tmp;
 		ArrayList<Couple<Integer, Integer>> moveList;
 		
-		// canPlay fonctionne ici ?
 		if(!game.canPlay(game.getCurrentPlayer()) || (depth == 0)){
 			game.prevPlayer();
 			Couple<Integer, ArrayList<Couple<Integer, Integer>>>res = new Couple<>(heur.heuristicPlace(game), resList);
-			game.nextPlayer();
+			game.nextPlayer();		
 			return res;
 		}
 		
@@ -167,13 +166,13 @@ public class DecisionTree {
 		moveList = board.placePossiblity();
 		for(Couple<Integer, Integer> curr : moveList){
 			if(game.placePenguin(curr.getFirst(), curr.getSecond())) {
-				game.nextPlayer();
 				if(ownTurn) {
 					if(game.movePhase()){
 						tmp = moveDecision(alpha, beta, false, depth-1).getFirst();
 					} else {
 						tmp = placeDecision(alpha, beta, false, depth-1).getFirst();
 					}
+					
 					// val = max(tmp, val);
 					if(tmp >= value){
 						/* Le coup est acceptable. On l'ajoute à la liste de coups.
@@ -187,14 +186,17 @@ public class DecisionTree {
 					   * ni la liste de coups mémorisés.
 					   */
 					
-					game.undo(1);	// Fonctionne avec placement ?
-					game.prevPlayer();
+					game.cancelPlace();
 					if(value >= beta){
 						return new Couple<>(value, resList);	// coupure beta.
 					}
 					alpha = Math.max(alpha, value);
 						
 				} else {
+					/* Ne devrait pas vraiment être accédé.
+					 * La valuation des coups de placement se fait avec
+					 * une profondeur de 1.
+					 */
 					if(game.movePhase()){
 						tmp = moveDecision(alpha, beta, true, depth-1).getFirst();
 					} else {
@@ -214,8 +216,7 @@ public class DecisionTree {
 					   * ni la liste de coups mémorisés.
 					   */
 					
-					game.undo(1);
-					game.prevPlayer();
+					game.cancelPlace();
 					if(alpha >= value){
 						return new Couple<>(value, resList);	// coupure alpha.
 					}

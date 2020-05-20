@@ -22,6 +22,9 @@ public class GameView extends GraphicGame {
     private final String PNG_EXT = ".png"; // Extension des fichiers images des tuiles.
 
     private Image[] tilesImg; // Tableau des images de tuiles.
+
+
+
     private Image[][] penguinsImg; // Tableau des images de pingouins.
 
     private final Color SEA_COLOR = new Color(44, 176, 229);
@@ -80,7 +83,7 @@ public class GameView extends GraphicGame {
      */
     @Override
     void generateBoard() {
-        int h = getHeight()/8, w = (int)((Math.sqrt(3)/2) * h); // Hauteur et largeur des tuiles à afficher.
+        int h = getHeight()/7, w = (int)((Math.sqrt(3)/2) * h); // Hauteur et largeur des tuiles à afficher.
         final int g = 10; // Taille de la gouttière entre les tuiles.
         int cx = (getWidth() - (w + g) * 7 - w) / 2; // Valeur de décalage pour centrage horizontal.
         int cy = (getHeight() - (h - h/4 + g) * 7 - h) / 2; // Valeur de décalage pour centrage vertical.
@@ -120,7 +123,7 @@ public class GameView extends GraphicGame {
     @Override
     void placePenguins() {
         // TODO : Enlever la répétition de cette section. Nécessaire pour le moment car permet d'éviter une exception de thread.
-        int h = getHeight()/8, w = (int)((Math.sqrt(3)/2) * h); // Hauteur et largeur des tuiles à afficher.
+        int h = getHeight()/7, w = (int)((Math.sqrt(3)/2) * h); // Hauteur et largeur des tuiles à afficher.
         final int g = 10; // Taille de la gouttière entre les tuiles.
         int cx = (getWidth() - (w + g) * 7 - w) / 2; // Valeur de décalage pour centrage horizontal.
         int cy = (getHeight() - (h - h/4 + g) * 7 - h) / 2; // Valeur de décalage pour centrage vertical.
@@ -139,5 +142,9 @@ public class GameView extends GraphicGame {
                 }
             }
         }
+    }
+
+    public Image[][] getPenguinsImg() {
+        return penguinsImg;
     }
 }

@@ -60,4 +60,8 @@ public class Move implements Cloneable{
 		Move m = new Move(x1, y1, x2, y2,player,fishNumber);
 		return m;
 	}
+
+	public String toString() {
+		return x1+" "+y1+" "+x2+" "+y2+" "+player+" "+fishNumber;
+	}
 }

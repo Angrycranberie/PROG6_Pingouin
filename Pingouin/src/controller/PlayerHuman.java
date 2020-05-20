@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Color;
 
 /**
  * Classe de joueur humain. Joue un coup à partir d'un clic.

@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class GameInterface implements PropertyChangeListener {
@@ -19,16 +21,28 @@ public class GameInterface implements PropertyChangeListener {
     private JLabel l_feedback;
     private JLabel l_scoreJ1;
     private JLabel l_scoreJ2;
+    private HashMap color;
+    private Image[] pinguoins;
+    private JLabel l_pingouinJ1;
+    private JLabel l_pingouinJ2;
+
 
     public Game game;
     public GameView gameView;
     public EventCollector eventCollector;
     public static boolean saved = false;
     GraphicInterface gra;
-
+    
     HashMap<Integer, String> statusString;
 
-    GameInterface(Game g, EventCollector ec, GraphicInterface gra){
+    GameInterface(Game g, EventCollector ec, GraphicInterface gra) throws IOException, FontFormatException {
+
+        color = new HashMap();
+        color.put((int) 0, new Color(28,28,28));
+        color.put((int) 1, new Color(255, 204, 0));
+        color.put((int) 2, new Color(0, 102, 255));
+        color.put((int) 3, new Color(102, 255, 255));
+
         this.gra = gra;
         final GameInterface me = this;
         game = g;
@@ -42,6 +56,9 @@ public class GameInterface implements PropertyChangeListener {
         p_main.setLayout(new GroupLayout(p_main));
 
         int logoHeight = (int) (p_main.getHeight()*0.1);
+
+
+
         Image logo = GraphicGame.loadImage("/gfx/ui/logo.png")
                 .getScaledInstance(logoHeight*3, logoHeight, Image.SCALE_SMOOTH);
         l_title = new JLabel();
@@ -57,7 +74,7 @@ public class GameInterface implements PropertyChangeListener {
         l_feedback.setBounds(l_title.getWidth()+10, 10, p_main.getWidth()-l_title.getWidth()-2*10, l_title.getHeight());
 
         gameView = new GameView(game, eventCollector);
-        gameView.setBounds(0, l_title.getHeight()+2*10, p_main.getWidth(), (int) (p_main.getHeight()*0.8));
+        gameView.setBounds(0, l_title.getHeight()+2*10, p_main.getWidth(), (int) (p_main.getHeight()*0.7));
 
         b_undo= new GameButton("Annuler", GameButton.TYPE_DEFAULT);
         b_undo.setSize(150,50);
@@ -79,19 +96,50 @@ public class GameInterface implements PropertyChangeListener {
             }
         });
 
+        pinguoins = new Image[4];
+        for(int i = 0; i<3; i++){
+            pinguoins[i] = GraphicGame.loadImage("/gfx/game/penguins/"+i+"_0.png").getScaledInstance((int)((Math.sqrt(3)/2) * gameView.getHeight()/7),gameView.getHeight()/7,Image.SCALE_SMOOTH);
+        }
+
+
+        Image avatarJ1 = pinguoins[game.getPlayer(0).getColor()];
+        Image avatarJ2 = pinguoins[game.getPlayer(1).getColor()];
+       // File font = new File("/fonts/icecube.ttf");
+       // Font labelFont = Font.createFont(Font.TRUETYPE_FONT, font);
+
         l_scoreJ2 = new JLabel();
-        l_scoreJ2.setText("Score joueur 2 : ");
+        //l_scoreJ2.setFont(labelFont);
+        l_scoreJ2.setText(game.getPlayer(1).getName());
         l_scoreJ2.setHorizontalAlignment(SwingConstants.CENTER);
         l_scoreJ2.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_scoreJ2.setSize(150,10);
-        l_scoreJ2.setLocation(p_main.getWidth()/2 + (l_scoreJ2.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+        l_scoreJ2.setSize(logoHeight,(int)(logoHeight*0.5));
+        l_scoreJ2.setLocation(p_main.getWidth()*2/3 + (l_scoreJ2.getWidth() + (int)(p_main.getWidth()*0.05) ), gameView.getY() +gameView.getHeight() + 10);
+        l_scoreJ2.setForeground((Color)color.get(game.getPlayer(1).getColor()));
+        l_scoreJ2.setForeground(l_scoreJ2.getForeground().darker());
 
         l_scoreJ1 = new JLabel();
-        l_scoreJ1.setText("Score joueur 1 : ");
+        l_scoreJ1.setText(gameView.game.getPlayer(0).getName());
         l_scoreJ1.setHorizontalAlignment(SwingConstants.CENTER);
         l_scoreJ1.setHorizontalTextPosition(SwingConstants.CENTER);
-        l_scoreJ1.setSize(150,10);
-        l_scoreJ1.setLocation(p_main.getWidth()/2 - (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+        l_scoreJ1.setSize(logoHeight,(int)(logoHeight*0.5));
+        l_scoreJ1.setLocation(p_main.getWidth()*2/3 - (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+        l_scoreJ1.setForeground((Color)color.get(game.getPlayer(0).getColor()));
+
+        l_pingouinJ1 = new JLabel();
+        l_pingouinJ1.setBounds(l_scoreJ1.getX()-l_scoreJ1.getWidth(),l_scoreJ1.getY() - 50,l_scoreJ1.getWidth(),(int) (p_main.getHeight()*0.2));
+        l_pingouinJ1.setIcon(new ImageIcon(avatarJ1));
+        l_pingouinJ1.setOpaque(true);
+        l_pingouinJ1.setVisible(true);
+
+        l_pingouinJ2 = new JLabel();
+        l_pingouinJ2.setBounds(l_scoreJ2.getX()-l_scoreJ2.getWidth(),l_scoreJ2.getY() - 50,l_scoreJ2.getWidth(),(int) (p_main.getHeight()*0.2));
+        l_pingouinJ2.setIcon(new ImageIcon(avatarJ2));
+        l_pingouinJ2.setOpaque(true);
+        l_pingouinJ2.setVisible(true);
+
+
+
+
 
         p_main.add(l_title);
         p_main.add(l_feedback);
@@ -100,6 +148,8 @@ public class GameInterface implements PropertyChangeListener {
         p_main.add(b_redo);
         p_main.add(l_scoreJ1);
         p_main.add(l_scoreJ2);
+        p_main.add(l_pingouinJ1);
+        p_main.add(l_pingouinJ2);
     }
 
     public JLabel getFeedbackLabel() {
@@ -132,13 +182,17 @@ public class GameInterface implements PropertyChangeListener {
         updateFeedback();
     }
 
-    public void redimensionnement(){
+    public void resize(){
         p_main.setSize(gra.frame.getSize());
-        gameView.setSize(p_main.getWidth(), gameView.getHeight());
+        gameView.setBounds(0, l_title.getHeight()+2*10, p_main.getWidth(), (int) (p_main.getHeight()*0.7));
         //l_title.setLocation((p_main.getWidth()-1500/4)/2,0);
         l_feedback.setBounds(l_title.getWidth()+10, 10, p_main.getWidth()-l_title.getWidth()-2*10, l_title.getHeight());
-        l_scoreJ2.setLocation(p_main.getWidth()/2 - (l_scoreJ2.getWidth()), gameView.getY() +gameView.getHeight() + 10);
-        l_scoreJ1.setLocation(p_main.getWidth()/2 + (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+        l_scoreJ2.setLocation(p_main.getWidth()*2/3 + (l_scoreJ2.getWidth() + (int)(p_main.getWidth()*0.05) ), gameView.getY() +gameView.getHeight() + 10);
+        l_scoreJ1.setLocation(p_main.getWidth()*2/3 - (l_scoreJ1.getWidth()), gameView.getY() +gameView.getHeight() + 10);
+        b_undo.setLocation(50, gameView.getY() +gameView.getHeight() + 10);
+        b_redo.setLocation(b_undo.getLocation().x+b_undo.getWidth()+10, gameView.getY() +gameView.getHeight() + 10);
+        l_pingouinJ1.setBounds(l_scoreJ1.getX()-l_scoreJ1.getWidth(),l_scoreJ1.getY() - 50,l_scoreJ1.getWidth(),(int) (p_main.getHeight()*0.2));
+        l_pingouinJ2.setBounds(l_scoreJ2.getX()-l_scoreJ2.getWidth(),l_scoreJ2.getY() - 50,l_scoreJ2.getWidth(),(int) (p_main.getHeight()*0.2));
 
     }
 
