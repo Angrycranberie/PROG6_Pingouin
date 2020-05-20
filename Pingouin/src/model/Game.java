@@ -541,7 +541,6 @@ public class Game implements Cloneable{
 					Penguin p_tmp = players[i].getPenguin(j);
 					saveBot.println(p_tmp.toString());
 				}
-
 			}
 			
 			System.out.println("Player "+i+" saved");

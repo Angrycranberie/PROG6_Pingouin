@@ -28,7 +28,7 @@ public class LoadGameInterface {
      * @param mm Interface de menu principal afin de pouvoir revenir en arrière
      * @param gra L'interface graphique : la fenêtre sur laquelle l'application s'affiche
      */
-    LoadGameInterface(final MainMenuInterface mm, GraphicInterface gra){
+    LoadGameInterface(final MainMenuInterface mm, final GraphicInterface gra){
         //Clic sur le bouton "Annuler"
         ActionListener al_cancel = new ActionListener() {
             @Override
