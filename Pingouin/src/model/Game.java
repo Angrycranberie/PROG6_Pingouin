@@ -168,7 +168,6 @@ public class Game implements Cloneable{
 		if (hasPenguinGoodOwning(p,x1,y1)) {
 			Tile t = board.makeMove(x1, y1, x2, y2);
 			if (t != null) {
-				System.out.println("Réussi");
 				p.changeScore(t.getFishNumber());
 				p.addTile();
 				p.movePenguin(x1, y1, x2, y2);
@@ -277,7 +276,7 @@ public class Game implements Cloneable{
 		if(p.getAmountPlaced() < p.getPenguinsCount()){
 			Tile t = board.getTile(x, y);
 			if(t == null) {
-				System.out.println("La case est vide.");
+				//System.out.println("La case est vide.");
 				return false;
 			}
 			if(!t.occupied()){
@@ -289,16 +288,16 @@ public class Game implements Cloneable{
 					val = true;
 					nextPlayer();
 				} else {
-					System.out.print("Les pingouins doivent être placés sur" +
-							" une case de valeur 1.");
+					//System.out.print("Les pingouins doivent être placés sur" +
+					//		" une case de valeur 1.");
 					error = ONLY_ONE_FISH;
 				}
 			} else {
-				System.out.print("La case est occupée.");
+				//System.out.print("La case est occupée.");
 				error = ALREADY_OCCUPY;
 			}
 		} else {
-			System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");
+			//System.out.print("Tous les pingouins sont déjà placés pour ce joueur.");
 			nextPlayer();
 		}
 		return val;
@@ -347,13 +346,15 @@ public class Game implements Cloneable{
 	public void printScoreboard(){
 		Player currPlayer;
 		
-		System.out.println("~~~ Tableau des scores ~~~");
+		//System.out.println("~~~ Tableau des scores ~~~");
 		for(int i = 0 ; i < playerCount ; i++){
 			currPlayer = players[i];
-			System.out.println("Joueur " + currPlayer.getName() + " : " + 
-					currPlayer.getFishScore() + " points ; " + 
-					currPlayer.getTileScore() + " tuiles.");
+			//System.out.println("Joueur " + currPlayer.getName() + " : " + 
+			//		currPlayer.getFishScore() + " points ; " + 
+			//		currPlayer.getTileScore() + " tuiles.");
+			System.out.print(currPlayer.getFishScore() + " ");
 		}
+		System.out.println();
 	}
 	
 	/**
@@ -379,13 +380,13 @@ public class Game implements Cloneable{
 					scoreMax = topPlayer.getFishScore();
 					tileMax = topPlayer.getTileScore();
 				} else if (tileMax == currPlayer.getTileScore()) {
-					System.out.println("Egalité ! Les joueurs " + topPlayer.getName() 
-							+ " et " + currPlayer.getName() + " gagnent !");
+					//System.out.println("Egalité ! Les joueurs " + topPlayer.getName() 
+					//		+ " et " + currPlayer.getName() + " gagnent !");
 					return;
 				}
 			}
 		}
-		System.out.println(topPlayer.getName() + " gagne la partie !");
+		//System.out.println(topPlayer.getName() + " gagne la partie !");
 	}
 	
 	/**

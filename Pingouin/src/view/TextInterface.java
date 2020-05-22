@@ -28,10 +28,10 @@ public class TextInterface {
 			} else {
 				if(g.getCurrentPlayer().isAI()){
 					c.startAITurn();
-					System.out.println();
+					//System.out.println();
 				}
 			}
-			g.getBoard().printBoard(2);
+			//g.getBoard().printBoard(2);
 			if(!g.getCurrentPlayer().isAI()){
 				System.out.print("Commande (" + g.getCurrentPlayer().getName() + ") > ");
 				try {
@@ -44,7 +44,7 @@ public class TextInterface {
 					System.out.print("Erreur inconnue : " + e.getLocalizedMessage() + ". Rejouez.");
 				}
 			}
-			System.out.println();
+			//System.out.println();
 		}
 	}
 }
